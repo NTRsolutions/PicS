@@ -128,7 +128,6 @@ public class LoginActivity extends AppCompatActivity {
         Map<String, String> map = new HashMap<String, String>();
 
 
-        final String userId = "userid";
         String token = App.getToken(Constant.HOME_URL);
 
         map.put(Constant.TOKEN_NAME, token);
@@ -148,8 +147,10 @@ public class LoginActivity extends AppCompatActivity {
                                 JSONObject jsonObject = new JSONObject(response.toString());
                                 SharedPreferences.Editor editor = getSharedPreferences(Constant.USER_INFO_PREFS, MODE_PRIVATE).edit();
 
-                                editor.putInt(userId, jsonObject.getInt(userId));
+                                editor.putInt(App.USER_ID_NAME, jsonObject.getInt(App.USER_ID_NAME));
                                 editor.commit();
+
+                                App.setUserId(jsonObject.getInt(App.USER_ID_NAME)); // 设置全局userId
 
                             } catch (JSONException e) {
                                 e.printStackTrace();

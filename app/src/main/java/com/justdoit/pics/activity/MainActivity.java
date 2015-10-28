@@ -1,5 +1,6 @@
 package com.justdoit.pics.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -32,6 +33,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-
+        switch (v.getId()) {
+            case R.id.user_info_btn:
+                Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
     }
 }
