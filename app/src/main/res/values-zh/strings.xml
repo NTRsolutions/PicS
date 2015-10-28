@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PicS</string>
+    <string name="prompt_password">密码</string>
+    <string name="prompt_username">用户名</string>
+    <string name="prompt_email">邮箱</string>
+    <string name="permission_rationale"></string>
+    <string name="error_invalid_password">密码不能小于6个字符</string>
+    <string name="error_invalid_email">邮箱不正确</string>
+    <string name="error_incorrect_password">密码不正确</string>
+    <string name="error_field_required">不能为空</string>
+    <string name="error_invalid_username">用户名不正确</string>
+    <string name="action_sign_in">登录</string>
+</resources>
