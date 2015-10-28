@@ -2,6 +2,7 @@ package com.justdoit.pics.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -10,6 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.justdoit.pics.R;
 import com.justdoit.pics.bean.UserInfo;
 import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
@@ -27,11 +29,42 @@ import java.lang.reflect.Type;
 public class UserInfoActivity extends AppCompatActivity {
 
     private final static String TAG = "UserInfoActivity";
+
+    private UserInfo userInfo = null;
+
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_user_info);
 
         getDataFromServer();
+
+        initView();
+    }
+
+    /**
+     * 初始化view
+     */
+    private void initView() {
+
+        initToolbar();
+
+    }
+
+    /**
+     * 设置toolbar
+     */
+    private void initToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.user_into_toolbar);
+        setSupportActionBar(toolbar);
+
+        if (userInfo == null) {
+            toolbar.setTitle(R.string.user_info);
+        } else {
+
+        }
     }
 
     /**
@@ -43,11 +76,8 @@ public class UserInfoActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Gson gson = new Gson();
-                        UserInfo userInfo;
                         Type type = new TypeToken<UserInfo>(){}.getType();
                         userInfo = gson.fromJson(String.valueOf(response), type);
-
-                        Log.e(TAG, userInfo.getEmail());
                     }
                 },
                 new Response.ErrorListener() {
