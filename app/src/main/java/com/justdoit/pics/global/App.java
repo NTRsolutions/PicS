@@ -82,6 +82,16 @@ public class App extends Application {
         return cookieStore.getToken(uri);
     }
 
+    /**
+     * 返回是否登录,通过判断USER_ID是否等于-1，-1就是没有登录
+     * @return
+     *   true:已登录
+     *   false:没登录
+     */
+    public static boolean isLogin() {
+        return USER_ID == -1 ? false : true;
+    }
+
     public static void setUserId(int userId) {
         USER_ID = userId;
     }
