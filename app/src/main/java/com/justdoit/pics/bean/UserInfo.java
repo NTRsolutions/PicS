@@ -8,7 +8,7 @@ public class UserInfo {
     /**
      * pk : 唯一标识
      * email : 用户email
-     * avatar : 昵称
+     * avatar : 头像
      * sex : 性别(0:女 1:男)
      * country : 国家
      * province : 省
