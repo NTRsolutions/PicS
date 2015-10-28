@@ -9,4 +9,7 @@ public class Constant {
     public final static String LOGIN_URL_SUFFIX = "/api/user/login/";
 
     public final static String USER_INFO_PREFS = "UserInfoPrefs"; // 用户信息preference文件名
+    public final static String COOKIES_PREFS = "CookiesPrefs"; // cookie保存的preference文件名
+
+    public final static String TOKEN_NAME = "csrftoken"; // token名称
 }

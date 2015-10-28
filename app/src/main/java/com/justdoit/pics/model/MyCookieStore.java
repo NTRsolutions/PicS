@@ -43,7 +43,7 @@ public class MyCookieStore implements CookieStore {
 
         cookieStore = new CookieManager().getCookieStore();
 
-        SharedPreferences sp = context.getSharedPreferences(Constant.USER_INFO_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences sp = context.getSharedPreferences(Constant.COOKIES_PREFS, Context.MODE_PRIVATE);
 
         if (sp.getAll().isEmpty()) {
             // 请求服务器生成cookie

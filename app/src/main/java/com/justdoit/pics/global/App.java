@@ -19,7 +19,6 @@ public class App extends Application {
     public static CookieManager cookieManager;
     private final static String TAG = "App";
 
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -34,10 +33,10 @@ public class App extends Application {
      */
     public void setCookieManager() {
 
-        // 初始化cookie
+        // 初始化cookie,设置token名称
         if (cookieManager == null) {
             try {
-                cookieManager = new CookieManager(new MyCookieStore(this, new URI(Constant.HOME_URL)), CookiePolicy.ACCEPT_ALL);
+                cookieManager = new CookieManager(new MyCookieStore(this, new URI(Constant.HOME_URL), Constant.TOKEN_NAME), CookiePolicy.ACCEPT_ALL);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
                 Log.e(TAG, "new URI() failed");

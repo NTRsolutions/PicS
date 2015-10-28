@@ -89,7 +89,6 @@ public abstract class PostFormRequest<T> extends Request<T> {
             Log.e(TAG, "endLine getBytes() error");
         }
 
-        Log.i(TAG, "form data:" + bos.toString());
         return bos.toByteArray();
     }
 

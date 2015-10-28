@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,9 @@ import com.justdoit.pics.global.Constant;
 import com.justdoit.pics.model.NetSingleton;
 import com.justdoit.pics.model.PostFormJsonObjRequest;
 import com.justdoit.pics.util.NetUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -124,10 +128,10 @@ public class LoginActivity extends AppCompatActivity {
         Map<String, String> map = new HashMap<String, String>();
 
 
-        String tokenName = "csrfmiddlewaretoken";
+        final String userId = "userid";
         String token = App.getToken(Constant.HOME_URL);
 
-        map.put(tokenName, token);
+        map.put(Constant.TOKEN_NAME, token);
         map.put("username", username);
         map.put("password", password);
 
@@ -137,8 +141,20 @@ public class LoginActivity extends AppCompatActivity {
                     new Response.Listener() {
                         @Override
                         public void onResponse(Object response) {
-                            Log.e(TAG, response.toString());
                             showProgress(false);
+
+                            try {
+                                // 登录用户id信息写入shared preference文件
+                                JSONObject jsonObject = new JSONObject(response.toString());
+                                SharedPreferences.Editor editor = getSharedPreferences(Constant.USER_INFO_PREFS, MODE_PRIVATE).edit();
+
+                                editor.putInt(userId, jsonObject.getInt(userId));
+                                editor.commit();
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.e(TAG, "new JSONObject() failed");
+                            }
 
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -148,7 +164,6 @@ public class LoginActivity extends AppCompatActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.e(TAG, "登录失败");
                             error.printStackTrace();
 
                             showProgress(false);
