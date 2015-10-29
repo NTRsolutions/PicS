@@ -2,6 +2,7 @@ package com.justdoit.pics.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -107,10 +108,12 @@ public class UserInfoActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
 
+        // 点击up按钮事件处理
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
-
 
         return super.onOptionsItemSelected(item);
     }
