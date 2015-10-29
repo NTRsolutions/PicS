@@ -40,8 +40,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private final static String TAG = "LoginActivity";
 
-    // Email输入控件
-    // private AutoCompleteTextView mEmailView;
     private EditText mUsernameView;
     private EditText mPasswordView;
     private View mProgressView;
@@ -124,7 +122,12 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void work(String username, String password) {
+    /**
+     * 登录操作，成功后把用户id和用户名保存在preference文件
+     * @param username
+     * @param password
+     */
+    public void work(final String username, String password) {
         Map<String, String> map = new HashMap<String, String>();
 
 
@@ -143,14 +146,17 @@ public class LoginActivity extends AppCompatActivity {
                             showProgress(false);
 
                             try {
-                                // 登录用户id信息写入shared preference文件
+                                // 登录用户id和用户名信息写入shared preference文件
                                 JSONObject jsonObject = new JSONObject(response.toString());
                                 SharedPreferences.Editor editor = getSharedPreferences(Constant.USER_INFO_PREFS, MODE_PRIVATE).edit();
 
-                                editor.putInt(App.USER_ID_NAME, jsonObject.getInt(App.USER_ID_NAME));
+                                editor.putInt(Constant.USER_ID_NAME, jsonObject.getInt(Constant.USER_ID_NAME));
+                                editor.putString(Constant.USERNAME_NAME, username);
                                 editor.commit();
 
-                                App.setUserId(jsonObject.getInt(App.USER_ID_NAME)); // 设置全局userId
+                                App.setUserId(jsonObject.getInt(Constant.USER_ID_NAME)); // 设置全局userId
+                                App.setUserName(username);
+
 
                             } catch (JSONException e) {
                                 e.printStackTrace();

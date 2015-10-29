@@ -20,7 +20,8 @@ public class App extends Application {
     public static CookieManager cookieManager;
 
     public static int USER_ID = -1; // 用户id，唯一标识，默认值为-1
-    public static final String USER_ID_NAME = "userid"; // 用户id的名称
+
+    public static String USER_NAME = ""; // 用户名，默认为空字符串
 
     private final static String TAG = "App";
 
@@ -39,7 +40,8 @@ public class App extends Application {
     private void initUserData() {
         // 初始化userid,不存在就设为-1
         SharedPreferences sp = getSharedPreferences(Constant.USER_INFO_PREFS, MODE_PRIVATE);
-        USER_ID = sp.getInt(USER_ID_NAME, -1);
+        USER_ID = sp.getInt(Constant.USER_ID_NAME, -1);
+        USER_NAME = sp.getString(Constant.USERNAME_NAME, "");
     }
 
 
@@ -96,7 +98,15 @@ public class App extends Application {
         USER_ID = userId;
     }
 
+    public static void setUserName(String userName) {
+        USER_NAME = userName;
+    }
+
     public static int getUserId() {
         return USER_ID;
+    }
+
+    public static String getUserName() {
+        return USER_NAME;
     }
 }

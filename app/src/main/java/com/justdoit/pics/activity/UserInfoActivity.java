@@ -3,7 +3,6 @@ package com.justdoit.pics.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -63,7 +62,7 @@ public class UserInfoActivity extends AppCompatActivity {
         if (userInfo == null) {
             toolbar.setTitle(R.string.user_info);
         } else {
-
+            toolbar.setTitle(App.getUserName());
         }
     }
 
