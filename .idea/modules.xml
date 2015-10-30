@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/PicS.iml" filepath="$PROJECT_DIR$/PicS.iml" />
       <module fileurl="file://$PROJECT_DIR$/android-volley-1.0.19/android-volley-1.0.19.iml" filepath="$PROJECT_DIR$/android-volley-1.0.19/android-volley-1.0.19.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android-volley-1.0.19/android-volley-1.0.19.iml" filepath="$PROJECT_DIR$/android-volley-1.0.19/android-volley-1.0.19.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
