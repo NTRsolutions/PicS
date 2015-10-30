@@ -4,4 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="small_userphoto">32dp</dimen>
     <dimen name="cardview_margin">16dp</dimen>
+
+    <dimen name="user_info_collapse_layout_height">240dp</dimen>
 </resources>

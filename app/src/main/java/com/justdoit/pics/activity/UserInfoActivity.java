@@ -1,8 +1,14 @@
 package com.justdoit.pics.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -32,6 +38,7 @@ public class UserInfoActivity extends AppCompatActivity {
     private UserInfo userInfo = null;
 
     private Toolbar toolbar;
+    private CollapsingToolbarLayout toolbarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,13 +64,21 @@ public class UserInfoActivity extends AppCompatActivity {
      */
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.user_into_toolbar);
-        setSupportActionBar(toolbar);
+        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.user_info_toolbar_container);
 
-        if (userInfo == null) {
-            toolbar.setTitle(R.string.user_info);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 显示上一级按钮
+
+        String username = App.getUserName();
+
+        // 显示title内容
+        if (username == null || TextUtils.isEmpty(username)) {
+            toolbarLayout.setTitle(getResources().getString(R.string.user_info));
         } else {
-            toolbar.setTitle(App.getUserName());
+            toolbarLayout.setTitle(username);
         }
+
+        toolbarLayout.setTitleEnabled(false); // 设置title不跟随layout缩放
     }
 
     /**
@@ -90,4 +105,13 @@ public class UserInfoActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
 }
