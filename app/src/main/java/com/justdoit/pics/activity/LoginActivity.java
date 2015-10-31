@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -18,15 +19,18 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.justdoit.pics.R;
+import com.justdoit.pics.bean.UserInfo;
 import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
 import com.justdoit.pics.model.NetSingleton;
 import com.justdoit.pics.model.PostFormJsonObjRequest;
 import com.justdoit.pics.util.NetUtil;
+import com.justdoit.pics.util.SystemUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText mUsernameView;
     private EditText mPasswordView;
+    private Button mSignInButton;
     private View mProgressView;
     private View mLoginFormView;
 
@@ -55,8 +60,6 @@ public class LoginActivity extends AppCompatActivity {
         // Set up the login form.
 
         initView();
-
-
     }
 
     /**
@@ -80,8 +83,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        mSignInButton = (Button) findViewById(R.id.sign_in_button);
+        mSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
@@ -100,6 +103,9 @@ public class LoginActivity extends AppCompatActivity {
      * 检查登录信息是否符合
      */
     private void attemptLogin() {
+
+        // 关闭软键盘
+        SystemUtil.hideSystemKeyBoard(this, mSignInButton);
 
         mUsernameView.setError(null);
         mPasswordView.setError(null);
@@ -130,10 +136,12 @@ public class LoginActivity extends AppCompatActivity {
 
         if (cancel) {
             focusView.requestFocus();
-        } else {
-
+        } else if (NetUtil.isNetworkAvailable(this)) {
             showProgress(true);
             work(username, password);
+        } else {
+
+            Toast.makeText(this, "当前没有网络哦(T_T)", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -169,7 +177,6 @@ public class LoginActivity extends AppCompatActivity {
                                 editor.putInt(Constant.USER_ID_NAME, jsonObject.getInt(Constant.USER_ID_NAME));
                                 editor.putString(Constant.USERNAME_NAME, username);
                                 editor.commit();
-
                                 App.setUserId(jsonObject.getInt(Constant.USER_ID_NAME)); // 设置全局userId
                                 App.setUserName(username);
 
@@ -179,9 +186,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.e(TAG, "new JSONObject() failed");
                             }
 
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
+                            goActivity();
                         }
                     },
                     new Response.ErrorListener() {
@@ -201,6 +206,24 @@ public class LoginActivity extends AppCompatActivity {
             mInstance.addToRequestQueue(request);
         }
 
+    }
+
+    /**
+     * 根据传递的值判断要启动的activity
+     */
+    private void goActivity() {
+
+        String action = getIntent().getStringExtra(Constant.ACTION_KEY);
+        Intent intent = null;
+
+        if (action == null || TextUtils.isEmpty(action)) {
+            intent = new Intent(LoginActivity.this, MainActivity.class);
+        } else if (action.equals("UserInfoActivity")) {
+            intent = new Intent(LoginActivity.this, UserInfoActivity.class);
+        }
+
+        startActivity(intent);
+        finish();
     }
 
     private boolean isUsernameValid(String username) {

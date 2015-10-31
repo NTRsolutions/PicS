@@ -16,6 +16,7 @@ import android.widget.Button;
 import com.justdoit.pics.R;
 import com.justdoit.pics.adapater.mRecyclerViewAdapter;
 import com.justdoit.pics.global.App;
+import com.justdoit.pics.global.Constant;
 
 /**
  * 用来跳转到需要的测试页面
@@ -54,7 +55,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (App.isLogin()) {
                     startActivity(new Intent(MainActivity.this, UserInfoActivity.class));
                 } else {
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    // 带上要跳转到UserInfo的标识
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    intent.putExtra(Constant.ACTION_KEY, "UserInfoActivity");
+                    startActivity(intent);
                 }
 
             }
