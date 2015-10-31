@@ -5,5 +5,8 @@
     <dimen name="small_userphoto">32dp</dimen>
     <dimen name="cardview_margin">16dp</dimen>
 
-    <dimen name="user_info_collapse_layout_height">240dp</dimen>
+    <dimen name="user_info_collapse_layout_height">200dp</dimen>
+    <dimen name="user_info_avatar_iv_height">180dp</dimen>
+    <dimen name="user_info_vertical_margin">20dp</dimen>
+    <dimen name="user_info_horizontal_margin">16dp</dimen>
 </resources>

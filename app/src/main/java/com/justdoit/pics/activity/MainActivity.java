@@ -50,7 +50,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, UserInfoActivity.class));
+                // 如果登录了就跳转到用户信息页面，否则登录页面
+                if (App.isLogin()) {
+                    startActivity(new Intent(MainActivity.this, UserInfoActivity.class));
+                } else {
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
+
             }
         });
     }

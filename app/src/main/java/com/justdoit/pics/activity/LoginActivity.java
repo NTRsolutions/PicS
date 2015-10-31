@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -53,6 +54,19 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         // Set up the login form.
 
+        initView();
+
+
+    }
+
+    /**
+     * 初始化view
+     */
+    private void initView() {
+
+        setSupportActionBar((Toolbar) findViewById(R.id.login_toolbar));
+        getSupportActionBar().setTitle(R.string.action_sign_in);
+
         mUsernameView = (EditText) findViewById(R.id.username);
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -78,6 +92,7 @@ public class LoginActivity extends AppCompatActivity {
         mProgressView = findViewById(R.id.login_progress);
 
         mInstance = NetSingleton.getInstance(getApplicationContext());
+
     }
 
 
@@ -124,6 +139,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * 登录操作，成功后把用户id和用户名保存在preference文件
+     *
      * @param username
      * @param password
      */

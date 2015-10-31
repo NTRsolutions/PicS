@@ -72,6 +72,8 @@ public class UserInfoActivity extends AppCompatActivity {
 
         String username = App.getUserName();
 
+
+
         // 显示title内容
         if (username == null || TextUtils.isEmpty(username)) {
             toolbarLayout.setTitle(getResources().getString(R.string.user_info));
