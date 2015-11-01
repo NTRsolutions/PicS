@@ -21,6 +21,7 @@ import com.etiennelawlor.quickreturn.library.listeners.SpeedyQuickReturnRecycler
 import com.justdoit.pics.R;
 import com.justdoit.pics.adapater.mRecyclerViewAdapter;
 import com.justdoit.pics.global.App;
+import com.justdoit.pics.global.Constant;
 
 import org.w3c.dom.Text;
 
@@ -65,7 +66,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, UserInfoActivity.class));
+                // 如果登录了就跳转到用户信息页面，否则登录页面
+                if (App.isLogin()) {
+                    startActivity(new Intent(MainActivity.this, UserInfoActivity.class));
+                } else {
+                    // 带上要跳转到UserInfo的标识
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    intent.putExtra(Constant.ACTION_KEY, "UserInfoActivity");
+                    startActivity(intent);
+                }
+
             }
         });
 

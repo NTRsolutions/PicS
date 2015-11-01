@@ -16,4 +16,7 @@ public class Constant {
     public final static String COOKIES_PREFS = "CookiesPrefs"; // cookie保存的preference文件名
     public static final String USER_ID_NAME = "userid"; // 用户id的名称
     public static final String USERNAME_NAME = "username"; // 用户名的名称
+
+    // activity
+    public final static String ACTION_KEY = "goActivity"; // 选择要跳转的activity的key标识
 }
