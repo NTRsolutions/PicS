@@ -34,8 +34,8 @@ public class mRecyclerViewAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ((mViewHolder)holder).username.setText("test");
         ((mViewHolder)holder).content_text.setText("test");
-        ((mViewHolder)holder).userphoto.setImageResource(testphotodata[position-1]);
-        ((mViewHolder)holder).testphoto.setImageResource(testphotodata[position-1]);
+        ((mViewHolder)holder).userphoto.setImageResource(testphotodata[position]);
+        ((mViewHolder)holder).testphoto.setImageResource(testphotodata[position]);
     }
 
     @Override
