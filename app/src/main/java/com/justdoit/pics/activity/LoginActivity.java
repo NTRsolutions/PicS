@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.justdoit.pics.R;
@@ -46,6 +47,10 @@ import java.util.regex.Pattern;
 public class LoginActivity extends AppCompatActivity {
 
     private final static String TAG = "LoginActivity";
+    // key值
+    private final String USER_NAME = "username";
+    private final String PASSWORD = "password";
+    private final String EMAIL = "email";
 
     private EditText mUsernameView;
     private EditText mPasswordView;
@@ -199,12 +204,12 @@ public class LoginActivity extends AppCompatActivity {
         String url = null;
 
         map.put(Constant.TOKEN_NAME, token);
-        map.put("username", username);
-        map.put("password", password);
+        map.put(USER_NAME, username);
+        map.put(PASSWORD, password);
 
         // 判断登录还是注册，改变url和传递数据
         if (!isToLogin) {
-            map.put("email", email);
+            map.put(EMAIL, email);
             url = Constant.HOME_URL + Constant.REGIST_URL_SUFFIX;
         } else {
             url = Constant.HOME_URL + Constant.LOGIN_URL_SUFFIX;
@@ -218,23 +223,10 @@ public class LoginActivity extends AppCompatActivity {
                         public void onResponse(Object response) {
                             showProgress(false);
 
-                            try {
-                                // 登录用户id和用户名信息写入shared preference文件
-                                JSONObject jsonObject = new JSONObject(response.toString());
-                                SharedPreferences.Editor editor = getSharedPreferences(Constant.USER_INFO_PREFS, MODE_PRIVATE).edit();
+                            // 保存参数
+                            saveUserInfo(response.toString(), username);
 
-                                editor.putInt(Constant.USER_ID_NAME, jsonObject.getInt(Constant.USER_ID_NAME));
-                                editor.putString(Constant.USERNAME_NAME, username);
-                                editor.commit();
-                                App.setUserId(jsonObject.getInt(Constant.USER_ID_NAME)); // 设置全局userId
-                                App.setUserName(username);
-
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Log.e(TAG, "new JSONObject() failed");
-                            }
-
+                            // 跳转到相应页面
                             goActivity();
                         }
                     },
@@ -242,12 +234,14 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             // TODO 需要分析response，然后调整界面
-                            error.printStackTrace();
 
                             showProgress(false);
 
-                            mPasswordView.setError(getString(R.string.error_incorrect_password));
-                            mPasswordView.requestFocus();
+                            // 显示错误信息
+                            showErrorMessage(error.networkResponse);
+
+//                            mPasswordView.setError(getString(R.string.error_incorrect_password));
+//                            mPasswordView.requestFocus();
                         }
                     }
             );
@@ -256,6 +250,62 @@ public class LoginActivity extends AppCompatActivity {
             mInstance.addToRequestQueue(request);
         }
 
+    }
+
+    /**
+     * 保存登录或注册成功后的信息
+     * TODO 注册接口需要添加userid字段
+     * @param jsonStr
+     */
+    private void saveUserInfo(String jsonStr, String username) {
+        try {
+            // 登录用户id和用户名信息写入shared preference文件
+            JSONObject jsonObject = new JSONObject(jsonStr);
+            SharedPreferences.Editor editor = getSharedPreferences(Constant.USER_INFO_PREFS, MODE_PRIVATE).edit();
+
+            editor.putInt(Constant.USER_ID_NAME, jsonObject.getInt(Constant.USER_ID_NAME));
+            editor.putString(Constant.USERNAME_NAME, username);
+            editor.commit();
+
+            App.setUserId(jsonObject.getInt(Constant.USER_ID_NAME)); // 设置全局userId
+            App.setUserName(username);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, "saveUserInfo():new JSONObject() failed");
+        }
+    }
+
+    /**
+     * 显示登录或注册失败的返回信息
+     * @param response
+     */
+    private void showErrorMessage(NetworkResponse response) {
+        String jsonStr = new String(response.data);
+        try {
+            JSONObject jsonObject = new JSONObject(jsonStr);
+
+            // 显示各项错误
+            if (!jsonObject.isNull(USER_NAME)) {
+                // 如果username不是空
+                String usernameError = jsonObject.getJSONArray(USER_NAME).getString(0);
+                mUsernameView.setError(usernameError);
+                mUsernameView.requestFocus();
+            } else if (!jsonObject.isNull(PASSWORD)) {
+                String passwordError = jsonObject.getJSONArray(PASSWORD).getString(0);
+                mPasswordView.setError(passwordError);
+                mPasswordView.requestFocus();
+            } else if (!isToLogin && !jsonObject.isNull(EMAIL)) {
+                String emailError = jsonObject.getJSONArray(EMAIL).getString(0);
+                mEmailView.setError(emailError);
+                mEmailView.requestFocus();
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, "new JSONObject() failed");
+        }
     }
 
     private boolean isUsernameValid(String username) {
@@ -275,7 +325,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean isEmailValid(String email) {
         // 检查邮件字符串合法性
-        final String EMAIL_MATCH_STR = "\\p{Alpha}\\w{2,15}[@][a-z0-9]{3,}[.]\\p{Lower}{2,}";
+        final String EMAIL_MATCH_STR = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
         Pattern pattern = Pattern.compile(EMAIL_MATCH_STR);
         return pattern.matcher(email).matches();
     }
