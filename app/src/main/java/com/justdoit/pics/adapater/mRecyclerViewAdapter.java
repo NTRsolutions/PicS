@@ -1,10 +1,12 @@
 package com.justdoit.pics.adapater;
 
+import android.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.justdoit.pics.R;
@@ -32,13 +34,13 @@ public class mRecyclerViewAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ((mViewHolder)holder).username.setText("test");
         ((mViewHolder)holder).content_text.setText("test");
-        ((mViewHolder)holder).userphoto.setImageResource(testphotodata[position]);
-        ((mViewHolder)holder).testphoto.setImageResource(testphotodata[position]);
+        ((mViewHolder)holder).userphoto.setImageResource(testphotodata[position-1]);
+        ((mViewHolder)holder).testphoto.setImageResource(testphotodata[position-1]);
     }
 
     @Override
     public int getItemCount() {
-        return testphotodata.length-1;
+        return testphotodata.length;
     }
 
 
