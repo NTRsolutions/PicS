@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -144,14 +145,14 @@ public class LoginActivity extends AppCompatActivity {
         boolean cancel = false;
         View focusView = null;
 
-        // 检查用户名
-        if (TextUtils.isEmpty(username)) {
-            mUsernameView.setError(getString(R.string.error_field_required));
-            focusView = mUsernameView;
+        // 检查密码
+        if (TextUtils.isEmpty(password)) {
+            mPasswordView.setError(getString(R.string.error_field_required));
+            focusView = mPasswordView;
             cancel = true;
-        } else if (!isUsernameValid(username)) {
-            mUsernameView.setError(getString(R.string.error_invalid_username));
-            focusView = mUsernameView;
+        } else if (!isPasswordValid(password)) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
             cancel = true;
         }
 
@@ -167,12 +168,17 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
 
-        // 检查密码
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
+        // 检查用户名
+        if (TextUtils.isEmpty(username)) {
+            mUsernameView.setError(getString(R.string.error_field_required));
+            focusView = mUsernameView;
+            cancel = true;
+        } else if (!isUsernameValid(username)) {
+            mUsernameView.setError(getString(R.string.error_invalid_username));
+            focusView = mUsernameView;
             cancel = true;
         }
+
 
         if (cancel) {
             focusView.requestFocus();
@@ -181,9 +187,7 @@ public class LoginActivity extends AppCompatActivity {
 
             work(email, username, password);
         } else {
-
             Toast.makeText(this, "当前没有网络哦(T_T)", Toast.LENGTH_SHORT).show();
-
         }
     }
 
@@ -221,10 +225,11 @@ public class LoginActivity extends AppCompatActivity {
                     new Response.Listener() {
                         @Override
                         public void onResponse(Object response) {
-                            showProgress(false);
 
                             // 保存参数
                             saveUserInfo(response.toString(), username);
+
+                            showProgress(false);
 
                             // 跳转到相应页面
                             goActivity();
@@ -233,14 +238,10 @@ public class LoginActivity extends AppCompatActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
-                            showProgress(false);
-
                             // 显示错误信息
                             showErrorMessage(error.networkResponse);
 
-//                            mPasswordView.setError(getString(R.string.error_incorrect_password));
-//                            mPasswordView.requestFocus();
+                            showProgress(false);
                         }
                     }
             );
