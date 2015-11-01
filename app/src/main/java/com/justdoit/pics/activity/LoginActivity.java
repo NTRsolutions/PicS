@@ -233,7 +233,6 @@ public class LoginActivity extends AppCompatActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            // TODO 需要分析response，然后调整界面
 
                             showProgress(false);
 
