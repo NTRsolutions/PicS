@@ -144,13 +144,6 @@ public class LoginActivity extends AppCompatActivity {
         boolean cancel = false;
         View focusView = null;
 
-        // 检查密码
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
         // 检查用户名
         if (TextUtils.isEmpty(username)) {
             mUsernameView.setError(getString(R.string.error_field_required));
@@ -172,6 +165,13 @@ public class LoginActivity extends AppCompatActivity {
                 focusView = mEmailView;
                 cancel = true;
             }
+        }
+
+        // 检查密码
+        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            cancel = true;
         }
 
         if (cancel) {
@@ -303,7 +303,7 @@ public class LoginActivity extends AppCompatActivity {
 
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e(TAG, "new JSONObject() failed");
+            Log.e(TAG, "showErrorMessage() : new JSONObject() failed");
         }
     }
 
