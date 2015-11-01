@@ -1,5 +1,6 @@
 package com.justdoit.pics.activity;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,12 +12,18 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.etiennelawlor.quickreturn.library.enums.QuickReturnViewType;
+import com.etiennelawlor.quickreturn.library.listeners.SpeedyQuickReturnRecyclerViewOnScrollListener;
 import com.justdoit.pics.R;
 import com.justdoit.pics.adapater.mRecyclerViewAdapter;
 import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
+
+import org.w3c.dom.Text;
 
 /**
  * 用来跳转到需要的测试页面
@@ -42,10 +49,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         content_container =(RecyclerView)findViewById(R.id.content_container);
-        content_container.setLayoutManager(new StaggeredGridLayoutManager(1 , StaggeredGridLayoutManager.VERTICAL));
+        content_container.setLayoutManager(new LinearLayoutManager(this));
         content_container.setHasFixedSize(true);
         content_container.setAdapter(new mRecyclerViewAdapter());
-
+        SpeedyQuickReturnRecyclerViewOnScrollListener scrollListener = new SpeedyQuickReturnRecyclerViewOnScrollListener.Builder(this, QuickReturnViewType.BOTH)
+                .header(findViewById(R.id.header_tv))
+                .footer(findViewById(R.id.footer_tv))
+                .slideHeaderUpAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_header_up))
+                .slideHeaderDownAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_header_down))
+                .slideFooterUpAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_footer_up))
+                .slideFooterDownAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_footer_down))
+                .build();
+        content_container.addOnScrollListener(scrollListener);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.mipmap.ic_launcher);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -63,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+
     }
 
     @Override
