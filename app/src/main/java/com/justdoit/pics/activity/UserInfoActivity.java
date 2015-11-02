@@ -2,7 +2,10 @@ package com.justdoit.pics.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -18,6 +21,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.justdoit.pics.R;
+import com.justdoit.pics.adapater.UserInfoViewPagerAdapter;
 import com.justdoit.pics.bean.UserInfo;
 import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
@@ -39,6 +43,7 @@ public class UserInfoActivity extends AppCompatActivity {
     private UserInfo userInfo = null;
 
     private Toolbar toolbar;
+    private TabLayout tabLayout;
     private CollapsingToolbarLayout toolbarLayout;
 
     @Override
@@ -57,6 +62,8 @@ public class UserInfoActivity extends AppCompatActivity {
     private void initView() {
 
         initToolbar();
+
+        initTabLayout();
 
     }
 
@@ -82,6 +89,36 @@ public class UserInfoActivity extends AppCompatActivity {
         }
 
         toolbarLayout.setTitleEnabled(false); // 设置title不跟随layout缩放
+    }
+
+    /**
+     * 设置tab layout和viewpager
+     */
+    private void initTabLayout() {
+        tabLayout = (TabLayout) findViewById(R.id.user_info_tab_layout);
+
+        ViewPager viewpager = (ViewPager) findViewById(R.id.user_info_view_pager);
+
+        if (viewpager != null) {
+            setupViewPager(viewpager);
+        }
+
+        tabLayout.setupWithViewPager(viewpager); // 装载viewpager
+    }
+
+    /**
+     * 初始化viewpager
+     * @param viewpager
+     */
+    private void setupViewPager(ViewPager viewpager) {
+        UserInfoViewPagerAdapter adapter = new UserInfoViewPagerAdapter(getSupportFragmentManager());
+
+        adapter.addFragment(new Fragment(), "简介");
+        adapter.addFragment(new Fragment(), "信息");
+        adapter.addFragment(new Fragment(), "收藏");
+
+        viewpager.setAdapter(adapter);
+
     }
 
     /**
