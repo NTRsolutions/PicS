@@ -53,15 +53,16 @@ public class LoginActivity extends AppCompatActivity {
     private final String PASSWORD = "password";
     private final String EMAIL = "email";
 
-    private EditText mUsernameView;
-    private EditText mPasswordView;
-    private EditText mEmailView;
-    private TextView mHintTextView;
+    private TextInputLayout mUsernameLayout;
+    private TextInputLayout mPasswordLayout;
+    private TextInputLayout mEmailLayout;
+
+    private TextView mHintTextView; // 提示转换登录和注册
+
     private Button mButton;
     private View mProgressView;
     private View mProgressLayoutView;
     private View mLoginFormView;
-    private View mEmailLayoutView;
 
     private boolean isToLogin = true; // 是准备登录
 
@@ -93,19 +94,21 @@ public class LoginActivity extends AppCompatActivity {
                 if (isToLogin) {
                     ((TextView) v).setText(R.string.register_hint);
                     mButton.setText(R.string.action_login_in);
-                    mEmailLayoutView.setVisibility(View.GONE);
+                    mEmailLayout.setVisibility(View.GONE);
                 } else {
                     ((TextView) v).setText(R.string.login_hint);
                     mButton.setText(R.string.action_sign_up);
-                    mEmailLayoutView.setVisibility(View.VISIBLE);
+                    mEmailLayout.setVisibility(View.VISIBLE);
                 }
             }
         });
 
 
-        mUsernameView = (EditText) findViewById(R.id.username);
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mEmailView = (EditText) findViewById(R.id.email);
+        mUsernameLayout = (TextInputLayout) findViewById(R.id.username_layout);
+        mPasswordLayout = (TextInputLayout) findViewById(R.id.password_layout);
+        mEmailLayout = (TextInputLayout) findViewById(R.id.email_layout);
+
+        // 点击清除错误信息
 
         mButton = (Button) findViewById(R.id.sign_in_button);
         mButton.setOnClickListener(new OnClickListener() {
@@ -118,7 +121,6 @@ public class LoginActivity extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         mProgressLayoutView = findViewById(R.id.login_progress_layout);
-        mEmailLayoutView = findViewById(R.id.email_layout);
 
         mInstance = NetSingleton.getInstance(getApplicationContext());
 
@@ -134,48 +136,48 @@ public class LoginActivity extends AppCompatActivity {
         SystemUtil.hideSystemKeyBoard(this, mButton);
 
         // TODO 错误信息显示错位
-        mUsernameView.setError(null);
-        mPasswordView.setError(null);
-        mEmailView.setError(null);
+        mUsernameLayout.setError(null);
+        mPasswordLayout.setError(null);
+        mEmailLayout.setError(null);
 
-        String username = mUsernameView.getText().toString();
-        String password = mPasswordView.getText().toString();
-        String email = mEmailView.getText().toString();
+        String username = mUsernameLayout.getEditText().getText().toString();
+        String password = mPasswordLayout.getEditText().getText().toString();
+        String email = mEmailLayout.getEditText().getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // 检查密码
         if (TextUtils.isEmpty(password)) {
-            mPasswordView.setError(getString(R.string.error_field_required));
-            focusView = mPasswordView;
+            mPasswordLayout.setError(getString(R.string.error_field_required));
+            focusView = mPasswordLayout;
             cancel = true;
         } else if (!isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
+            mPasswordLayout.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordLayout;
             cancel = true;
         }
 
         if (!isToLogin) {
             if (TextUtils.isEmpty(email)) {
-                mEmailView.setError(getString(R.string.error_field_required));
-                focusView = mEmailView;
+                mEmailLayout.setError(getString(R.string.error_field_required));
+                focusView = mEmailLayout;
                 cancel = true;
             } else if (!isEmailValid(email)) {
-                mEmailView.setError(getString(R.string.error_invalid_email));
-                focusView = mEmailView;
+                mEmailLayout.setError(getString(R.string.error_invalid_email));
+                focusView = mEmailLayout;
                 cancel = true;
             }
         }
 
         // 检查用户名
         if (TextUtils.isEmpty(username)) {
-            mUsernameView.setError(getString(R.string.error_field_required));
-            focusView = mUsernameView;
+            mUsernameLayout.setError(getString(R.string.error_field_required));
+            focusView = mUsernameLayout;
             cancel = true;
         } else if (!isUsernameValid(username)) {
-            mUsernameView.setError(getString(R.string.error_invalid_username));
-            focusView = mUsernameView;
+            mUsernameLayout.setError(getString(R.string.error_invalid_username));
+            focusView = mUsernameLayout;
             cancel = true;
         }
 
@@ -290,16 +292,16 @@ public class LoginActivity extends AppCompatActivity {
             if (!jsonObject.isNull(USER_NAME)) {
                 // 如果username不是空
                 String usernameError = jsonObject.getJSONArray(USER_NAME).getString(0);
-                mUsernameView.setError(usernameError);
-                mUsernameView.requestFocus();
+                mUsernameLayout.setError(usernameError);
+                mUsernameLayout.requestFocus();
             } else if (!jsonObject.isNull(PASSWORD)) {
                 String passwordError = jsonObject.getJSONArray(PASSWORD).getString(0);
-                mPasswordView.setError(passwordError);
-                mPasswordView.requestFocus();
+                mPasswordLayout.setError(passwordError);
+                mPasswordLayout.requestFocus();
             } else if (!isToLogin && !jsonObject.isNull(EMAIL)) {
                 String emailError = jsonObject.getJSONArray(EMAIL).getString(0);
-                mEmailView.setError(emailError);
-                mEmailView.requestFocus();
+                mEmailLayout.setError(emailError);
+                mEmailLayout.requestFocus();
             }
 
         } catch (JSONException e) {
