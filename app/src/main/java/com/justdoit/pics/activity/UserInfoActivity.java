@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -63,6 +64,8 @@ public class UserInfoActivity extends AppCompatActivity {
 
         initToolbar();
 
+        initBriefView();
+
         initTabLayout();
 
     }
@@ -77,18 +80,24 @@ public class UserInfoActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 显示上一级按钮
 
+        toolbarLayout.setTitleEnabled(false); // 设置title不跟随layout缩放
+    }
+
+    private void initBriefView() {
+        TextView usernameTv = (TextView) findViewById(R.id.user_info_username);
+
         String username = App.getUserName();
 
-
-
-        // 显示title内容
+        // 设置用户名
         if (username == null || TextUtils.isEmpty(username)) {
-            toolbarLayout.setTitle(getResources().getString(R.string.user_info));
+            usernameTv.setText(R.string.user_info);
         } else {
-            toolbarLayout.setTitle(username);
+            usernameTv.setText(username);
         }
 
-        toolbarLayout.setTitleEnabled(false); // 设置title不跟随layout缩放
+        // 设置居住地
+        TextView locationTv = (TextView) findViewById(R.id.user_info_location);
+
     }
 
     /**
