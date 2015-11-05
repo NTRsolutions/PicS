@@ -15,5 +15,6 @@
     <string name="register_hint">Don\'t have an account?Sign up Now</string>
     <string name="login_hint">Already have an account?Login in Now</string>
 
+    <string name="user_info_location">Live in Someplace:)</string>
     <string name="user_info">User info</string>
 </resources>

@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
     private void initView() {
 
         setSupportActionBar((Toolbar) findViewById(R.id.login_toolbar));
-        getSupportActionBar().setTitle(R.string.action_sign_up);
+        getSupportActionBar().setTitle(R.string.action_login_in);
 
         mHintTextView = (TextView) findViewById(R.id.hint_tv);
         mHintTextView.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
@@ -94,10 +94,12 @@ public class LoginActivity extends AppCompatActivity {
                 if (isToLogin) {
                     ((TextView) v).setText(R.string.register_hint);
                     mButton.setText(R.string.action_login_in);
+                    getSupportActionBar().setTitle(R.string.action_login_in);
                     mEmailLayout.setVisibility(View.GONE);
                 } else {
                     ((TextView) v).setText(R.string.login_hint);
                     mButton.setText(R.string.action_sign_up);
+                    getSupportActionBar().setTitle(R.string.action_sign_up);
                     mEmailLayout.setVisibility(View.VISIBLE);
                 }
             }
@@ -135,7 +137,6 @@ public class LoginActivity extends AppCompatActivity {
         // 关闭软键盘
         SystemUtil.hideSystemKeyBoard(this, mButton);
 
-        // TODO 错误信息显示错位
         mUsernameLayout.setError(null);
         mPasswordLayout.setError(null);
         mEmailLayout.setError(null);
@@ -271,7 +272,6 @@ public class LoginActivity extends AppCompatActivity {
 
             App.setUserId(jsonObject.getInt(Constant.USER_ID_NAME)); // 设置全局userId
             App.setUserName(username);
-
 
         } catch (JSONException e) {
             e.printStackTrace();

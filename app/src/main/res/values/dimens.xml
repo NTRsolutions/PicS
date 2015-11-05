@@ -6,9 +6,10 @@
     <dimen name="cardview_margin">16dp</dimen>
 
     <dimen name="user_info_collapse_layout_height">200dp</dimen>
+    <dimen name="user_info_brief_container_height">180dp</dimen>
     <dimen name="user_info_bg_iv_height">180dp</dimen>
     <dimen name="user_info_vertical_margin">20dp</dimen>
     <dimen name="user_info_horizontal_margin">16dp</dimen>
-    <dimen name="user_info_show_case_height">60dp</dimen>
     <dimen name="user_info_avatar_size">56dp</dimen>
+    <dimen name="user_info_username_tx_size">20sp</dimen>
 </resources>
