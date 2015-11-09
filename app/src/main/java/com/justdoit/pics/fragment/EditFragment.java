@@ -13,13 +13,13 @@ import com.justdoit.pics.R;
 /**
  * Created by ljz on 2015/11/3.
  */
-public class edit_fragment extends DialogFragment {
-    public edit_fragment() {
+public class EditFragment extends DialogFragment {
+    public EditFragment() {
         super();
     }
 
-    static edit_fragment newInstance() {
-        return new edit_fragment();
+    static EditFragment newInstance() {
+        return new EditFragment();
     }
 
     @Nullable

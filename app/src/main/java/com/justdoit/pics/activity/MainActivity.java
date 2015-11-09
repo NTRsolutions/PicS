@@ -1,33 +1,15 @@
 package com.justdoit.pics.activity;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.etiennelawlor.quickreturn.library.enums.QuickReturnViewType;
-import com.etiennelawlor.quickreturn.library.listeners.SpeedyQuickReturnRecyclerViewOnScrollListener;
 import com.justdoit.pics.R;
-import com.justdoit.pics.adapater.mRecyclerViewAdapter;
-import com.justdoit.pics.fragment.mainFragment;
+import com.justdoit.pics.fragment.MainFragment;
 import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 
 /**
  * 用来跳转到需要的测试页面
@@ -78,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         getFragmentManager()
                 .beginTransaction()
-                .add(R.id.container, mainFragment.newInstance("test"),"mainFragment")
+                .add(R.id.container, MainFragment.newInstance("test"),"MainFragment")
                 .commit();
 
     }

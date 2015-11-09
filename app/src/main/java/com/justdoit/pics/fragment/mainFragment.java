@@ -1,12 +1,11 @@
 package com.justdoit.pics.fragment;
 
-import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
+
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,12 +25,12 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link mainFragment.OnFragmentInteractionListener} interface
+ * {@link MainFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link mainFragment#newInstance} factory method to
+ * Use the {@link MainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class mainFragment extends Fragment implements OnClickListener {
+public class MainFragment extends Fragment implements OnClickListener {
     //
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -43,7 +42,7 @@ public class mainFragment extends Fragment implements OnClickListener {
 
     private RecyclerView content_container;
 
-    public mainFragment() {
+    public MainFragment() {
         // Required empty public constructor
     }
 
@@ -52,10 +51,10 @@ public class mainFragment extends Fragment implements OnClickListener {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @return A new instance of fragment mainFragment.
+     * @return A new instance of fragment MainFragment.
      */
-    public static mainFragment newInstance(String param1) {
-        mainFragment fragment = new mainFragment();
+    public static MainFragment newInstance(String param1) {
+        MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         fragment.setArguments(args);
@@ -101,8 +100,8 @@ public class mainFragment extends Fragment implements OnClickListener {
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.edit_iv:
-                edit_fragment edit_fragment = com.justdoit.pics.fragment.edit_fragment.newInstance();
-                edit_fragment.show(this.getActivity().getFragmentManager().beginTransaction(),"edit_fragment");
+                EditFragment EditFragment = com.justdoit.pics.fragment.EditFragment.newInstance();
+                EditFragment.show(this.getActivity().getFragmentManager().beginTransaction(),"EditFragment");
                 break;
             default:
                 break;
