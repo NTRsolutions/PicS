@@ -88,7 +88,6 @@ public class MainFragment extends Fragment implements OnClickListener {
                 .slideFooterUpAnimation(AnimationUtils.loadAnimation(this.getActivity(), R.anim.slide_footer_up))
                 .slideFooterDownAnimation(AnimationUtils.loadAnimation(this.getActivity(), R.anim.slide_footer_down))
                 .build();
-
         content_container.addOnScrollListener(scrollListener);
 
         edit_iv.setOnClickListener(this);
