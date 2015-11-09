@@ -7,7 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.justdoit.pics.R;
-import com.justdoit.pics.fragment.mainFragment;
+import com.justdoit.pics.fragment.MainFragment;
 import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
 
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         getFragmentManager()
                 .beginTransaction()
-                .add(R.id.container, mainFragment.newInstance("test"),"mainFragment")
+                .add(R.id.container, MainFragment.newInstance("test"),"MainFragment")
                 .commit();
 
     }
