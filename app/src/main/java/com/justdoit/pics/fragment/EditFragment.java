@@ -21,7 +21,6 @@ public class EditFragment extends DialogFragment {
     static EditFragment newInstance() {
         return new EditFragment();
     }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
