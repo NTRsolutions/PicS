@@ -25,12 +25,12 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MainFragment.OnFragmentInteractionListener} interface
+ * {@link mainFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MainFragment#newInstance} factory method to
+ * Use the {@link mainFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends Fragment implements OnClickListener {
+public class mainFragment extends Fragment implements OnClickListener {
     //
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -42,7 +42,7 @@ public class MainFragment extends Fragment implements OnClickListener {
 
     private RecyclerView content_container;
 
-    public MainFragment() {
+    public mainFragment() {
         // Required empty public constructor
     }
 
@@ -51,10 +51,10 @@ public class MainFragment extends Fragment implements OnClickListener {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @return A new instance of fragment MainFragment.
+     * @return A new instance of fragment mainFragment.
      */
-    public static MainFragment newInstance(String param1) {
-        MainFragment fragment = new MainFragment();
+    public static mainFragment newInstance(String param1) {
+        mainFragment fragment = new mainFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         fragment.setArguments(args);
