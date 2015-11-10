@@ -4,16 +4,10 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -24,6 +18,7 @@ import com.google.gson.reflect.TypeToken;
 import com.justdoit.pics.R;
 import com.justdoit.pics.adapater.UserInfoViewPagerAdapter;
 import com.justdoit.pics.bean.UserInfo;
+import com.justdoit.pics.fragment.MainFragment;
 import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
 import com.justdoit.pics.model.NetSingleton;
@@ -84,19 +79,6 @@ public class UserInfoActivity extends AppCompatActivity {
     }
 
     private void initBriefView() {
-        TextView usernameTv = (TextView) findViewById(R.id.user_info_username);
-
-        String username = App.getUserName();
-
-        // 设置用户名
-        if (username == null || TextUtils.isEmpty(username)) {
-            usernameTv.setText(R.string.user_info);
-        } else {
-            usernameTv.setText(username);
-        }
-
-        // 设置居住地
-        TextView locationTv = (TextView) findViewById(R.id.user_info_location);
 
     }
 
@@ -123,9 +105,9 @@ public class UserInfoActivity extends AppCompatActivity {
         UserInfoViewPagerAdapter adapter = new UserInfoViewPagerAdapter(getSupportFragmentManager());
 
         adapter.addFragment(new Fragment(), "简介");
-        adapter.addFragment(new Fragment(), "信息");
+        // adapter.addFragment(new Fragment(), "信息");
+        adapter.addFragment(MainFragment.newInstance("test"), "信息");
         adapter.addFragment(new Fragment(), "收藏");
-
         viewpager.setAdapter(adapter);
 
     }
