@@ -20,4 +20,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sex">Sex</string>
+    <string name="residence">Residence</string>
+    <string name="birthday">Birthday</string>
+    <string name="followers">Followers</string>
+    <string name="grade">Grade</string>
 </resources>

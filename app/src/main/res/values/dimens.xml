@@ -5,12 +5,16 @@
     <dimen name="small_userphoto">32dp</dimen>
     <dimen name="cardview_margin">16dp</dimen>
 
-    <dimen name="user_info_collapse_layout_height">240dp</dimen>
+    <dimen name="user_info_collapse_layout_height">260dp</dimen>
     <dimen name="user_info_toolbar_height">115dp</dimen>
     <dimen name="user_info_toolbar_title_margin_top">15dp</dimen>
     <dimen name="user_info_bg_iv_height">180dp</dimen>
     <dimen name="user_info_vertical_margin">20dp</dimen>
     <dimen name="user_info_horizontal_margin">16dp</dimen>
-    <dimen name="user_info_avatar_size">56dp</dimen>
+    <dimen name="user_info_avatar_size">80dp</dimen>
     <dimen name="user_info_username_tx_size">20sp</dimen>
+
+    <dimen name="brief_intro_margin">16dp</dimen>
+    <dimen name="brief_intro_item_divider_height">1dp</dimen>
+    <dimen name="brief_intro_tv_size">22sp</dimen>
 </resources>

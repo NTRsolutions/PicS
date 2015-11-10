@@ -41,7 +41,7 @@ public class NetSingleton {
      */
     public synchronized static NetSingleton getInstance(Context context) {
         if (mInstance == null) {
-            mInstance = new NetSingleton(context);
+            mInstance = new NetSingleton(context.getApplicationContext()); // 使用全局context
         }
 
         return mInstance;

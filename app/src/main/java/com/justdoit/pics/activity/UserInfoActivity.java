@@ -18,6 +18,7 @@ import com.google.gson.reflect.TypeToken;
 import com.justdoit.pics.R;
 import com.justdoit.pics.adapater.UserInfoViewPagerAdapter;
 import com.justdoit.pics.bean.UserInfo;
+import com.justdoit.pics.fragment.BriefIntroFragment;
 import com.justdoit.pics.fragment.MainFragment;
 import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
@@ -36,8 +37,6 @@ public class UserInfoActivity extends AppCompatActivity {
 
     private final static String TAG = "UserInfoActivity";
 
-    private UserInfo userInfo = null;
-
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private CollapsingToolbarLayout toolbarLayout;
@@ -46,8 +45,6 @@ public class UserInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
-
-        getDataFromServer();
 
         initView();
     }
@@ -58,8 +55,6 @@ public class UserInfoActivity extends AppCompatActivity {
     private void initView() {
 
         initToolbar();
-
-        initBriefView();
 
         initTabLayout();
 
@@ -76,10 +71,6 @@ public class UserInfoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 显示上一级按钮
 
         toolbarLayout.setTitleEnabled(false); // 设置title不跟随layout缩放
-    }
-
-    private void initBriefView() {
-
     }
 
     /**
@@ -104,35 +95,10 @@ public class UserInfoActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewpager) {
         UserInfoViewPagerAdapter adapter = new UserInfoViewPagerAdapter(getSupportFragmentManager());
 
-        adapter.addFragment(new Fragment(), "简介");
-        // adapter.addFragment(new Fragment(), "信息");
+        adapter.addFragment(BriefIntroFragment.newInstance(), "简介");
         adapter.addFragment(MainFragment.newInstance("test"), "信息");
         adapter.addFragment(new Fragment(), "收藏");
         viewpager.setAdapter(adapter);
-
-    }
-
-    /**
-     * 获取服务器用户数据
-     */
-    public void getDataFromServer() {
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, Constant.HOME_URL + Constant.USER_INFO_URL_SUFFIX + App.getUserId(),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Gson gson = new Gson();
-                        Type type = new TypeToken<UserInfo>(){}.getType();
-                        userInfo = gson.fromJson(String.valueOf(response), type);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                });
-
-        NetSingleton.getInstance(this).addToRequestQueue(request);
 
     }
 
