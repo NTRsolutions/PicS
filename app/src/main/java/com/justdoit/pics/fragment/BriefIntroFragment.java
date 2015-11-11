@@ -21,6 +21,7 @@ import com.justdoit.pics.bean.UserInfo;
 import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
 import com.justdoit.pics.model.NetSingleton;
+import com.justdoit.pics.widget.CustomItemDecoration;
 
 import org.json.JSONObject;
 
@@ -75,6 +76,8 @@ public class BriefIntroFragment extends Fragment {
         briefIntroAdapter = new BriefIntroAdapter();
 
         briefIntroList.setAdapter(briefIntroAdapter); // 设置adapter
+
+        briefIntroList.addItemDecoration(new CustomItemDecoration()); // 设置分隔线
     }
 
     /**
