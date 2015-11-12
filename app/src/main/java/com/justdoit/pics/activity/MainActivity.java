@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.container, MainFragment.newInstance("test"),"MainFragment")
+                .add(R.id.container, MainFragment.newInstance(MainFragment.NORMAL),"MainFragment")
                 .commit();
 
     }

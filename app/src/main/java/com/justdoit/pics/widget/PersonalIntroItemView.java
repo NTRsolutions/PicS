@@ -13,6 +13,8 @@ import com.justdoit.pics.R;
 
 /**
  * 用户信息页面->简介页面->基本信息的一个组合view
+ * 包含三个view（标题，内容，编辑图片）
+ * 通过update() 方法控制显示的内容
  * Created by mengwen on 2015/11/12.
  */
 public class PersonalIntroItemView extends RelativeLayout {
@@ -64,6 +66,11 @@ public class PersonalIntroItemView extends RelativeLayout {
         return editable;
     }
 
+    /**
+     * 设置可编辑
+     * @param editable
+     *   true:显示编辑图片，false:隐藏编辑图片
+     */
     public void setEditable(boolean editable) {
         this.editable = editable;
     }
