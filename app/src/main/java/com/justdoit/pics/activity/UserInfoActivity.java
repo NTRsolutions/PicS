@@ -5,6 +5,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -40,6 +41,7 @@ public class UserInfoActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private CollapsingToolbarLayout toolbarLayout;
+    private SwipeRefreshLayout container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,8 @@ public class UserInfoActivity extends AppCompatActivity {
      * 初始化view
      */
     private void initView() {
+
+        container = (SwipeRefreshLayout) findViewById(R.id.user_info_refresh_container);
 
         initToolbar();
 
