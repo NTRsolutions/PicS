@@ -96,7 +96,7 @@ public class UserInfoActivity extends AppCompatActivity {
         UserInfoViewPagerAdapter adapter = new UserInfoViewPagerAdapter(getSupportFragmentManager());
 
         adapter.addFragment(BriefIntroFragment.newInstance(), "简介");
-        adapter.addFragment(MainFragment.newInstance("test"), "信息");
+        adapter.addFragment(MainFragment.newInstance(MainFragment.NO_FOOTERANDHEADER), "信息");
         adapter.addFragment(new Fragment(), "收藏");
         viewpager.setAdapter(adapter);
 

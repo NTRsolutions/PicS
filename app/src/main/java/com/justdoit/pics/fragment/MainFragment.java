@@ -11,7 +11,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.etiennelawlor.quickreturn.library.enums.QuickReturnViewType;
@@ -19,6 +21,8 @@ import com.etiennelawlor.quickreturn.library.listeners.SpeedyQuickReturnRecycler
 import com.justdoit.pics.R;
 import com.justdoit.pics.adapater.mRecyclerViewAdapter;
 import com.justdoit.pics.bean.Content;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -33,9 +37,12 @@ import java.util.ArrayList;
 public class MainFragment extends Fragment implements OnClickListener {
     //
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-
-    private String mParam1;
+    private static final String ARG_PARAM1 = "type";
+    public static final int NO_HEADER = 0;
+    public static final int NO_FOOTER = 1;
+    public static final int NO_FOOTERANDHEADER = 2 ;
+    public static final int NORMAL = 3;
+    private int type;
 
     private OnFragmentInteractionListener mListener;
 
@@ -50,13 +57,13 @@ public class MainFragment extends Fragment implements OnClickListener {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
+     * @param type Parameter 1.
      * @return A new instance of fragment MainFragment.
      */
-    public static MainFragment newInstance(String param1) {
+    public static MainFragment newInstance(int type) {
         MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putInt(ARG_PARAM1, type);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,7 +72,7 @@ public class MainFragment extends Fragment implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            type = getArguments().getInt(ARG_PARAM1);
         }
     }
 
@@ -80,9 +87,19 @@ public class MainFragment extends Fragment implements OnClickListener {
 
         TextView footer_tv = (TextView)v.findViewById(R.id.footer_tv);
         ImageView edit_iv = (ImageView)v.findViewById(R.id.edit_iv);
+        FrameLayout footer = (FrameLayout)v.findViewById(R.id.footer);
+        TextView header_tv = (TextView) v.findViewById(R.id.header_tv);
+        if(type != NORMAL){
+            if(type == NO_FOOTER ||type == NO_FOOTERANDHEADER){
+                footer.setVisibility(View.INVISIBLE);
+            }
+            if(type == NO_HEADER ||type == NO_FOOTERANDHEADER){
+                header_tv.setVisibility(View.INVISIBLE);
+            }
+        }
         SpeedyQuickReturnRecyclerViewOnScrollListener scrollListener = new SpeedyQuickReturnRecyclerViewOnScrollListener.Builder(this.getActivity(), QuickReturnViewType.BOTH)
-                .header(v.findViewById(R.id.header_tv))
-                .footer(v.findViewById(R.id.footer))
+                .header(header_tv)
+                .footer(footer)
                 .slideHeaderUpAnimation(AnimationUtils.loadAnimation(this.getActivity(), R.anim.slide_header_up))
                 .slideHeaderDownAnimation(AnimationUtils.loadAnimation(this.getActivity(), R.anim.slide_header_down))
                 .slideFooterUpAnimation(AnimationUtils.loadAnimation(this.getActivity(), R.anim.slide_footer_up))

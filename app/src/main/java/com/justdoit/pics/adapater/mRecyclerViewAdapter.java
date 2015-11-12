@@ -64,6 +64,7 @@ public class mRecyclerViewAdapter extends RecyclerView.Adapter {
             Animation animation = AnimationUtils.loadAnimation(mcontext, R.anim.up_from_bottom);
             holder.itemView.startAnimation(animation);
         }
+        lastPosition = position;
     }
 
     @Override
