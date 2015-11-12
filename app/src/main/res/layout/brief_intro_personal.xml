@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/brief_intro_margin"
+        android:layout_marginRight="@dimen/brief_intro_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/brief_personal_intro_title"
+            android:textColor="@android:color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/personal_intro"
+            android:textSize="@dimen/brief_intro_title" />
+
+        <com.justdoit.pics.widget.PersonalIntroItemView
+            android:id="@+id/personal_intro_username"
+            android:layout_marginTop="@dimen/brief_intro_item_margin_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.justdoit.pics.widget.PersonalIntroItemView
+            android:id="@+id/personal_intro_email"
+            android:layout_marginTop="@dimen/brief_intro_item_margin_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.justdoit.pics.widget.PersonalIntroItemView
+            android:id="@+id/personal_intro_sex"
+            android:layout_marginTop="@dimen/brief_intro_item_margin_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.justdoit.pics.widget.PersonalIntroItemView
+            android:id="@+id/personal_intro_location"
+            android:layout_marginTop="@dimen/brief_intro_item_margin_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.justdoit.pics.widget.PersonalIntroItemView
+            android:id="@+id/personal_intro_birthday"
+            android:layout_marginTop="@dimen/brief_intro_item_margin_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.justdoit.pics.widget.PersonalIntroItemView
+            android:id="@+id/personal_intro_followers"
+            android:layout_marginTop="@dimen/brief_intro_item_margin_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>

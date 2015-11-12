@@ -25,4 +25,6 @@
     <string name="birthday">Birthday</string>
     <string name="followers">Followers</string>
     <string name="grade">Grade</string>
+    <string name="connections">Connections</string>
+    <string name="personal_intro">Personal Intro</string>
 </resources>

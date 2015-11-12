@@ -73,11 +73,10 @@ public class BriefIntroFragment extends Fragment {
 
         briefIntroList.setLayoutManager(new LinearLayoutManager(view.getContext())); // 设置线性布局
 
-        briefIntroAdapter = new BriefIntroAdapter();
+        briefIntroAdapter = new BriefIntroAdapter(view.getContext());
 
         briefIntroList.setAdapter(briefIntroAdapter); // 设置adapter
 
-        briefIntroList.addItemDecoration(new CustomItemDecoration()); // 设置分隔线
     }
 
     /**

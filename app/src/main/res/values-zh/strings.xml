@@ -15,10 +15,12 @@
     <string name="login_hint">已有账号?马上登录</string>
     <string name="action_sign_up">注册</string>
     <string name="action_login_in">登录</string>
-    <string name="user_info_location">居住在某个地点(￣▽￣)"</string>
+    <string name="user_info_location">居住在</string>
     <string name="sex">性别</string>
     <string name="residence">居住地</string>
     <string name="birthday">生日</string>
     <string name="followers">粉丝数</string>
     <string name="grade">等级</string>
+    <string name="connections">人脉</string>
+    <string name="personal_intro">基本介绍</string>
 </resources>
