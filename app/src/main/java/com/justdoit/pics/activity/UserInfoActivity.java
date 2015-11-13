@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -89,6 +90,17 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 显示上一级按钮
+
+        // 如果登录了，必须要有用户名
+        // 用户名添加到text view
+        // 然后添加到toolbar
+        // 默认是显示"用户信息"
+        if (App.isLogin()) {
+            getSupportActionBar().setTitle(App.getUserName());
+        } else {
+            getSupportActionBar().setTitle(R.string.user_info);
+        }
+
 
         toolbarLayout.setTitleEnabled(false); // 设置title不跟随layout缩放
     }
