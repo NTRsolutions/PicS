@@ -40,7 +40,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         setSupportActionBar(toolbar);
-        if(App.isLogin()){//登录才能显示用户头像
+        if (!App.isLogin()) { // 未登录显示默认用户头像
+            toolbar.setNavigationIcon(R.mipmap.user_info_def_avatar);
+        } else { // 登录了就显示用户头像 TODO:用户头像获取
             toolbar.setNavigationIcon(R.mipmap.ic_launcher);
         }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
