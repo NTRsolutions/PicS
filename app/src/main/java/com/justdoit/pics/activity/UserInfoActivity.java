@@ -1,6 +1,7 @@
 package com.justdoit.pics.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -34,12 +35,13 @@ import java.lang.reflect.Type;
  * TODO 添加修改信息和收藏页面
  * Created by mengwen on 2015/10/28.
  */
-public class UserInfoActivity extends AppCompatActivity {
+public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
     private final static String TAG = "UserInfoActivity";
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
+    private AppBarLayout appBarLayout;
     private CollapsingToolbarLayout toolbarLayout;
     private SwipeRefreshLayout container;
 
@@ -49,6 +51,20 @@ public class UserInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_info);
 
         initView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        appBarLayout.addOnOffsetChangedListener(this); // 添加监听appbar layout是否可滚动的listener
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        appBarLayout.removeOnOffsetChangedListener(this);
     }
 
     /**
@@ -82,6 +98,7 @@ public class UserInfoActivity extends AppCompatActivity {
      */
     private void initTabLayout() {
         tabLayout = (TabLayout) findViewById(R.id.user_info_tab_layout);
+        appBarLayout = (AppBarLayout) findViewById(R.id.user_info_appbar);
 
         ViewPager viewpager = (ViewPager) findViewById(R.id.user_info_view_pager);
 
@@ -116,5 +133,12 @@ public class UserInfoActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        // 如果垂直偏移量为0
+        // 设置swipe refresh layout 为可用
+        container.setEnabled(verticalOffset == 0);
     }
 }
