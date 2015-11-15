@@ -18,51 +18,106 @@
         <android.support.design.widget.AppBarLayout
             android:id="@+id/user_info_appbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/user_info_collapse_layout_height"
-            android:fitsSystemWindows="true">
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            android:minHeight="?attr/actionBarSize"
+            android:orientation="vertical">
 
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/user_info_toolbar_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/user_info_collapse_layout_height"
                 app:contentScrim="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="@dimen/user_info_bg_iv_height"
                     android:scaleType="centerCrop"
                     android:src="@drawable/menubackground"
                     app:layout_collapseMode="parallax"
                     app:layout_collapseParallaxMultiplier="0.6" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/user_info_brief_height"
+                    android:paddingLeft="@dimen/user_info_horizontal_margin"
+                    android:paddingBottom="@dimen/user_info_vertical_margin"
+                    android:layout_gravity="bottom"
+                    android:orientation="vertical"
+                    android:background="@android:color/white"
+                    app:layout_scrollFlags="scroll|snap">
+
+                    <TextView
+                        android:id="@+id/user_info_username"
+                        android:layout_marginTop="@dimen/user_info_vertical_margin"
+                        android:layout_marginBottom="@dimen/user_info_vertical_margin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/user_info_username_text" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/user_info_followers"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:textColor="@color/gray15"
+                            android:textSize="@dimen/user_info_username_below_text" />
+
+                        <View
+                            android:id="@+id/vertical_line"
+                            android:background="@color/gray15"
+                            android:layout_toRightOf="@id/user_info_followers"
+                            android:layout_width="1dp"
+                            android:layout_height="@dimen/user_info_vertical_margin"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"/>
+
+                        <TextView
+                            android:id="@+id/user_info_scanners"
+                            android:layout_toRightOf="@id/vertical_line"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:textColor="@color/gray15"
+                            android:textSize="@dimen/user_info_username_below_text"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
                 <ImageView
                     android:id="@+id/user_info_avatar_iv"
                     android:layout_width="@dimen/user_info_avatar_size"
                     android:layout_height="@dimen/user_info_avatar_size"
-                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:layout_marginTop="@dimen/user_info_vertical_margin"
+                    android:layout_marginTop="@dimen/user_info_avatar_vertical_margin"
                     android:src="@mipmap/user_info_def_avatar" />
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/user_into_toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/user_info_toolbar_height"
+                    android:layout_height="wrap_content"
                     android:gravity="top"
                     android:minHeight="?attr/actionBarSize"
                     android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                     app:layout_collapseMode="pin"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                     app:titleMarginTop="@dimen/user_info_toolbar_title_margin_top" />
 
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/user_info_tab_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_gravity="bottom"
-                    android:background="@android:color/darker_gray" />
             </android.support.design.widget.CollapsingToolbarLayout>
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/user_info_tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@android:color/darker_gray" />
 
         </android.support.design.widget.AppBarLayout>
 

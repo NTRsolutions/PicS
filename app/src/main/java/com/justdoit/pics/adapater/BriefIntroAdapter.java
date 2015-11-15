@@ -64,8 +64,6 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
 
         if (holder instanceof PersonalHolder) {
             // 名称 + 值 + 可否编辑(Y/N)
-            // 粉丝数 N
-            ((PersonalHolder) holder).followersPIV.update("粉丝数", userInfo.getFollowers_count() + "", false);
             // 用户名 N
             ((PersonalHolder) holder).usernamePIV.update(res.getString(R.string.prompt_username), App.getUserName(), false);
             // email N
@@ -124,7 +122,6 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
         PersonalIntroItemView locationPIV; // 居住地址
         PersonalIntroItemView emailPIV; // 邮箱
         PersonalIntroItemView usernamePIV; // 用户名
-        PersonalIntroItemView followersPIV; // 粉丝数
 
         public PersonalHolder(View itemView) {
             super(itemView);
@@ -135,7 +132,6 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
             locationPIV = (PersonalIntroItemView) itemView.findViewById(R.id.personal_intro_location);
             emailPIV = (PersonalIntroItemView) itemView.findViewById(R.id.personal_intro_email);
             usernamePIV = (PersonalIntroItemView) itemView.findViewById(R.id.personal_intro_username);
-            followersPIV = (PersonalIntroItemView) itemView.findViewById(R.id.personal_intro_followers);
         }
     }
 }

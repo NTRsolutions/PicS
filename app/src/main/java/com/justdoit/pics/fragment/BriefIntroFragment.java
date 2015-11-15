@@ -39,8 +39,7 @@ public class BriefIntroFragment extends Fragment {
     /**
      * 创建简介fragment
      *
-     * @return
-     *   简介fragment
+     * @return 简介fragment
      */
     public static BriefIntroFragment newInstance() {
 
@@ -65,6 +64,7 @@ public class BriefIntroFragment extends Fragment {
 
     /**
      * 初始化view
+     *
      * @param view
      */
     private void initView(View view) {
@@ -88,9 +88,10 @@ public class BriefIntroFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         Gson gson = new Gson();
-                        Type type = new TypeToken<UserInfo>(){}.getType();
+                        Type type = new TypeToken<UserInfo>() {
+                        }.getType();
 
-                        briefIntroAdapter.setUserInfo((UserInfo)gson.fromJson(String.valueOf(response), type));
+                        briefIntroAdapter.setUserInfo((UserInfo) gson.fromJson(String.valueOf(response), type));
                         briefIntroAdapter.notifyDataSetChanged(); // 更新界面
                     }
                 },

@@ -5,20 +5,25 @@
     <dimen name="small_userphoto">32dp</dimen>
     <dimen name="cardview_margin">16dp</dimen>
 
-    <dimen name="user_info_collapse_layout_height">260dp</dimen>
-    <dimen name="user_info_toolbar_height">115dp</dimen>
+    <dimen name="user_info_collapse_layout_height">360dp</dimen>
     <dimen name="user_info_toolbar_title_margin_top">15dp</dimen>
     <dimen name="user_info_bg_iv_height">180dp</dimen>
+    <dimen name="user_info_brief_height">180dp</dimen>
     <dimen name="user_info_vertical_margin">20dp</dimen>
     <dimen name="user_info_horizontal_margin">16dp</dimen>
+    <dimen name="user_info_avatar_vertical_margin">115dp</dimen>
     <dimen name="user_info_avatar_size">80dp</dimen>
-    <dimen name="user_info_username_tx_size">20sp</dimen>
+    <!-- 个人信息块的字体 -->
+    <dimen name="user_info_username_text">24sp</dimen>
+    <dimen name="user_info_username_below_text">16sp</dimen>
 
     <dimen name="brief_intro_edit_icon_size">16dp</dimen>
     <dimen name="brief_intro_item_margin_top">10dp</dimen>
     <dimen name="brief_intro_margin">16dp</dimen>
     <dimen name="brief_intro_item_divider_height">1dp</dimen>
+    <!-- viewpager下的简介页面的字体 -->
     <dimen name="brief_intro_title">22sp</dimen>
+    <!-- 基本信息的字体 -->
     <dimen name="personal_intro_item_title">16sp</dimen>
     <dimen name="personal_intro_item_content">14sp</dimen>
 </resources>

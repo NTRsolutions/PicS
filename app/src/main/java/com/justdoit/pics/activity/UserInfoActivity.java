@@ -1,6 +1,7 @@
 package com.justdoit.pics.activity;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
@@ -57,6 +58,10 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
 
     private ImageView avatarImageView; // 头像
 
+    private TextView userNameTv; // 用户名
+    private TextView followersTv; // 粉丝数
+    private TextView scannersTv; // 被查看次数
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +111,8 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
 
         initToolbar();
 
+        initBriefView();
+
         initTabLayout();
 
     }
@@ -133,6 +140,22 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
 
 
         toolbarLayout.setTitleEnabled(false); // 设置title不跟随layout缩放
+    }
+
+    /**
+     * 初始化toolbar layout下面的简单介绍的布局
+     */
+    private void initBriefView() {
+        userNameTv = (TextView) findViewById(R.id.user_info_username);
+        followersTv = (TextView) findViewById(R.id.user_info_followers);
+        scannersTv = (TextView) findViewById(R.id.user_info_scanners);
+
+        if (App.isLogin()) {
+            userNameTv.setText(App.getUserName());
+            userNameTv.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG); // 字体加粗
+            followersTv.setText("1020个关注者");
+            scannersTv.setText("6,324次被查看");
+        }
     }
 
     /**
