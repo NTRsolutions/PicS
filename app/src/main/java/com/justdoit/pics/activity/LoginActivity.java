@@ -44,6 +44,9 @@ import java.util.regex.Pattern;
 
 /**
  * 通过用户名和密码登录
+ * 或者通过用户名、email和密码注册
+ *
+ * 其中goActivity()方法控制跳转到目标的activity
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -343,7 +346,12 @@ public class LoginActivity extends AppCompatActivity {
         if (action == null || TextUtils.isEmpty(action)) {
             intent = new Intent(LoginActivity.this, MainActivity.class);
         } else if (action.equals("UserInfoActivity")) {
+            // 转载userid和username数据
             intent = new Intent(LoginActivity.this, UserInfoActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt(Constant.USER_ID_NAME, App.getUserId());
+            bundle.putString(Constant.USERNAME_NAME, App.getUserName());
+            intent.putExtras(bundle);
         }
 
         startActivity(intent);

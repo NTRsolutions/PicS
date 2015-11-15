@@ -30,4 +30,12 @@
     <string name="action_settings">Settings</string>
     <string name="action_change_avatar">Change avatar</string>
     <string name="action_change_background_image">Change Background Image</string>
+    
+    <!-- 选取图片菜单 -->
+    <string name="choose_picture">Select A Picture</string>
+    <string-array name="choose_picture_way">
+        <item>Take A Photo</item>
+        <item>Your Picture</item>
+        <item>Your Album</item>
+    </string-array>
 </resources>

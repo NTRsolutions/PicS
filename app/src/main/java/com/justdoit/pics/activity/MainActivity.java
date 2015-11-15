@@ -49,7 +49,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 if (App.isLogin()) {
-                    startActivity(new Intent(MainActivity.this, UserInfoActivity.class));
+                    Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(Constant.USER_ID_NAME, App.getUserId());
+                    bundle.putString(Constant.USERNAME_NAME, App.getUserName());
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 } else {
                     // 带上要跳转到UserInfo的标识
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
