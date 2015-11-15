@@ -27,4 +27,7 @@
     <string name="grade">Grade</string>
     <string name="connections">Connections</string>
     <string name="personal_intro">Personal Intro</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_change_avatar">Change avatar</string>
+    <string name="action_change_background_image">Change Background Image</string>
 </resources>

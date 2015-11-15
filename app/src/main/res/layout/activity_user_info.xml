@@ -29,7 +29,6 @@
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <ImageView
-                    android:id="@+id/user_info_avatar_iv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
@@ -38,6 +37,7 @@
                     app:layout_collapseParallaxMultiplier="0.6" />
 
                 <ImageView
+                    android:id="@+id/user_info_avatar_iv"
                     android:layout_width="@dimen/user_info_avatar_size"
                     android:layout_height="@dimen/user_info_avatar_size"
                     android:layout_gravity="center_vertical"
@@ -51,6 +51,8 @@
                     android:layout_height="@dimen/user_info_toolbar_height"
                     android:gravity="top"
                     android:minHeight="?attr/actionBarSize"
+                    android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                     app:layout_collapseMode="pin"
                     app:titleMarginTop="@dimen/user_info_toolbar_title_margin_top" />
 

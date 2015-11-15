@@ -23,4 +23,7 @@
     <string name="grade">等级</string>
     <string name="connections">人脉</string>
     <string name="personal_intro">基本介绍</string>
+    <string name="action_settings">设置</string>
+    <string name="action_change_avatar">修改头像</string>
+    <string name="action_change_background_image">修改背景图片</string>
 </resources>

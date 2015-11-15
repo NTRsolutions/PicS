@@ -1,6 +1,7 @@
 package com.justdoit.pics.util;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -31,5 +32,17 @@ public class SystemUtil {
         InputMethodManager imm = (InputMethodManager) (mContext
                 .getSystemService(Context.INPUT_METHOD_SERVICE));
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
+    /**
+     * 判断是否拥有相机功能
+     * @param mContext
+     * @return
+     *   true:有拍照功能
+     *   false:没有拍照功能
+     */
+    public static boolean hasCamera(Context mContext) {
+        PackageManager pm = mContext.getPackageManager();
+        return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
     }
 }
