@@ -33,6 +33,7 @@
     
     <!-- 选取图片菜单 -->
     <string name="choose_picture">Select A Picture</string>
+    <string name="action_mask">Mask</string>
     <string-array name="choose_picture_way">
         <item>Take A Photo</item>
         <item>Your Picture</item>

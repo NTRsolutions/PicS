@@ -223,8 +223,8 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         if (isUserOwn) {
             getMenuInflater().inflate(R.menu.activity_user_info, menu);
         } else {
-            // TODO 对应其他用户的menu
-
+            // TODO 没有测试
+            getMenuInflater().inflate(R.menu.activity_user_info_other, menu);
         }
 
         return super.onCreateOptionsMenu(menu);
@@ -240,6 +240,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
                 return true;
             case R.id.action_settings:
                 // 打开设置页面
+                // TODO 设置页面
                 return true;
             case R.id.action_change_avatar:
                 // 打开修改用户头像页面

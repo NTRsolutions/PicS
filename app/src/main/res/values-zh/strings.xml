@@ -32,4 +32,5 @@
         <item>你的照片</item>
         <item>你的相册</item>
     </string-array>
+    <string name="action_mask">屏蔽</string>
 </resources>
