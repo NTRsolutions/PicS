@@ -3,6 +3,7 @@ package com.justdoit.pics.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -43,11 +44,11 @@ import java.lang.reflect.Type;
 
 /**
  * 用户信息页面
- *
+ * <p/>
  * 需要传递用户名参数username和用户userid
  * 通过传递过来的id和用户的id对比，如果相同就设置isUserOwn = true;否则isUserOwn = false;
  * 如果isUserOwn = false，询问服务器是否已经关注了，更改相应的控件
- *
+ * <p/>
  * TODO 添加修改信息和收藏页面
  * Created by mengwen on 2015/10/28.
  */
@@ -55,8 +56,16 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
 
     private final static String TAG = "UserInfoActivity";
 
-    static final int CHANGE_AVATAR_REQ_CODE = 1; // 修改头像的请求code
-    static final int CHANGE_BACKGROUND_REQ_CODE = 2; // 修改背景的请求code
+    // 获取图片的方式
+    // 0:拍照
+    // 1:你的图库
+    // 2:你的分享的所有图片
+    public static final int WAY_TAKE_PHOTOS = 0;
+    public static final int WAY_YOUR_PHOTOS = 1;
+    public static final int WAY_YOUR_ALBUM = 2;
+
+    private static boolean isChangeAvatar; // 是否准备修改头像,false表示修改背景
+
     private int userId = -1;
     private String username;
     private boolean isUserOwn = true; // true:用户自己的个人页面; false:其他人的个人页面;默认是用户自己的页面
@@ -68,6 +77,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
     private SwipeRefreshLayout container;
 
     private ImageView avatarImageView; // 头像
+    private ImageView backgroundImageView; // 背景图片
 
     private TextView userNameTv; // 用户名
     private TextView followersTv; // 粉丝数
@@ -100,17 +110,42 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case CHANGE_AVATAR_REQ_CODE:
-                    // TODO 选择头像的上传和刷新工作
-                    break;
-                case CHANGE_BACKGROUND_REQ_CODE:
-                    // TODO 选择背景图片刷新工作，不需要上传
-                    break;
-                default:
-                    // 传递数据异常
-                    Log.e(TAG, "requestCode error: requestCode = " + requestCode);
-                    break;
+
+            // 用户修改头像
+            // TODO 同步到服务器,并且处理本地UI
+            if (isChangeAvatar) {
+                switch (requestCode) {
+                    case WAY_TAKE_PHOTOS:
+                        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                        avatarImageView.setImageBitmap(bitmap);
+                        break;
+                    case WAY_YOUR_PHOTOS:
+
+                        Log.e(TAG, data.getData().toString());
+                        break;
+                    case WAY_YOUR_ALBUM:
+                        break;
+                    default:
+                        // 传递数据异常
+                        Log.e(TAG, "requestCode error: requestCode = " + requestCode);
+                        break;
+                }
+            } else {
+                // 修改用户背景
+                switch (requestCode) {
+                    case WAY_TAKE_PHOTOS:
+                        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                        backgroundImageView.setImageBitmap(bitmap);
+                        break;
+                    case WAY_YOUR_PHOTOS:
+                        break;
+                    case WAY_YOUR_ALBUM:
+                        break;
+                    default:
+                        // 传递数据异常
+                        Log.e(TAG, "requestCode error: requestCode = " + requestCode);
+                        break;
+                }
             }
         }
     }
@@ -150,8 +185,11 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
      */
     private void initToolbar() {
         avatarImageView = (ImageView) findViewById(R.id.user_info_avatar_iv);
+        backgroundImageView = (ImageView) findViewById(R.id.user_info_bg_iv);
         toolbar = (Toolbar) findViewById(R.id.user_into_toolbar);
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.user_info_toolbar_container);
+
+        // TODO 设置用户头像
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 显示上一级按钮
@@ -202,6 +240,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
 
     /**
      * 初始化viewpager
+     *
      * @param viewpager
      */
     private void setupViewPager(ViewPager viewpager) {
@@ -245,11 +284,11 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
             case R.id.action_change_avatar:
                 // 打开修改用户头像页面
                 // 首先判断是否有拍照功能
-                choosePicture(CHANGE_AVATAR_REQ_CODE);
+                choosePicture(true);
                 return true;
             case R.id.action_change_background_image:
                 // 修改背景图片
-                choosePicture(CHANGE_BACKGROUND_REQ_CODE);
+                choosePicture(false);
                 return true;
         }
 
@@ -258,14 +297,17 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
 
     /**
      * 选择图片的获取方式:
-     * 1.拍照
-     * 2.你的图片
-     * 3.你的相册
-     * @param requestCode 请求的code，CHANGE_AVATAR_REQ_CODE = 1; // 修改头像的请求code
-     *                              CHANGE_BACKGROUND_REQ_CODE = 2; // 修改背景的请求code
+     * 0.拍照
+     * 1.你的图库
+     * 2.你的分享的所有图片
+     *
+     * @param isChangeAvatar true:修改头像
+     *                       false:修改背景
      */
-    private void choosePicture(final int requestCode) {
-        // TODO 选择方式
+    private void choosePicture(boolean isChangeAvatar) {
+
+        this.isChangeAvatar = isChangeAvatar; // 返回结果的时候,判断怎么处理返回的data
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.choose_picture).setItems(R.array.choose_picture_way, new DialogInterface.OnClickListener() {
             @Override
@@ -275,14 +317,15 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
                         // 拍照
                         if (SystemUtil.hasCamera(UserInfoActivity.this)) {
                             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            startActivityForResult(intent, requestCode);
+                            startActivityForResult(intent, WAY_TAKE_PHOTOS);
                         }
                         break;
                     case 1:
                         // 打开图库
                         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                        intent.setType("image/*");
-                        startActivityForResult(intent, requestCode);
+                        intent.setType("image/*"); // 所有格式的图片
+                        intent.addCategory(Intent.CATEGORY_OPENABLE); // 可打开文件
+                        startActivityForResult(intent, WAY_YOUR_PHOTOS);
                         break;
                     case 2:
                         // 打开相册
