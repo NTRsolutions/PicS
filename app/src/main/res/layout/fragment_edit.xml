@@ -1,10 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        >
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/avatar_iv"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:scaleType="centerCrop"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/username_tv"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/avatar_iv"
+            android:text="test"/>
+        <ImageView
+            android:layout_marginTop="10dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:id="@+id/type_iv"
+            android:layout_below="@id/username_tv"
+            android:layout_toRightOf="@id/avatar_iv"
+            android:background="@drawable/ic_action_notifications_highlighted"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/type_tv"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/type_iv"
+            android:layout_alignTop="@id/type_iv"
+            android:text="test"/>
+
+    </RelativeLayout>
     <EditText
+        android:layout_margin="10dp"
         android:layout_width="match_parent"
         android:layout_height="360dp"
+        android:hint="写点内容吧..."
+        android:gravity="top"
         android:id="@+id/EditText"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/ic_action_marker"
+            android:id="@+id/position_iv"
+            android:backgroundTint="@color/gray1"/>
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/position_tv"
+            android:text="添加你的位置信息"/>
+    </LinearLayout>
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray1"
+        android:id="@+id/mToolbar"/>
 </LinearLayout>
