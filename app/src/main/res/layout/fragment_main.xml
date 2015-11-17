@@ -1,28 +1,46 @@
+<!--<android.support.v4.widget.SwipeRefreshLayout-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:id="@+id/mSwipeRefreshLayout">-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.MainFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_height="match_parent"
-        android:id="@+id/content_container">
-
-    </android.support.v7.widget.RecyclerView>
-
-    <TextView
-        android:id="@+id/header_tv"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/transparent_black_ninty"
-        android:gravity="center"
-        android:text="header"
-        android:textColor="@android:color/white"
-        android:textSize="22sp"
-        android:layout_alignParentTop="true"
-        />
+        android:id="@+id/mSwipeRefreshLayout">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/content_container">
+            </android.support.v7.widget.RecyclerView>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/header_tv"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="@color/transparent_black_ninty"
+                android:gravity="center"
+                android:text="header"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                android:layout_alignParentTop="true"
+                />
+        </RelativeLayout>
+
+
+
+
+    </android.support.v4.widget.SwipeRefreshLayout>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,3 +82,4 @@
             />
     </FrameLayout>
 </RelativeLayout>
+<!--</android.support.v4.widget.SwipeRefreshLayout>-->

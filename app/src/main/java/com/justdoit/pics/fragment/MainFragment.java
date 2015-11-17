@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.etiennelawlor.quickreturn.library.enums.QuickReturnViewType;
 import com.etiennelawlor.quickreturn.library.listeners.SpeedyQuickReturnRecyclerViewOnScrollListener;
 import com.justdoit.pics.R;
+import com.justdoit.pics.activity.MainActivity;
 import com.justdoit.pics.adapater.mRecyclerViewAdapter;
 import com.justdoit.pics.bean.Content;
 
@@ -88,7 +90,7 @@ public class MainFragment extends Fragment implements OnClickListener {
         TextView footer_tv = (TextView)v.findViewById(R.id.footer_tv);
         ImageView edit_iv = (ImageView)v.findViewById(R.id.edit_iv);
         FrameLayout footer = (FrameLayout)v.findViewById(R.id.footer);
-        TextView header_tv = (TextView) v.findViewById(R.id.header_tv);
+        View header_tv = v.findViewById(R.id.header_tv);
         if(type != NORMAL){
             if(type == NO_FOOTER ||type == NO_FOOTERANDHEADER){
                 footer.setVisibility(View.INVISIBLE);

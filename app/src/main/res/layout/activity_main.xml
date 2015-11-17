@@ -23,7 +23,18 @@
         app:layout_scrollFlags="scroll|enterAlways"/>
 
 
+    <TextView
+        android:background="@color/transparent_black_ninty"
+        android:gravity="center"
+        android:text="header"
+        android:textColor="@android:color/white"
+        android:textSize="22sp"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:layout_scrollFlags="scroll|enterAlways"
+        />
     </android.support.design.widget.AppBarLayout>
+
 
     <FrameLayout
         android:layout_width="match_parent"
