@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -79,6 +80,19 @@ public class LoginActivity extends AppCompatActivity {
         initView();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // up事件处理
+                finish();
+                return true;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * 初始化view
      */
@@ -86,6 +100,7 @@ public class LoginActivity extends AppCompatActivity {
 
         setSupportActionBar((Toolbar) findViewById(R.id.login_toolbar));
         getSupportActionBar().setTitle(R.string.action_login_in);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 返回上一级
 
         mHintTextView = (TextView) findViewById(R.id.hint_tv);
         mHintTextView.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
