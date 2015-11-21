@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * 图片处理工具
@@ -31,13 +32,22 @@ public class ImageUtil {
     /**
      * 简单的byte转成bitmap
      * @param bitmap
+     * @param quality 表示图片质量，范围0-100,100表示最好,图片最大
      * @return
      *   如果成功,返回bytes;否则返回null
      */
-    public static byte[] getBytesFromBitmap(Bitmap bitmap) {
+    public static byte[] getBytesFromBitmap(Bitmap bitmap, int quality) {
         if (bitmap != null) {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 0, out);
+            bitmap.compress(Bitmap.CompressFormat.PNG, quality, out); // 100表示图片质量，范围0-100
+
+            try {
+                out.flush();
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
             return out.toByteArray();
         } else {
             return null;
