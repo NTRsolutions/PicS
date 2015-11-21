@@ -12,6 +12,7 @@ import java.util.Map;
 
 /**
  * 表单提交返回json object
+ * 使用方法可看PostFormRequest类
  * Created by mengwen on 2015/10/28.
  */
 public class PostFormJsonObjRequest<JSONObject> extends PostFormRequest<JSONObject> {

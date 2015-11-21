@@ -14,6 +14,9 @@ import java.util.Map;
 
 /**
  * 表单提交抽象类
+ * 使用方法：
+ *   通过构造方法或setmParams()方法
+ *   传入参数  Map<String, String> mParams
  * Created by mengwen on 2015/10/28.
  */
 public abstract class PostFormRequest<T> extends Request<T> {
@@ -35,6 +38,14 @@ public abstract class PostFormRequest<T> extends Request<T> {
         this.mListener = okListener;
         this.mParams = params;
         this.BOUNDARY += getTimeStamp();
+    }
+
+    public Map<String, String> getmParams() {
+        return mParams;
+    }
+
+    public void setmParams(Map<String, String> mParams) {
+        this.mParams = mParams;
     }
 
     /**
