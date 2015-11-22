@@ -8,19 +8,15 @@ import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,11 +24,11 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.justdoit.pics.R;
-import com.justdoit.pics.bean.UserInfo;
+import com.justdoit.pics.dao.User;
+import com.justdoit.pics.dao.impl.UserImpl;
 import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
 import com.justdoit.pics.model.NetSingleton;
-import com.justdoit.pics.model.PostFormJsonObjRequest;
 import com.justdoit.pics.util.NetUtil;
 import com.justdoit.pics.util.SystemUtil;
 
@@ -226,49 +222,43 @@ public class LoginActivity extends AppCompatActivity {
 
 
         String token = App.getToken(Constant.HOME_URL);
-        String url = null;
 
         map.put(Constant.TOKEN_NAME, token);
         map.put(USER_NAME, username);
         map.put(PASSWORD, password);
 
         // 判断登录还是注册，改变url和传递数据
-        if (!isToLogin) {
-            map.put(EMAIL, email);
-            url = Constant.HOME_URL + Constant.REGIST_URL_SUFFIX;
-        } else {
-            url = Constant.HOME_URL + Constant.LOGIN_URL_SUFFIX;
-        }
-
         if (NetUtil.isNetworkAvailable(this)) {
-            PostFormJsonObjRequest request = new PostFormJsonObjRequest(
-                    url, map,
-                    new Response.Listener() {
-                        @Override
-                        public void onResponse(Object response) {
+            User user = new UserImpl();
+            Response.Listener okListener = new Response.Listener() {
+                @Override
+                public void onResponse(Object response) {
+                    // 保存参数
+                    saveUserInfo(response.toString(), username);
 
-                            // 保存参数
-                            saveUserInfo(response.toString(), username);
+                    showProgress(false);
 
-                            showProgress(false);
+                    // 跳转到相应页面
+                    goActivity();
+                }
+            };
 
-                            // 跳转到相应页面
-                            goActivity();
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            // 显示错误信息
-                            showErrorMessage(error.networkResponse);
+            Response.ErrorListener errorListener = new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // 显示错误信息
+                    showErrorMessage(error.networkResponse);
 
-                            showProgress(false);
-                        }
-                    }
-            );
+                    showProgress(false);
+                }
+            };
 
-
-            mInstance.addToRequestQueue(request);
+            if (!isToLogin) {
+                map.put(EMAIL, email);
+                user.regist(this, map, okListener, errorListener);
+            } else {
+                user.login(this, map, okListener, errorListener);
+            }
         }
 
     }

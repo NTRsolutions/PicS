@@ -22,25 +22,13 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.justdoit.pics.R;
 import com.justdoit.pics.adapater.UserInfoViewPagerAdapter;
-import com.justdoit.pics.bean.UserInfo;
 import com.justdoit.pics.fragment.BriefIntroFragment;
 import com.justdoit.pics.fragment.MainFragment;
 import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
-import com.justdoit.pics.model.NetSingleton;
 import com.justdoit.pics.util.SystemUtil;
-
-import org.json.JSONObject;
-
-import java.lang.reflect.Type;
 
 /**
  * 用户信息页面

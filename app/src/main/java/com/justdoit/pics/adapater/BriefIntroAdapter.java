@@ -3,6 +3,7 @@ package com.justdoit.pics.adapater;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,10 +69,20 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
             ((PersonalHolder) holder).usernamePIV.update(res.getString(R.string.prompt_username), App.getUserName(), false);
             // email N
             ((PersonalHolder) holder).emailPIV.update(res.getString(R.string.prompt_email), userInfo.getEmail(), false);
-            // 性别 Y TODO:没有对性别的值进行处理
-            ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), userInfo.getSex(), false);
+            // 性别 Y
+            if (TextUtils.isEmpty(userInfo.getSex())) {
+                ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), res.getString(R.string.unknown), false);
+            } else if ("1".equals(userInfo.getSex())) {
+                ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), res.getString(R.string.man), false);
+            } else if ("0".equals(userInfo.getSex())) {
+                ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), res.getString(R.string.female), false);
+            } else {
+                ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), userInfo.getSex(), false);
+            }
+            ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), res.getString(R.string.unknown), false);
             // 居住地 Y
-            ((PersonalHolder) holder).locationPIV.update(res.getString(R.string.user_info_location), userInfo.getCountry() + "," + userInfo.getProvince() + "," + userInfo.getCity(), true);
+
+            ((PersonalHolder) holder).locationPIV.update(res.getString(R.string.user_info_location), userInfo.getCountry() + " " + userInfo.getProvince() + " " + userInfo.getCity(), true);
             // 生日 Y TODO:没有进行时间格式转换
             ((PersonalHolder) holder).birthdayPIV.update(res.getString(R.string.birthday), userInfo.getBirthday() + "", true);
 

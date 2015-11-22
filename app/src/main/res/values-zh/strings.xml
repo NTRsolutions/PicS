@@ -33,4 +33,7 @@
         <item>你的相册</item>
     </string-array>
     <string name="action_mask">屏蔽</string>
+    <string name="unknown">未知</string>
+    <string name="man">男</string>
+    <string name="female">女</string>
 </resources>
