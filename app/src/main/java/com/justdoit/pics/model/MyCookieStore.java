@@ -2,12 +2,15 @@ package com.justdoit.pics.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
 
 import java.net.CookieManager;
@@ -28,6 +31,7 @@ public class MyCookieStore implements CookieStore {
     private CookieStore cookieStore;
     private String token = "";
     private String tokenName = "test"; // token名称，默认为test
+    private SharedPreferences sp;
 
     public MyCookieStore(Context context, URI uri) {
         this(context, uri, null);
@@ -40,37 +44,18 @@ public class MyCookieStore implements CookieStore {
             this.tokenName = tokenName;
         }
 
-
         cookieStore = new CookieManager().getCookieStore();
 
-        SharedPreferences sp = context.getSharedPreferences(Constant.COOKIES_PREFS, Context.MODE_PRIVATE);
+        sp = context.getSharedPreferences(Constant.COOKIES_PREFS, Context.MODE_PRIVATE);
 
         if (sp.getAll().isEmpty()) {
-            // 请求服务器生成cookie
-
-            StringRequest request = new StringRequest(
-                    Request.Method.GET, uri.toString(),
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.i(TAG, "获取网络cookies成功");
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.i(TAG, "获取网络cookies失败");
-                            error.printStackTrace();
-                        }
-                    }
-            );
-            NetSingleton.getInstance(context.getApplicationContext()).addToRequestQueue(request);
-
+            // 网络请求cookies
+            initCookiesFromReq(context, uri);
         } else {
             // 加载保存cookie
             for (Map.Entry<String, ?> entry : sp.getAll().entrySet()) {
                 HttpCookie cookie = new HttpCookie(entry.getKey(), String.valueOf(entry.getValue()));
-//                cookie.setVersion(0);
+                cookie.setVersion(0);
                 cookie.setPath("/");
                 cookie.setDomain(uri.getHost());
                 cookieStore.add(uri, cookie);
@@ -109,25 +94,45 @@ public class MyCookieStore implements CookieStore {
         return cookieStore.removeAll();
     }
 
-    /**
-     * 获取相应uri的token值
-     *
-     * @param uri
-     * @return token string
-     */
-    public String getToken(URI uri) {
-
-        for (HttpCookie c : cookieStore.get(uri)) {
-            if (c.getName().equals(tokenName)) {
-                token = c.getValue();
-                break;
-            }
-        }
-
-        return token;
-    }
-
     public String getTokenName() {
         return tokenName;
+    }
+
+    /**
+     * 初始化
+     * 获取网络cookies
+     * 并且保存在shared preferences
+     * TODO 无法起作用
+     * @param context
+     * @param uri
+     */
+    public void initCookiesFromReq(Context context, final URI uri) {
+        // 请求服务器生成cookie
+        final SharedPreferences.Editor editor = sp.edit();
+
+        StringRequest request = new StringRequest(
+                Request.Method.GET, uri.toString(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i(TAG, "获取网络cookies成功");
+                        List<HttpCookie> cookies = App.cookieManager.getCookieStore().getCookies();
+
+                        for (HttpCookie c : cookies) {
+                            editor.putString(c.getName(), c.getValue());
+                        }
+
+                        editor.commit();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(TAG, "获取网络cookies失败");
+                        error.printStackTrace();
+                    }
+                }
+        );
+        NetSingleton.getInstance(context.getApplicationContext()).addToRequestQueue(request);
     }
 }

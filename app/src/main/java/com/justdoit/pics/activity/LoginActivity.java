@@ -35,6 +35,7 @@ import com.justdoit.pics.util.SystemUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.HttpCookie;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -220,10 +221,6 @@ public class LoginActivity extends AppCompatActivity {
     public void work(String email, final String username, String password) {
         Map<String, String> map = new HashMap<String, String>();
 
-
-        String token = App.getToken(Constant.HOME_URL);
-
-        map.put(Constant.TOKEN_NAME, token);
         map.put(USER_NAME, username);
         map.put(PASSWORD, password);
 
@@ -280,6 +277,14 @@ public class LoginActivity extends AppCompatActivity {
 
             App.setUserId(jsonObject.getInt(Constant.USER_ID_NAME)); // 设置全局userId
             App.setUserName(username);
+
+            SharedPreferences.Editor cookieEditor = getSharedPreferences(Constant.COOKIES_PREFS, MODE_PRIVATE).edit();
+            for (HttpCookie c : App.cookieManager.getCookieStore().getCookies()) {
+                cookieEditor.putString(c.getName(), c.getValue());
+                Log.e(TAG, "name:" + c.getName() + " value:" + c.getValue());
+            }
+
+            cookieEditor.commit();
 
         } catch (JSONException e) {
             e.printStackTrace();

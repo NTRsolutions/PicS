@@ -22,13 +22,21 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.justdoit.pics.R;
 import com.justdoit.pics.adapater.UserInfoViewPagerAdapter;
+import com.justdoit.pics.dao.User;
+import com.justdoit.pics.dao.impl.UserImpl;
 import com.justdoit.pics.fragment.BriefIntroFragment;
 import com.justdoit.pics.fragment.MainFragment;
 import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
+import com.justdoit.pics.util.ImageUtil;
 import com.justdoit.pics.util.SystemUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 用户信息页面
@@ -96,16 +104,35 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(final int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
 
+            User user = new UserImpl();
+            Map<String, String> fileParams = new HashMap<String, String>();
             // 用户修改头像
             // TODO 同步到服务器,并且处理本地UI
             if (isChangeAvatar) {
                 switch (requestCode) {
                     case WAY_TAKE_PHOTOS:
                         Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                        String path = ImageUtil.saveBitmap(this, bitmap, 100);
                         avatarImageView.setImageBitmap(bitmap);
+                        fileParams.put("avatar", path);
+                        user.changeUserInfo(this, App.getUserId(), null, fileParams, new Response.Listener() {
+                                    @Override
+                                    public void onResponse(Object response) {
+                                        // 修改成功
+                                        Log.e(TAG, response.toString());
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        // 修改失败
+                                        Log.e(TAG, error.toString());
+                                    }
+                                }
+                        );
                         break;
                     case WAY_YOUR_PHOTOS:
 

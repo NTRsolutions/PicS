@@ -22,7 +22,7 @@ public interface User {
      * @param listener  操作成功后的listener
      * @param errorListener  操作失败后的listener
      */
-    public abstract void changeUserInfo(Context context, String userId, Map<String, String> params, Map<String, String> fileParams, Response.Listener listener, Response.ErrorListener errorListener);
+    public abstract void changeUserInfo(Context context, int userId, Map<String, String> params, Map<String, String> fileParams, Response.Listener listener, Response.ErrorListener errorListener);
 
     /**
      * 登录接口

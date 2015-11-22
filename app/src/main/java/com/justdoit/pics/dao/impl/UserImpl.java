@@ -18,7 +18,7 @@ import java.util.Map;
 public class UserImpl implements User {
 
     @Override
-    public void changeUserInfo(Context context, String userId, Map<String, String> params, Map<String, String> fileParams, Response.Listener listener, Response.ErrorListener errorListener) {
+    public void changeUserInfo(Context context, int userId, Map<String, String> params, Map<String, String> fileParams, Response.Listener listener, Response.ErrorListener errorListener) {
         PostFormRequest request = new PostFormJsonObjRequest(
                 Constant.HOME_URL + Constant.USER_INFO_URL_SUFFIX + userId + "/",
                 params, fileParams, listener, errorListener

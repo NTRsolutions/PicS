@@ -13,6 +13,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 /**
+ * 初始化userId和username
+ * 获取token
  * Created by mengwen on 2015/10/27.
  */
 public class App extends Application {
@@ -23,6 +25,8 @@ public class App extends Application {
 
     public static String USER_NAME = ""; // 用户名，默认为空字符串
 
+    public static String token = "";
+
     private final static String TAG = "App";
 
     @Override
@@ -32,6 +36,9 @@ public class App extends Application {
         setCookieManager(); // 设置cookie
 
         initUserData();
+
+        initToken();
+
     }
 
     /**
@@ -42,6 +49,15 @@ public class App extends Application {
         SharedPreferences sp = getSharedPreferences(Constant.USER_INFO_PREFS, MODE_PRIVATE);
         USER_ID = sp.getInt(Constant.USER_ID_NAME, -1);
         USER_NAME = sp.getString(Constant.USERNAME_NAME, "");
+    }
+
+    public void initToken() {
+        SharedPreferences sp = getSharedPreferences(Constant.COOKIES_PREFS, MODE_PRIVATE);
+        token = sp.getString(Constant.TOKEN_NAME, "");
+    }
+
+    public static String getToken() {
+        return token;
     }
 
 
@@ -62,26 +78,6 @@ public class App extends Application {
             }
             CookieHandler.setDefault(cookieManager);
         }
-    }
-
-    /**
-     * 获取相应uri的token值
-     *
-     * @param str
-     * @return
-     */
-    public static String getToken(String str) {
-        MyCookieStore cookieStore = (MyCookieStore) cookieManager.getCookieStore();
-        URI uri = null;
-
-        try {
-            uri = new URI(str);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            Log.e(TAG, "App new URI() failed");
-        }
-
-        return cookieStore.getToken(uri);
     }
 
     /**

@@ -18,9 +18,9 @@ public class FileUtil {
 
     /**
      * 由文件路径得出文件的扩展名,不带".";如: png
+     *
      * @param path
-     * @return
-     *    如果扩展名存在就返回扩展名(不带".");否则返回""空字符串
+     * @return 如果扩展名存在就返回扩展名(不带".");否则返回""空字符串
      */
     public static String getFileExtensionFromPath(String path) {
         String extension = "";
@@ -37,9 +37,9 @@ public class FileUtil {
 
     /**
      * 通过文件路径,获取文件bytes
+     *
      * @param path 文件路径
-     * @return
-     *   文件bytes
+     * @return 文件bytes
      */
     public static byte[] getBytesFromPath(String path) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
