@@ -123,7 +123,6 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
             Map<String, String> params = new HashMap<String, String>();
             params.put("_method", "PUT");  // 上传必须要这个参数
             // 用户修改头像
-            // TODO 同步到服务器,并且处理本地UI
             if (isChangeAvatar) {
                 switch (requestCode) {
                     case WAY_TAKE_PHOTOS:
@@ -140,6 +139,8 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
                         break;
                     case WAY_YOUR_PHOTOS:
                         avatarImageView.setImageURI(data.getData());
+                        // TODO 同步到服务器,并且处理本地UI
+
                         break;
                     case WAY_YOUR_ALBUM:
                         // TODO 暂时没有添加分享图片做头像的功能
@@ -194,6 +195,11 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, error.toString());
+
+                // 停止刷新，如果存在刷新
+                if (container.isRefreshing()) {
+                    container.setRefreshing(false);
+                }
             }
         };
 
@@ -235,6 +241,11 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         // 1: mainFragment
         // 2:
         ((BriefIntroFragment)viewPagerAdapter.getItem(0)).updateUI(userInfo);
+
+        // 停止刷新，如果正在刷新
+        if (container.isRefreshing()) {
+            container.setRefreshing(false);
+        }
     }
 
     /**
