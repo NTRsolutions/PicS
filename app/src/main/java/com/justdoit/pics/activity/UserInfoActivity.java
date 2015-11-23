@@ -109,6 +109,8 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
 
             User user = new UserImpl();
             Map<String, String> fileParams = new HashMap<String, String>();
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("_method", "PUT");  // 上传必须要这个参数
             // 用户修改头像
             // TODO 同步到服务器,并且处理本地UI
             if (isChangeAvatar) {
@@ -117,8 +119,9 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
                         Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                         String path = ImageUtil.saveBitmap(this, bitmap, 100);
                         avatarImageView.setImageBitmap(bitmap);
+
                         fileParams.put("avatar", path);
-                        user.changeUserInfo(this, App.getUserId(), null, fileParams, new Response.Listener() {
+                        user.changeUserInfo(this, App.getUserId(), params, fileParams, new Response.Listener() {
                                     @Override
                                     public void onResponse(Object response) {
                                         // 修改成功
@@ -135,10 +138,10 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
                         );
                         break;
                     case WAY_YOUR_PHOTOS:
-
-                        Log.e(TAG, data.getData().toString());
+                        avatarImageView.setImageURI(data.getData());
                         break;
                     case WAY_YOUR_ALBUM:
+                        // TODO 暂时没有添加分享图片做头像的功能
                         break;
                     default:
                         // 传递数据异常
@@ -153,6 +156,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
                         backgroundImageView.setImageBitmap(bitmap);
                         break;
                     case WAY_YOUR_PHOTOS:
+                        backgroundImageView.setImageURI(data.getData());
                         break;
                     case WAY_YOUR_ALBUM:
                         break;
