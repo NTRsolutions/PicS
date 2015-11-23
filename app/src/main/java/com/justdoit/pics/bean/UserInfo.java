@@ -10,6 +10,7 @@ public class UserInfo {
      * email : 用户email
      * avatar : 头像
      * sex : 性别(0:女 1:男)
+     * nickname: 昵称
      * country : 国家
      * province : 省
      * city : 城市
@@ -22,6 +23,7 @@ public class UserInfo {
     private String email;
     private Object avatar;
     private String sex;
+    private String nickname;
     private String country;
     private String province;
     private String city;
@@ -43,6 +45,10 @@ public class UserInfo {
 
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public void setCountry(String country) {
@@ -83,6 +89,10 @@ public class UserInfo {
 
     public String getSex() {
         return sex;
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 
     public String getCountry() {

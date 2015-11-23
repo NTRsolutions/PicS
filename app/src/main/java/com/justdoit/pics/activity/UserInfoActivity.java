@@ -87,6 +87,8 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         initData();
 
         initView();
+
+        initListener();
     }
 
     @Override
@@ -121,20 +123,10 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
                         avatarImageView.setImageBitmap(bitmap);
 
                         fileParams.put("avatar", path);
-                        user.changeUserInfo(this, App.getUserId(), params, fileParams, new Response.Listener() {
-                                    @Override
-                                    public void onResponse(Object response) {
-                                        // 修改成功
-                                        Log.e(TAG, response.toString());
-                                    }
-                                },
-                                new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        // 修改失败
-                                        Log.e(TAG, error.toString());
-                                    }
-                                }
+                        user.changeUserInfo(this, App.getUserId(),
+                                params, fileParams,
+                                okListener,
+                                errorListener
                         );
                         break;
                     case WAY_YOUR_PHOTOS:
@@ -167,6 +159,29 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
                 }
             }
         }
+    }
+
+    private Response.Listener okListener; // 成功监听器
+    private Response.ErrorListener errorListener; // 失败监听器
+
+    /**
+     * 初始化网络请求监听
+     */
+    private void initListener() {
+        okListener = new Response.Listener() {
+            @Override
+            public void onResponse(Object response) {
+                Log.e(TAG, response.toString());
+            }
+        };
+
+        errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+            }
+        };
+
     }
 
     /**

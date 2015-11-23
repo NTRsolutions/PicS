@@ -3,7 +3,6 @@ package com.justdoit.pics.adapater;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +37,7 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
 
     /**
      * 设置user info和更新item数量
+     *
      * @param userInfo
      */
     public void setUserInfo(UserInfo userInfo) {
@@ -65,23 +65,19 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
 
         if (holder instanceof PersonalHolder) {
             // 名称 + 值 + 可否编辑(Y/N)
-            // 用户名 N
-            ((PersonalHolder) holder).usernamePIV.update(res.getString(R.string.prompt_username), App.getUserName(), false);
-            // email N
-            ((PersonalHolder) holder).emailPIV.update(res.getString(R.string.prompt_email), userInfo.getEmail(), false);
+            // 昵称 Y
+            ((PersonalHolder) holder).nicknamePIV.update(res.getString(R.string.nick_name), userInfo.getNickname(), true);
+            // email Y
+            ((PersonalHolder) holder).emailPIV.update(res.getString(R.string.prompt_email), userInfo.getEmail(), true);
             // 性别 Y
-            if (TextUtils.isEmpty(userInfo.getSex())) {
-                ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), res.getString(R.string.unknown), false);
-            } else if ("1".equals(userInfo.getSex())) {
-                ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), res.getString(R.string.man), false);
+            if ("1".equals(userInfo.getSex())) {
+                ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), res.getString(R.string.man), true);
             } else if ("0".equals(userInfo.getSex())) {
-                ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), res.getString(R.string.female), false);
+                ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), res.getString(R.string.female), true);
             } else {
-                ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), userInfo.getSex(), false);
+                ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), res.getString(R.string.unknown), true);
             }
-            ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), res.getString(R.string.unknown), false);
             // 居住地 Y
-
             ((PersonalHolder) holder).locationPIV.update(res.getString(R.string.user_info_location), userInfo.getCountry() + " " + userInfo.getProvince() + " " + userInfo.getCity(), true);
             // 生日 Y TODO:没有进行时间格式转换
             ((PersonalHolder) holder).birthdayPIV.update(res.getString(R.string.birthday), userInfo.getBirthday() + "", true);
@@ -132,7 +128,7 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
         PersonalIntroItemView birthdayPIV; // 生日栏
         PersonalIntroItemView locationPIV; // 居住地址
         PersonalIntroItemView emailPIV; // 邮箱
-        PersonalIntroItemView usernamePIV; // 用户名
+        PersonalIntroItemView nicknamePIV; // 用户名
 
         public PersonalHolder(View itemView) {
             super(itemView);
@@ -142,7 +138,7 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
             birthdayPIV = (PersonalIntroItemView) itemView.findViewById(R.id.personal_intro_birthday);
             locationPIV = (PersonalIntroItemView) itemView.findViewById(R.id.personal_intro_location);
             emailPIV = (PersonalIntroItemView) itemView.findViewById(R.id.personal_intro_email);
-            usernamePIV = (PersonalIntroItemView) itemView.findViewById(R.id.personal_intro_username);
+            nicknamePIV = (PersonalIntroItemView) itemView.findViewById(R.id.personal_intro_nickname);
         }
     }
 }

@@ -20,7 +20,7 @@
             android:textSize="@dimen/brief_intro_title" />
 
         <com.justdoit.pics.widget.PersonalIntroItemView
-            android:id="@+id/personal_intro_username"
+            android:id="@+id/personal_intro_nickname"
             android:layout_marginTop="@dimen/brief_intro_item_margin_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -45,12 +45,6 @@
 
         <com.justdoit.pics.widget.PersonalIntroItemView
             android:id="@+id/personal_intro_birthday"
-            android:layout_marginTop="@dimen/brief_intro_item_margin_top"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <com.justdoit.pics.widget.PersonalIntroItemView
-            android:id="@+id/personal_intro_followers"
             android:layout_marginTop="@dimen/brief_intro_item_margin_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
