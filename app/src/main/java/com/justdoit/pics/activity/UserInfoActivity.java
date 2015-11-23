@@ -21,20 +21,29 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.justdoit.pics.R;
 import com.justdoit.pics.adapater.UserInfoViewPagerAdapter;
+import com.justdoit.pics.bean.UserInfo;
 import com.justdoit.pics.dao.User;
 import com.justdoit.pics.dao.impl.UserImpl;
 import com.justdoit.pics.fragment.BriefIntroFragment;
 import com.justdoit.pics.fragment.MainFragment;
 import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
+import com.justdoit.pics.model.NetSingleton;
 import com.justdoit.pics.util.ImageUtil;
+import com.justdoit.pics.util.NetUtil;
 import com.justdoit.pics.util.SystemUtil;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,6 +54,8 @@ import java.util.Map;
  * 通过传递过来的id和用户的id对比，如果相同就设置isUserOwn = true;否则isUserOwn = false;
  * 如果isUserOwn = false，询问服务器是否已经关注了，更改相应的控件
  * <p/>
+ *
+ * 从数据库获取数据:getDataFromServer()
  * TODO 添加修改信息和收藏页面
  * Created by mengwen on 2015/10/28.
  */
@@ -72,7 +83,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
     private CollapsingToolbarLayout toolbarLayout;
     private SwipeRefreshLayout container;
 
-    private ImageView avatarImageView; // 头像
+    private NetworkImageView avatarImageView; // 头像
     private ImageView backgroundImageView; // 背景图片
 
     private TextView userNameTv; // 用户名
@@ -87,8 +98,6 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         initData();
 
         initView();
-
-        initListener();
     }
 
     @Override
@@ -163,7 +172,6 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
 
     private Response.Listener okListener; // 成功监听器
     private Response.ErrorListener errorListener; // 失败监听器
-
     /**
      * 初始化网络请求监听
      */
@@ -171,7 +179,14 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         okListener = new Response.Listener() {
             @Override
             public void onResponse(Object response) {
-                Log.e(TAG, response.toString());
+                Gson gson = new Gson();
+                Type type = new TypeToken<UserInfo>(){
+
+                }.getType();
+                UserInfo userInfo = gson.fromJson(String.valueOf(response), type);
+
+                // 更新UI
+                updateUI(userInfo);
             }
         };
 
@@ -182,6 +197,44 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
             }
         };
 
+    }
+
+    /**
+     * 从服务器获取数据
+     * 获取成功后，okListener
+     * 使用updateUI()
+     * 更新Activity和简介fragment的UI
+     */
+    private void getDataFromServer() {
+        initListener();
+
+        User user = new UserImpl();
+        user.getUserInfo(this, userId, null, okListener, errorListener);
+    }
+
+    /**
+     * 更新Activity UI和简介fragment UI
+     * @param userInfo
+     */
+    private void updateUI(UserInfo userInfo) {
+        // 图片加载
+        ImageLoader imageLoader = NetSingleton.getInstance(this).getImageLoader();
+
+        // toolbar
+        getSupportActionBar().setTitle(userInfo.getUsername());
+
+
+        // brief view
+        followersTv.setText(userInfo.getFollowers_count() + "个关注者");
+        avatarImageView.setImageUrl(userInfo.getAvatar(), imageLoader);
+        avatarImageView.setDefaultImageResId(R.mipmap.user_info_def_avatar);
+        avatarImageView.setErrorImageResId(R.drawable.ic_broken_image_black_48dp);
+
+        // brief fragment UI
+        // 0: briefIntroFragment
+        // 1: mainFragment
+        // 2:
+        ((BriefIntroFragment)viewPagerAdapter.getItem(0)).updateUI(userInfo);
     }
 
     /**
@@ -197,6 +250,14 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         } else {
             isUserOwn = false;
         }
+
+        // 如果网络通畅
+        if (NetUtil.isNetworkAvailable(this)) {
+            getDataFromServer();
+        } else {
+            // TODO 没有网络
+            Toast.makeText(this, "当前没有网络+-+", Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
@@ -205,6 +266,12 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
     private void initView() {
 
         container = (SwipeRefreshLayout) findViewById(R.id.user_info_refresh_container);
+        container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getDataFromServer();
+            }
+        });
 
         initToolbar();
 
@@ -218,12 +285,10 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
      * 设置toolbar
      */
     private void initToolbar() {
-        avatarImageView = (ImageView) findViewById(R.id.user_info_avatar_iv);
+        avatarImageView = (NetworkImageView) findViewById(R.id.user_info_avatar_iv);
         backgroundImageView = (ImageView) findViewById(R.id.user_info_bg_iv);
         toolbar = (Toolbar) findViewById(R.id.user_into_toolbar);
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.user_info_toolbar_container);
-
-        // TODO 设置用户头像
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // 显示上一级按钮
@@ -272,22 +337,24 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         tabLayout.setupWithViewPager(viewpager); // 装载viewpager
     }
 
+    private UserInfoViewPagerAdapter viewPagerAdapter; // Viewpager adapter
+
     /**
      * 初始化viewpager
      *
      * @param viewpager
      */
     private void setupViewPager(ViewPager viewpager) {
-        UserInfoViewPagerAdapter adapter = new UserInfoViewPagerAdapter(getSupportFragmentManager());
+        viewPagerAdapter = new UserInfoViewPagerAdapter(getSupportFragmentManager());
 
-        adapter.addFragment(BriefIntroFragment.newInstance(), "简介");
-        adapter.addFragment(MainFragment.newInstance(MainFragment.NO_FOOTERANDHEADER), "信息");
+        viewPagerAdapter.addFragment(BriefIntroFragment.newInstance(), "简介");
+        viewPagerAdapter.addFragment(MainFragment.newInstance(MainFragment.NO_FOOTERANDHEADER), "信息");
         if (isUserOwn) {
             // TODO 收藏页面
-            adapter.addFragment(new Fragment(), "收藏");
+            viewPagerAdapter.addFragment(new Fragment(), "收藏");
         }
 
-        viewpager.setAdapter(adapter);
+        viewpager.setAdapter(viewPagerAdapter);
 
     }
 

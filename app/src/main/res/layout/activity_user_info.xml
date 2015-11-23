@@ -94,7 +94,7 @@
 
                 </LinearLayout>
 
-                <ImageView
+                <com.android.volley.toolbox.NetworkImageView
                     android:id="@+id/user_info_avatar_iv"
                     android:layout_width="@dimen/user_info_avatar_size"
                     android:layout_height="@dimen/user_info_avatar_size"

@@ -14,6 +14,16 @@ import java.util.Map;
 public interface User {
 
     /**
+     * 获取用户信息
+     * @param context
+     * @param userId
+     * @param params
+     * @param listener
+     * @param errorListener
+     */
+    public abstract void getUserInfo(Context context, int userId, Map<String, String> params, Response.Listener listener, Response.ErrorListener errorListener);
+
+    /**
      * 修改用户信息
      * @param context
      * @param userId 用户id

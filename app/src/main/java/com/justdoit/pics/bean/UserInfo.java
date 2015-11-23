@@ -1,14 +1,17 @@
 package com.justdoit.pics.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by mengwen on 2015/10/28.
  */
-public class UserInfo {
+public class UserInfo implements Serializable{
 
     /**
      * pk : 唯一标识
+     * username : 用户名
      * email : 用户email
-     * avatar : 头像
+     * avatar : 头像链接
      * sex : 性别(0:女 1:男)
      * nickname: 昵称
      * country : 国家
@@ -20,14 +23,15 @@ public class UserInfo {
      */
 
     private int pk;
+    private String username;
     private String email;
-    private Object avatar;
+    private String avatar;
     private String sex;
     private String nickname;
     private String country;
     private String province;
     private String city;
-    private Object birthday;
+    private String birthday;
     private int followers_count;
     private int grade;
 
@@ -35,11 +39,15 @@ public class UserInfo {
         this.pk = pk;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public void setAvatar(Object avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 
@@ -63,7 +71,7 @@ public class UserInfo {
         this.city = city;
     }
 
-    public void setBirthday(Object birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
@@ -79,11 +87,15 @@ public class UserInfo {
         return pk;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     public String getEmail() {
         return email;
     }
 
-    public Object getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
@@ -107,7 +119,7 @@ public class UserInfo {
         return city;
     }
 
-    public Object getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 

@@ -22,6 +22,7 @@ import java.util.Map;
 
 /**
  * 存储和初始化加载cookie的类
+ * TODO 存储cookies的相关属性
  * Created by mengwen on 2015/10/27.
  */
 public class MyCookieStore implements CookieStore {

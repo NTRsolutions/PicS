@@ -20,6 +20,7 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
 
     private final String TAG = "BriefIntroAdapter";
     private UserInfo userInfo = null;
+    private boolean isUserOwn = true;
     private int NUM_ITEM = 0;
     private Context context;
 
@@ -30,6 +31,12 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
     }
 
     public BriefIntroAdapter(Context context) {
+        this(context, true);
+    }
+
+    public BriefIntroAdapter(Context context, boolean isUserOwn) {
+
+        this.isUserOwn = isUserOwn;
         this.context = context;
         userInfo = new UserInfo();
         NUM_ITEM = 2; // 基本信息和人脉
@@ -80,7 +87,7 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
             // 居住地 Y
             ((PersonalHolder) holder).locationPIV.update(res.getString(R.string.user_info_location), userInfo.getCountry() + " " + userInfo.getProvince() + " " + userInfo.getCity(), true);
             // 生日 Y TODO:没有进行时间格式转换
-            ((PersonalHolder) holder).birthdayPIV.update(res.getString(R.string.birthday), userInfo.getBirthday() + "", true);
+            ((PersonalHolder) holder).birthdayPIV.update(res.getString(R.string.birthday), userInfo.getBirthday(), true);
 
         } else if (holder instanceof ConnectionsHolder) {
 

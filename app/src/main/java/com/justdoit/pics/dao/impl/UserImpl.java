@@ -2,8 +2,11 @@ package com.justdoit.pics.dao.impl;
 
 import android.content.Context;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.justdoit.pics.dao.User;
+import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
 import com.justdoit.pics.model.NetSingleton;
 import com.justdoit.pics.model.PostFormJsonObjRequest;
@@ -16,6 +19,15 @@ import java.util.Map;
  * Created by mengwen on 2015/11/22.
  */
 public class UserImpl implements User {
+
+    @Override
+    public void getUserInfo(Context context, int userId, Map<String, String> params, Response.Listener listener, Response.ErrorListener errorListener) {
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
+                Constant.HOME_URL + Constant.USER_INFO_URL_SUFFIX + userId,
+                listener, errorListener
+        );
+        NetSingleton.getInstance(context).addToRequestQueue(request);
+    }
 
     @Override
     public void changeUserInfo(Context context, int userId, Map<String, String> params, Map<String, String> fileParams, Response.Listener listener, Response.ErrorListener errorListener) {
