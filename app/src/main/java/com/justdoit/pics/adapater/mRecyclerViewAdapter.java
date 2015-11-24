@@ -47,17 +47,12 @@ public class mRecyclerViewAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ((mViewHolder)holder).mDisplayNameTextView.setText("test");
-        ((mViewHolder)holder).mCommentTextView.setText("test");
-        ((mViewHolder)holder).mPlusOneTextView.setText("test");
-        ((mViewHolder)holder).mAddCommentTextView.setText("test");
         ((mViewHolder)holder).mTimestampTextView.setText("test");
         ((mViewHolder)holder).mMessageTextView.setText("test");
+        ((mViewHolder)holder).mPlusOneView.setText("10");
 
         ((mViewHolder)holder).mUserImageView.setImageResource(testphotodata[position]);
         ((mViewHolder)holder).mPostImageView.setImageResource(testphotodata[position]);
-        ((mViewHolder)holder).mCommenterOneImageView.setImageResource(testphotodata[position]);
-        ((mViewHolder)holder).mCommenterTwoImageView.setImageResource(testphotodata[position]);
-        ((mViewHolder)holder).mCommenterThreeImageView.setImageResource(testphotodata[position]);
 
 
         if(position > lastPosition){
@@ -76,30 +71,20 @@ public class mRecyclerViewAdapter extends RecyclerView.Adapter {
     class mViewHolder extends RecyclerView.ViewHolder{
         ImageView mUserImageView;
         TextView mDisplayNameTextView;
-        TextView mCommentTextView;
-        TextView mPlusOneTextView;
+        TextView mPlusOneView;
         TextView mAddCommentTextView;
         TextView mTimestampTextView;
         TextView mMessageTextView;
         ImageView mPostImageView;
-        ImageView mCommenterOneImageView;
-        ImageView mCommenterTwoImageView;
-        ImageView mCommenterThreeImageView;
-        View mIndicatorView;
         public mViewHolder(View V){
             super(V);
             mUserImageView = (ImageView)V.findViewById(R.id.user_iv) ;
             mDisplayNameTextView = (TextView)V.findViewById(R.id.display_name_tv) ;
-            mCommentTextView = (TextView )V.findViewById(R.id.comment_tv);
-            mPlusOneTextView = (TextView)V.findViewById(R.id.plus_one_tv);
+            mPlusOneView = (TextView)V.findViewById(R.id.plus_one_tv);
             mAddCommentTextView = (TextView)V.findViewById(R.id.add_comment_tv);
             mTimestampTextView = (TextView)V.findViewById(R.id.timestamp_tv);
             mMessageTextView = (TextView)V.findViewById(R.id.message_tv);
             mPostImageView = (ImageView)V.findViewById(R.id.post_iv);
-            mCommenterOneImageView = (ImageView)V.findViewById(R.id.commenter_one_iv);
-            mCommenterTwoImageView = (ImageView)V.findViewById(R.id.commenter_two_iv);
-            mCommenterThreeImageView = (ImageView)V.findViewById(R.id.commenter_three_iv);
-            mIndicatorView = V.findViewById(R.id.indicator_v);
         }
     }
 }

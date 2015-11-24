@@ -9,7 +9,7 @@
     android:layout_height="match_parent"
     tools:context=".fragment.MainFragment">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <com.justdoit.pics.widget.MultiSwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
                 android:id="@+id/content_container">
             </android.support.v7.widget.RecyclerView>
 
-            <android.support.v7.widget.Toolbar
+            <TextView
                 android:id="@+id/header_tv"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
@@ -37,17 +37,15 @@
                 />
         </RelativeLayout>
 
+    </com.justdoit.pics.widget.MultiSwipeRefreshLayout>
 
-
-
-    </android.support.v4.widget.SwipeRefreshLayout>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/footer"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="46dp"
+        android:layout_marginBottom="32dp"
         android:gravity="center">
         <TextView
             android:id="@+id/footer_tv"
@@ -56,7 +54,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/shape_rounded_rectangle_transparent_black"
             android:textSize="14sp"
-            android:text="test"
+            android:text="@string/top"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="20dp"

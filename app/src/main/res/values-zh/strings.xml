@@ -32,18 +32,12 @@
         <item>你的照片</item>
         <item>你的相册</item>
     </string-array>
-    <string-array name="change_info">
-        <item>修改你的昵称</item>
-        <item>修改你的邮箱</item>
-        <item>修改你的性别</item>
-        <item>修改你的居住地</item>
-        <item>修改你的生日</item>
-    </string-array>
     <string name="action_mask">屏蔽</string>
     <string name="unknown">未知</string>
     <string name="man">男</string>
     <string name="female">女</string>
     <string name="nick_name">昵称</string>
-    <string name="change_info">修改基本信息</string>
-    <string name="action_save">保存</string>
+    <string name="visitor">游客</string>
+    <string name="top">顶部</string>
+    <string name="comment">评论</string>
 </resources>

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.justdoit.pics.R;
@@ -22,6 +23,8 @@ import com.justdoit.pics.R;
  * Created by ljz on 2015/11/3.
  */
 public class EditFragment extends DialogFragment {
+
+
     public EditFragment() {
         super();
         this.setStyle(STYLE_NO_FRAME, android.R.style.Theme_DeviceDefault_Dialog);
