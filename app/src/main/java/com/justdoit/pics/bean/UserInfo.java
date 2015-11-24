@@ -25,13 +25,13 @@ public class UserInfo implements Serializable{
     private int pk;
     private String username;
     private String email;
-    private String avatar;
+    private Object avatar;
     private String sex;
     private String nickname;
     private String country;
     private String province;
     private String city;
-    private String birthday;
+    private Object birthday;
     private int followers_count;
     private int grade;
 
@@ -47,7 +47,7 @@ public class UserInfo implements Serializable{
         this.email = email;
     }
 
-    public void setAvatar(String avatar) {
+    public void setAvatar(Object avatar) {
         this.avatar = avatar;
     }
 
@@ -71,7 +71,7 @@ public class UserInfo implements Serializable{
         this.city = city;
     }
 
-    public void setBirthday(String birthday) {
+    public void setBirthday(Object birthday) {
         this.birthday = birthday;
     }
 
@@ -95,7 +95,7 @@ public class UserInfo implements Serializable{
         return email;
     }
 
-    public String getAvatar() {
+    public Object getAvatar() {
         return avatar;
     }
 
@@ -119,7 +119,7 @@ public class UserInfo implements Serializable{
         return city;
     }
 
-    public String getBirthday() {
+    public Object getBirthday() {
         return birthday;
     }
 

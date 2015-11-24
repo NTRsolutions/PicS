@@ -87,7 +87,11 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
             // 居住地 Y
             ((PersonalHolder) holder).locationPIV.update(res.getString(R.string.user_info_location), userInfo.getCountry() + " " + userInfo.getProvince() + " " + userInfo.getCity(), true);
             // 生日 Y TODO:没有进行时间格式转换
-            ((PersonalHolder) holder).birthdayPIV.update(res.getString(R.string.birthday), userInfo.getBirthday(), true);
+            if (userInfo.getBirthday() == null) {
+                ((PersonalHolder) holder).birthdayPIV.update(res.getString(R.string.birthday), "", true);
+            } else {
+                ((PersonalHolder) holder).birthdayPIV.update(res.getString(R.string.birthday), String.valueOf(userInfo.getBirthday()), true);
+            }
 
         } else if (holder instanceof ConnectionsHolder) {
 

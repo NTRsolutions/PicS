@@ -232,7 +232,10 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
 
         // brief view
         followersTv.setText(userInfo.getFollowers_count() + "个关注者");
-        avatarImageView.setImageUrl(userInfo.getAvatar(), imageLoader);
+        if (userInfo.getAvatar() != null){
+            avatarImageView.setImageUrl(String.valueOf(userInfo.getAvatar()), imageLoader);
+        }
+
         avatarImageView.setDefaultImageResId(R.mipmap.user_info_def_avatar);
         avatarImageView.setErrorImageResId(R.drawable.ic_broken_image_black_48dp);
 
