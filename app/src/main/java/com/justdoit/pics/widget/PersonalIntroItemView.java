@@ -74,4 +74,20 @@ public class PersonalIntroItemView extends RelativeLayout {
     public void setEditable(boolean editable) {
         this.editable = editable;
     }
+
+    /**
+     * 获取title text view的text
+     * @return
+     */
+    public String getTitle() {
+        return String.valueOf(titleTv.getText());
+    }
+
+    /**
+     * 获取content text view的text
+     * @return
+     */
+    public String getContent() {
+        return String.valueOf(contentTv.getText());
+    }
 }

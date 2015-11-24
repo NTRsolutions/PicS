@@ -29,6 +29,7 @@ import com.justdoit.pics.dao.impl.UserImpl;
 import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
 import com.justdoit.pics.model.NetSingleton;
+import com.justdoit.pics.util.CheckUtil;
 import com.justdoit.pics.util.NetUtil;
 import com.justdoit.pics.util.SystemUtil;
 
@@ -38,12 +39,11 @@ import org.json.JSONObject;
 import java.net.HttpCookie;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * 通过用户名和密码登录
  * 或者通过用户名、email和密码注册
- *
+ * <p/>
  * 其中goActivity()方法控制跳转到目标的activity
  */
 public class LoginActivity extends AppCompatActivity {
@@ -168,7 +168,7 @@ public class LoginActivity extends AppCompatActivity {
             mPasswordLayout.setError(getString(R.string.error_field_required));
             focusView = mPasswordLayout;
             cancel = true;
-        } else if (!isPasswordValid(password)) {
+        } else if (!CheckUtil.isPasswordValid(password)) {
             mPasswordLayout.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordLayout;
             cancel = true;
@@ -179,7 +179,7 @@ public class LoginActivity extends AppCompatActivity {
                 mEmailLayout.setError(getString(R.string.error_field_required));
                 focusView = mEmailLayout;
                 cancel = true;
-            } else if (!isEmailValid(email)) {
+            } else if (!CheckUtil.isEmailValid(email)) {
                 mEmailLayout.setError(getString(R.string.error_invalid_email));
                 focusView = mEmailLayout;
                 cancel = true;
@@ -191,7 +191,7 @@ public class LoginActivity extends AppCompatActivity {
             mUsernameLayout.setError(getString(R.string.error_field_required));
             focusView = mUsernameLayout;
             cancel = true;
-        } else if (!isUsernameValid(username)) {
+        } else if (!CheckUtil.isUsernameValid(username)) {
             mUsernameLayout.setError(getString(R.string.error_invalid_username));
             focusView = mUsernameLayout;
             cancel = true;
@@ -211,9 +211,10 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * 登录或者注册操作，主要通过isToLogin判断
-     *  true:登录
-     *  false:注册
+     * true:登录
+     * false:注册
      * 成功后把用户id和用户名保存在preference文件
+     *
      * @param email
      * @param username
      * @param password
@@ -263,6 +264,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * 保存登录或注册成功后的信息
      * TODO 注册接口需要添加userid字段
+     *
      * @param jsonStr
      */
     private void saveUserInfo(String jsonStr, String username) {
@@ -294,6 +296,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * 显示登录或注册失败的返回信息
+     *
      * @param response
      */
     private void showErrorMessage(NetworkResponse response) {
@@ -321,28 +324,6 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.e(TAG, "showErrorMessage() : new JSONObject() failed");
         }
-    }
-
-    private boolean isUsernameValid(String username) {
-        // 用户名必须6-30位,只能包含数字字母下划线,并以字母开头
-        final String USER_NAME_MATCH_STR = "^[a-zA-Z][\\w]{5,29}$";
-        Pattern pattern = Pattern.compile(USER_NAME_MATCH_STR);
-
-        return pattern.matcher(username).matches();
-
-    }
-
-    private boolean isPasswordValid(String password) {
-        // TODO 需要商量一下
-        return password.length() >= 6;
-    }
-
-
-    private boolean isEmailValid(String email) {
-        // 检查邮件字符串合法性
-        final String EMAIL_MATCH_STR = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
-        Pattern pattern = Pattern.compile(EMAIL_MATCH_STR);
-        return pattern.matcher(email).matches();
     }
 
     /**

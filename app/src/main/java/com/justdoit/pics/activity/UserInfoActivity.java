@@ -54,7 +54,7 @@ import java.util.Map;
  * 通过传递过来的id和用户的id对比，如果相同就设置isUserOwn = true;否则isUserOwn = false;
  * 如果isUserOwn = false，询问服务器是否已经关注了，更改相应的控件
  * <p/>
- *
+ * <p/>
  * 从数据库获取数据:getDataFromServer()
  * TODO 添加修改信息和收藏页面
  * Created by mengwen on 2015/10/28.
@@ -67,11 +67,14 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
     // 0:拍照
     // 1:你的图库
     // 2:你的分享的所有图片
-    public static final int WAY_TAKE_PHOTOS = 0;
-    public static final int WAY_YOUR_PHOTOS = 1;
-    public static final int WAY_YOUR_ALBUM = 2;
 
-    private static boolean isChangeAvatar; // 是否准备修改头像,false表示修改背景
+    private static enum REQUEST_CODE {
+        takePhotos,
+        usePhotos,
+        useAlbum;
+
+        static boolean isChangeAvatar; // 是否准备修改头像,false表示修改背景
+    }
 
     private int userId = -1;
     private String username;
@@ -122,10 +125,11 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
             Map<String, String> fileParams = new HashMap<String, String>();
             Map<String, String> params = new HashMap<String, String>();
             params.put("_method", "PUT");  // 上传必须要这个参数
+
             // 用户修改头像
-            if (isChangeAvatar) {
-                switch (requestCode) {
-                    case WAY_TAKE_PHOTOS:
+            if (REQUEST_CODE.isChangeAvatar) {
+                switch (REQUEST_CODE.values()[requestCode]) {
+                    case takePhotos:
                         Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                         String path = ImageUtil.saveBitmap(this, bitmap, 100);
                         avatarImageView.setImageBitmap(bitmap);
@@ -137,12 +141,12 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
                                 errorListener
                         );
                         break;
-                    case WAY_YOUR_PHOTOS:
+                    case usePhotos:
                         avatarImageView.setImageURI(data.getData());
                         // TODO 同步到服务器,并且处理本地UI
 
                         break;
-                    case WAY_YOUR_ALBUM:
+                    case useAlbum:
                         // TODO 暂时没有添加分享图片做头像的功能
                         break;
                     default:
@@ -152,15 +156,15 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
                 }
             } else {
                 // 修改用户背景
-                switch (requestCode) {
-                    case WAY_TAKE_PHOTOS:
+                switch (REQUEST_CODE.values()[requestCode]) {
+                    case takePhotos:
                         Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                         backgroundImageView.setImageBitmap(bitmap);
                         break;
-                    case WAY_YOUR_PHOTOS:
+                    case usePhotos:
                         backgroundImageView.setImageURI(data.getData());
                         break;
-                    case WAY_YOUR_ALBUM:
+                    case useAlbum:
                         break;
                     default:
                         // 传递数据异常
@@ -173,6 +177,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
 
     private Response.Listener okListener; // 成功监听器
     private Response.ErrorListener errorListener; // 失败监听器
+
     /**
      * 初始化网络请求监听
      */
@@ -181,7 +186,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
             @Override
             public void onResponse(Object response) {
                 Gson gson = new Gson();
-                Type type = new TypeToken<UserInfo>(){
+                Type type = new TypeToken<UserInfo>() {
 
                 }.getType();
                 UserInfo userInfo = gson.fromJson(String.valueOf(response), type);
@@ -220,6 +225,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
 
     /**
      * 更新Activity UI和简介fragment UI
+     *
      * @param userInfo
      */
     private void updateUI(UserInfo userInfo) {
@@ -232,7 +238,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
 
         // brief view
         followersTv.setText(userInfo.getFollowers_count() + "个关注者");
-        if (userInfo.getAvatar() != null){
+        if (userInfo.getAvatar() != null) {
             avatarImageView.setImageUrl(String.valueOf(userInfo.getAvatar()), imageLoader);
         }
 
@@ -243,7 +249,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         // 0: briefIntroFragment
         // 1: mainFragment
         // 2:
-        ((BriefIntroFragment)viewPagerAdapter.getItem(0)).updateUI(userInfo);
+        ((BriefIntroFragment) viewPagerAdapter.getItem(0)).updateUI(userInfo);
 
         // 停止刷新，如果正在刷新
         if (container.isRefreshing()) {
@@ -421,28 +427,29 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
      */
     private void choosePicture(boolean isChangeAvatar) {
 
-        this.isChangeAvatar = isChangeAvatar; // 返回结果的时候,判断怎么处理返回的data
+        REQUEST_CODE.isChangeAvatar = isChangeAvatar;// 返回结果的时候,判断怎么处理返回的data
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.choose_picture).setItems(R.array.choose_picture_way, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
+
+                switch (REQUEST_CODE.values()[which]) {
+                    case takePhotos:
                         // 拍照
                         if (SystemUtil.hasCamera(UserInfoActivity.this)) {
                             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            startActivityForResult(intent, WAY_TAKE_PHOTOS);
+                            startActivityForResult(intent, REQUEST_CODE.takePhotos.ordinal());
                         }
                         break;
-                    case 1:
+                    case usePhotos:
                         // 打开图库
                         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                         intent.setType("image/*"); // 所有格式的图片
                         intent.addCategory(Intent.CATEGORY_OPENABLE); // 可打开文件
-                        startActivityForResult(intent, WAY_YOUR_PHOTOS);
+                        startActivityForResult(intent, REQUEST_CODE.usePhotos.ordinal());
                         break;
-                    case 2:
+                    case useAlbum:
                         // 打开相册
                         // TODO 从服务器获取所有分享的图片
 

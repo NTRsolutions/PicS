@@ -38,7 +38,7 @@
             android:layout_height="wrap_content" />
 
         <com.justdoit.pics.widget.PersonalIntroItemView
-            android:id="@+id/personal_intro_location"
+            android:id="@+id/personal_intro_residence"
             android:layout_marginTop="@dimen/brief_intro_item_margin_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
