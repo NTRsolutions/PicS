@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         contents = new ArrayList<Content>();
         initView();
-        getDataformnet();
+        getDataFormServer();
     }
 
 
@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-        setSupportActionBar(toolbar);
         if (!App.isLogin()) { // 未登录显示默认用户头像
             toolbar.setNavigationIcon(R.mipmap.user_info_def_avatar);
             toolbar.setTitle(R.string.visitor);
@@ -82,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             userid = mApp.getUserId();
             toolbar.setNavigationIcon(R.mipmap.ic_launcher);
             toolbar.setTitle(username);
+            Log.e("test",username);
         }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        setSupportActionBar(toolbar);
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.container, MainFragment.newInstance(MainFragment.NORMAL),"MainFragment")
@@ -158,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void getDataformnet(){
+    private void getDataFormServer(){
         showProgress(true);
         JsonArrayRequest mjson = new JsonArrayRequest("http://demo.gzqichang.com:8001/api/topic/list/", new Response.Listener<JSONArray>() {
             @Override

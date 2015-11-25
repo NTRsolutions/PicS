@@ -43,9 +43,21 @@
         <item>Your Picture</item>
         <item>Your Album</item>
     </string-array>
+    <string name="action_save">Save</string>
 
+    <string name="change_info">Change Base Info</string>
+
+    <string-array name="change_info">
+        <item>Change Your Nick Name</item>
+        <item>Change Your Email</item>
+        <item>Change Your Sex</item>
+        <item>Change Your Residence</item>
+        <item>Change Your Birthday</item>
+    </string-array>
 
     <string name="visitor">visitor</string>
     <string name="top">top</string>
     <string name="comment">comment</string>
+
+
 </resources>

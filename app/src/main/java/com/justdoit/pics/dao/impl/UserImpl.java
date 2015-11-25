@@ -59,5 +59,10 @@ public class UserImpl implements User {
         NetSingleton.getInstance(context).addToRequestQueue(request);
     }
 
+    @Override
+    public void userTopic(Context context, Map<String, String> params, Response.Listener listener, Response.ErrorListener errorListener) {
+
+    }
+
 
 }
