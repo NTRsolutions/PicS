@@ -59,4 +59,14 @@ public interface User {
      * @param errorListener
      */
     public abstract void logout(Context context, Response.Listener listener, Response.ErrorListener errorListener);
+    /**
+     * 查看用户话题接口
+     * @param context
+     * @param params
+     * @param listener
+     * @param errorListener
+     *
+     */
+    public abstract void userTopic(Context context,Map<String,String> params, Response.Listener listener,Response.ErrorListener errorListener);
+
 }

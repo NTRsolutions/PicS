@@ -1,27 +1,43 @@
+<!--<android.support.v4.widget.SwipeRefreshLayout-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:id="@+id/mSwipeRefreshLayout">-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.MainFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
+    <com.justdoit.pics.widget.MultiSwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_height="match_parent"
-        android:id="@+id/content_container">
-
-    </android.support.v7.widget.RecyclerView>
-
-    <TextView
-        android:id="@+id/header_tv"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/transparent_black_ninty"
-        android:gravity="center"
-        android:text="header"
-        android:textColor="@android:color/white"
-        android:textSize="22sp"
-        android:layout_alignParentTop="true"
-        />
+        android:id="@+id/mSwipeRefreshLayout">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/content_container">
+            </android.support.v7.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/header_tv"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="@color/transparent_black_ninty"
+                android:gravity="center"
+                android:text="header"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                android:layout_alignParentTop="true"
+                />
+        </RelativeLayout>
+
+    </com.justdoit.pics.widget.MultiSwipeRefreshLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -29,7 +45,7 @@
         android:id="@+id/footer"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="46dp"
+        android:layout_marginBottom="32dp"
         android:gravity="center">
         <TextView
             android:id="@+id/footer_tv"
@@ -38,7 +54,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/shape_rounded_rectangle_transparent_black"
             android:textSize="14sp"
-            android:text="test"
+            android:text="@string/top"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="20dp"
@@ -64,3 +80,4 @@
             />
     </FrameLayout>
 </RelativeLayout>
+<!--</android.support.v4.widget.SwipeRefreshLayout>-->

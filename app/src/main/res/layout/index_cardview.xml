@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:clickable="true"
-    app:contentPadding="-2dp">
+    app:contentPadding="-2dp"
+    android:background="@drawable/shape_rounded_rectangle">
 
     <!--style="@style/CardViewStyle"-->
     <!--app:cardUseCompatPadding="true"-->
@@ -31,6 +32,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
                 android:scaleType="centerCrop"
+                android:background="@drawable/mainview_selector"
                 />
             <!--app:corner_radius="25dp" -->
             <!--android:background="@drawable/shape_google_avatar"-->
@@ -47,7 +49,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:background="@drawable/mainview_selector"
+                    android:clickable="true"
+                    android:padding="5dp"/>
 
 
                 <TextView
@@ -55,7 +60,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/gray15"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:background="@drawable/mainview_selector"
+                    android:clickable="true"
+                    android:padding="5dp"/>
             </LinearLayout>
 
 
@@ -89,35 +97,41 @@
             android:gravity="center_vertical">
 
             <TextView
+                android:clickable="true"
                 android:id="@+id/plus_one_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:background="@drawable/shape_rounded_rectangle"
+                android:background="@drawable/mainview_selector"
                 android:gravity="center"
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
-                android:textColor="@color/gray15"
                 android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginLeft="17dp"
-                android:layout_toRightOf="@id/plus_one_tv"
-                android:background="@drawable/shape_rounded_rectangle"
-                android:contentDescription=""
-                android:gravity="center"
-                android:padding="4dp"
-                android:src="@drawable/ic_action_share" />
+                android:textStyle="bold"
+                android:drawableLeft="@drawable/ic_favorite_border_black_18dp"
+                />
 
             <TextView
+                android:clickable="true"
+                android:id="@+id/collect_tv"
+                android:layout_toRightOf = "@id/plus_one_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/mainview_selector"
+                android:gravity="center"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:drawableLeft="@drawable/ic_action_share"/>
+
+            <TextView
+                android:clickable="true"
                 android:id="@+id/add_comment_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="3dp"
-                android:background="@drawable/shape_rounded_rectangle"
+                android:background="@drawable/mainview_selector"
                 android:drawableLeft="@drawable/ic_action_google_plus_comment"
                 android:drawablePadding="-2dp"
                 android:gravity="center"
@@ -125,7 +139,8 @@
                 android:paddingRight="12dp"
                 android:textColor="@color/gray15"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:text="@string/comment"/>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -133,65 +148,12 @@
                 android:layout_marginRight="3dp"
                 android:layout_toLeftOf="@id/add_comment_tv">
 
-                <LinearLayout
-                    android:id="@+id/commenter_avatars_ll"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/commenter_one_iv"
-                        android:layout_width="32dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="3dp"
-                        android:background="@drawable/shape_rounded_rectangle"/>
-
-                    <ImageView
-                        android:id="@+id/commenter_two_iv"
-                        android:layout_width="32dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="3dp"
-                        android:layout_marginRight="3dp"
-                        android:background="@drawable/shape_rounded_rectangle"/>
-
-                    <ImageView
-                        android:id="@+id/commenter_three_iv"
-                        android:layout_width="32dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="3dp"
-                        android:background="@drawable/shape_rounded_rectangle"/>
-
-                </LinearLayout>
-
-                <View
-                    android:id="@+id/indicator_v"
-                    android:layout_width="30dp"
-                    android:layout_height="2dp"
-                    android:layout_below="@id/commenter_avatars_ll"
-                    android:layout_margin="1dp"
-                    android:background="@color/bulgarian_blue" />
 
             </RelativeLayout>
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="62dp"
-            android:background="@drawable/shape_whitesmoke_semi_rounded_rectangle"
-            android:gravity="center_vertical"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
-
-            <TextView
-                android:id="@+id/comment_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:textSize="15sp" />
-
-        </RelativeLayout>
 
     </LinearLayout>
 
