@@ -22,6 +22,8 @@ import java.util.Map;
 
 /**
  * 存储和初始化加载cookie的类
+ * 在add（）方法自动存储该uri的cookies的值到preference
+ * 包括token值
  * TODO 存储cookies的相关属性
  * Created by mengwen on 2015/10/27.
  */
@@ -34,11 +36,14 @@ public class MyCookieStore implements CookieStore {
     private String tokenName = "test"; // token名称，默认为test
     private SharedPreferences sp;
 
+    private URI uri;
+
     public MyCookieStore(Context context, URI uri) {
         this(context, uri, null);
     }
 
     public MyCookieStore(Context context, URI uri, String tokenName) {
+        this.uri = uri;
 
         // 设置token值
         if (tokenName != null && !tokenName.isEmpty()) {
@@ -68,6 +73,13 @@ public class MyCookieStore implements CookieStore {
     @Override
     public void add(URI uri, HttpCookie cookie) {
         cookieStore.add(uri, cookie);
+
+        // 如果是同一个域名下的,保存cookies的值到preference
+        if (uri.getHost().equals(this.uri.getHost())) {
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString(cookie.getName(), cookie.getValue());
+            editor.commit();
+        }
     }
 
     @Override
@@ -102,14 +114,11 @@ public class MyCookieStore implements CookieStore {
     /**
      * 初始化
      * 获取网络cookies
-     * 并且保存在shared preferences
-     * TODO 无法起作用
      * @param context
      * @param uri
      */
     public void initCookiesFromReq(Context context, final URI uri) {
         // 请求服务器生成cookie
-        final SharedPreferences.Editor editor = sp.edit();
 
         StringRequest request = new StringRequest(
                 Request.Method.GET, uri.toString(),
@@ -117,13 +126,6 @@ public class MyCookieStore implements CookieStore {
                     @Override
                     public void onResponse(String response) {
                         Log.i(TAG, "获取网络cookies成功");
-                        List<HttpCookie> cookies = App.cookieManager.getCookieStore().getCookies();
-
-                        for (HttpCookie c : cookies) {
-                            editor.putString(c.getName(), c.getValue());
-                        }
-
-                        editor.commit();
                     }
                 },
                 new Response.ErrorListener() {

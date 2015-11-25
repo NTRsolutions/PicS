@@ -231,13 +231,17 @@ public class LoginActivity extends AppCompatActivity {
             Response.Listener okListener = new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
-                    // 保存参数
-                    saveUserInfo(response.toString(), username);
 
                     showProgress(false);
+                    // 保存参数
+                    if (response != null) {
+                        saveUserInfo(String.valueOf(response), username);
 
-                    // 跳转到相应页面
-                    goActivity();
+                        // 跳转到相应页面
+                        goActivity();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "返回参数出错+-+", Toast.LENGTH_LONG).show();
+                    }
                 }
             };
 
@@ -263,7 +267,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * 保存登录或注册成功后的信息
-     * TODO 注册接口需要添加userid字段
+     * 直接保存填写的username
      *
      * @param jsonStr
      */
@@ -273,11 +277,19 @@ public class LoginActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(jsonStr);
             SharedPreferences.Editor editor = getSharedPreferences(Constant.USER_INFO_PREFS, MODE_PRIVATE).edit();
 
-            editor.putInt(Constant.USER_ID_NAME, jsonObject.getInt(Constant.USER_ID_NAME));
+            int userid = -1;
+
+            if (isToLogin) {
+                userid = jsonObject.getInt(Constant.USER_ID_NAME);
+            } else {
+                userid = jsonObject.getInt("pk");
+            }
+
+            editor.putInt(Constant.USER_ID_NAME, userid);
             editor.putString(Constant.USERNAME_NAME, username);
             editor.commit();
 
-            App.setUserId(jsonObject.getInt(Constant.USER_ID_NAME)); // 设置全局userId
+            App.setUserId(userid); // 设置全局userId
             App.setUserName(username);
 
             SharedPreferences.Editor cookieEditor = getSharedPreferences(Constant.COOKIES_PREFS, MODE_PRIVATE).edit();

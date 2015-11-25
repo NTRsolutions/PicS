@@ -101,6 +101,8 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         initData();
 
         initView();
+
+        initListener();
     }
 
     @Override
@@ -182,6 +184,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
      * 初始化网络请求监听
      */
     private void initListener() {
+        // 成功后更新UI
         okListener = new Response.Listener() {
             @Override
             public void onResponse(Object response) {
@@ -190,6 +193,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
 
                 }.getType();
                 UserInfo userInfo = gson.fromJson(String.valueOf(response), type);
+                Log.e(TAG, "updateUI");
 
                 // 更新UI
                 updateUI(userInfo);
@@ -212,15 +216,22 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
 
     /**
      * 从服务器获取数据
+     * 判断是否有网络
      * 获取成功后，okListener
      * 使用updateUI()
      * 更新Activity和简介fragment的UI
      */
     private void getDataFromServer() {
-        initListener();
 
-        User user = new UserImpl();
-        user.getUserInfo(this, userId, null, okListener, errorListener);
+        // 如果网络通畅
+        if (NetUtil.isNetworkAvailable(this)) {
+            User user = new UserImpl();
+            user.getUserInfo(this, userId, null, okListener, errorListener);
+        } else {
+            // TODO 没有网络
+            Toast.makeText(this, "当前没有网络+-+", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     /**
@@ -269,14 +280,6 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
             isUserOwn = true;
         } else {
             isUserOwn = false;
-        }
-
-        // 如果网络通畅
-        if (NetUtil.isNetworkAvailable(this)) {
-            getDataFromServer();
-        } else {
-            // TODO 没有网络
-            Toast.makeText(this, "当前没有网络+-+", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -400,7 +403,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
                 return true;
             case R.id.action_settings:
                 // 打开设置页面
-                // TODO 设置页面
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.action_change_avatar:
                 // 打开修改用户头像页面

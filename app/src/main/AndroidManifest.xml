@@ -38,6 +38,10 @@
             android:label="@string/change_info">
 
         </activity>
+        <activity android:name=".activity.SettingsActivity"
+            android:label="@string/action_settings">
+
+        </activity>
     </application>
 
 </manifest>

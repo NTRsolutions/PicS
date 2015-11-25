@@ -1,7 +1,9 @@
 package com.justdoit.pics.global;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.util.Log;
 
 import com.justdoit.pics.model.MyCookieStore;
@@ -78,6 +80,35 @@ public class App extends Application {
             }
             CookieHandler.setDefault(cookieManager);
         }
+    }
+
+    /**
+     * 退出登录
+     * 清理所有用户信息和cookies
+     * @param context
+     */
+    public static void logout(Context context) {
+        // 清除cookies
+        cookieManager.getCookieStore().removeAll();
+        // 清除preference
+        clearAllPrefs(context);
+
+        USER_ID = -1;
+    }
+
+    /**
+     * 清除所有preferences
+     * cookies
+     * userinfo
+     * @param context
+     */
+    public static void clearAllPrefs(Context context) {
+        context.getSharedPreferences(Constant.COOKIES_PREFS, MODE_PRIVATE).edit()
+                .clear()
+                .commit();
+        context.getSharedPreferences(Constant.USER_INFO_PREFS, MODE_PRIVATE).edit()
+                .clear()
+                .commit();
     }
 
     /**

@@ -5,6 +5,7 @@ import android.content.Context;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.justdoit.pics.dao.User;
 import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
@@ -54,6 +55,16 @@ public class UserImpl implements User {
         PostFormRequest request = new PostFormJsonObjRequest(
                 Constant.HOME_URL + Constant.REGIST_URL_SUFFIX,
                 params, listener, errorListener
+        );
+
+        NetSingleton.getInstance(context).addToRequestQueue(request);
+    }
+
+    @Override
+    public void logout(Context context, Response.Listener listener, Response.ErrorListener errorListener) {
+        StringRequest request = new StringRequest(
+                Constant.HOME_URL + Constant.LOGOUT_URL_SUFFIX,
+                listener, errorListener
         );
 
         NetSingleton.getInstance(context).addToRequestQueue(request);
