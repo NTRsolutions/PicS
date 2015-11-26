@@ -43,6 +43,8 @@ import java.util.Map;
 /**
  * 通过用户名和密码登录
  * 或者通过用户名、email和密码注册
+ *
+ * TODO 注册之后要再次发送登录请求登陆
  * <p/>
  * 其中goActivity()方法控制跳转到目标的activity
  */
@@ -231,7 +233,6 @@ public class LoginActivity extends AppCompatActivity {
             Response.Listener okListener = new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
-
                     showProgress(false);
                     // 保存参数
                     if (response != null) {

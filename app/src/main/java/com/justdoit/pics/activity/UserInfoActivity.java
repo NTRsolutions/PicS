@@ -19,6 +19,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -93,6 +94,8 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
     private TextView followersTv; // 粉丝数
     private TextView scannersTv; // 被查看次数
 
+    private Button makeFriendsBtn; // follow和un-follow
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +106,8 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         initView();
 
         initListener();
+
+        getDataFromServer();
     }
 
     @Override
@@ -337,6 +342,8 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         followersTv = (TextView) findViewById(R.id.user_info_followers);
         scannersTv = (TextView) findViewById(R.id.user_info_scanners);
 
+        makeFriendsBtn = (Button) findViewById(R.id.make_friends_btn);
+
         userNameTv.setText(username);
         userNameTv.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG); // 字体加粗
         // TODO 用户简介的数据更新
@@ -413,6 +420,12 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
             case R.id.action_change_background_image:
                 // 修改背景图片
                 choosePicture(false);
+                return true;
+            case R.id.action_logout:
+                // 退出登录
+                App.logout(this);
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
                 return true;
         }
 

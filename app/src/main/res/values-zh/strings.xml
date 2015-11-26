@@ -42,4 +42,7 @@
     <string name="comment">评论</string>
     <string name="change_info">修改基本信息</string>
     <string name="action_save">保存</string>
+    <string name="logout">退出登录</string>
+    <string name="follow">关注</string>
+    <string name="un_follow">取消关注</string>
 </resources>

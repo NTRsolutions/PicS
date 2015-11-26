@@ -62,7 +62,12 @@ public class SettingsFragment extends PreferenceFragmentCompat{
                             @Override
                             public void onResponse(Object response) {
                                 Log.e(TAG, String.valueOf(response));
-                                App.logout(getActivity()); // 登出删除信息
+                                if (getContext() != null) {
+                                    Log.e(TAG, "getactivity is not null");
+                                } else {
+                                    Log.e(TAG, "getactivity is null");
+                                }
+                                App.logout(getContext()); // 登出删除信息
                                 startActivity(new Intent(getContext(), MainActivity.class));
                             }
                         },

@@ -1,5 +1,6 @@
 package com.justdoit.pics.model;
 
+import android.content.Context;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -49,8 +50,8 @@ public abstract class PostFormRequest<T> extends Request<T> {
     private Map<String, String> fileParams; // 上传图片文件
 
 
-    public PostFormRequest(String url, Map<String, String> params, Response.Listener okListener, Response.ErrorListener errorListener) {
-        this(url, params, null, okListener, errorListener);
+    public PostFormRequest(Context context, String url, Map<String, String> params, Response.Listener okListener, Response.ErrorListener errorListener) {
+        this(context, url, params, null, okListener, errorListener);
     }
 
     /**
@@ -60,10 +61,10 @@ public abstract class PostFormRequest<T> extends Request<T> {
      * @param okListener
      * @param errorListener
      */
-    public PostFormRequest(String url, Map<String, String> params, Map<String, String> fileParams, Response.Listener okListener, Response.ErrorListener errorListener) {
+    public PostFormRequest(Context context, String url, Map<String, String> params, Map<String, String> fileParams, Response.Listener okListener, Response.ErrorListener errorListener) {
         super(Method.POST, url, errorListener);
 
-        initParams(params);
+        initParams(context, params);
         this.mListener = okListener;
         this.BOUNDARY += getTimeStamp();
         this.fileParams = fileParams;
@@ -73,7 +74,8 @@ public abstract class PostFormRequest<T> extends Request<T> {
      * 初始化token param
      * 初始化传过来的param
      */
-    private void initParams(Map<String, String> params) {
+    private void initParams(Context context, Map<String, String> params) {
+
         this.mParams.put(Constant.FORM_TOKEN_NAME, App.getToken());
 
         if (params != null) {

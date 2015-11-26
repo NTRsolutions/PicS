@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -30,6 +32,9 @@ import java.util.Map;
 public class MyCookieStore implements CookieStore {
 
     private final String TAG = "MyCookieStore";
+
+    private static final String SET_COOKIE_KEY = "Set-Cookie";
+    private static final String SESSION_COOKIE = "sessionid";
 
     private CookieStore cookieStore;
     private String token = "";
@@ -73,13 +78,6 @@ public class MyCookieStore implements CookieStore {
     @Override
     public void add(URI uri, HttpCookie cookie) {
         cookieStore.add(uri, cookie);
-
-        // 如果是同一个域名下的,保存cookies的值到preference
-        if (uri.getHost().equals(this.uri.getHost())) {
-            SharedPreferences.Editor editor = sp.edit();
-            editor.putString(cookie.getName(), cookie.getValue());
-            editor.commit();
-        }
     }
 
     @Override
@@ -117,25 +115,48 @@ public class MyCookieStore implements CookieStore {
      * @param context
      * @param uri
      */
-    public void initCookiesFromReq(Context context, final URI uri) {
+    public void initCookiesFromReq(final Context context, final URI uri) {
         // 请求服务器生成cookie
 
-        StringRequest request = new StringRequest(
-                Request.Method.GET, uri.toString(),
+        final StringRequest request = new StringRequest(
+                Request.Method.HEAD, uri.toString(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.i(TAG, "获取网络cookies成功");
+                        Log.e(TAG, "获取网络cookies成功");
+
+                        SharedPreferences.Editor editor = sp.edit();
+                        for (HttpCookie cookie : App.cookieManager.getCookieStore().getCookies()) {
+                            editor.putString(cookie.getName(), cookie.getValue());
+                            Log.e(TAG, "name:" + cookie.getName());
+                            Log.e(TAG, "value:" + cookie.getValue());
+                        }
+
+                        editor.commit();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.i(TAG, "获取网络cookies失败");
+                        Log.e(TAG, "获取网络cookies失败");
                         error.printStackTrace();
                     }
                 }
-        );
+        ){
+            @Override
+            protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                Map<String, String> headers = response.headers;
+
+                Log.e(TAG, "hahah");
+
+                if (headers.containsKey(SET_COOKIE_KEY)
+                        && headers.get(SET_COOKIE_KEY).contains(SESSION_COOKIE)) {
+                    Log.e(TAG, headers.get(SET_COOKIE_KEY).toString());
+                }
+
+                return super.parseNetworkResponse(response);
+            }
+        };
         NetSingleton.getInstance(context.getApplicationContext()).addToRequestQueue(request);
     }
 }

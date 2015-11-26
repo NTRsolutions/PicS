@@ -5,11 +5,11 @@ package com.justdoit.pics.global;
  */
 public class Constant {
     // 网页有关
-    public final static String HOME_URL = "http://demo.gzqichang.com:8001"; // 首页
-    public final static String REGIST_URL_SUFFIX = "/api/user/regist/"; // 注册
-    public final static String LOGIN_URL_SUFFIX = "/api/user/login/"; // 登录
-    public final static String USER_INFO_URL_SUFFIX = "/api/user/userinfo/"; // 用户信息
-    public final static String LOGOUT_URL_SUFFIX = "/api/user/logout/"; // 登出
+    public final static String HOME_URL = "http://demo.gzqichang.com:8001/"; // 首页
+    public final static String REGIST_URL_SUFFIX = "api/user/regist/"; // 注册
+    public final static String LOGIN_URL_SUFFIX = "api/user/login/"; // 登录
+    public final static String USER_INFO_URL_SUFFIX = "api/user/userinfo/"; // 用户信息
+    public final static String LOGOUT_URL_SUFFIX = "api/user/logout/"; // 登出
     public final static String TOKEN_NAME = "csrftoken"; // token名称
     public final static String FORM_TOKEN_NAME = "csrfmiddlewaretoken"; // 表单token名称
 
