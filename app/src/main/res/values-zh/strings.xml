@@ -42,4 +42,12 @@
     <string name="comment">评论</string>
     <string name="change_info">修改基本信息</string>
     <string name="action_save">保存</string>
+    <string name="reply">回复</string>
+
+    <string-array name="headerarray">
+        <item>最近</item>
+        <item>好友</item>
+        <item>精选</item>
+        <item>查询</item>
+    </string-array>
 </resources>

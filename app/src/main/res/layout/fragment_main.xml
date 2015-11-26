@@ -1,8 +1,3 @@
-<!--<android.support.v4.widget.SwipeRefreshLayout-->
-    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:id="@+id/mSwipeRefreshLayout">-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -24,16 +19,16 @@
                 android:id="@+id/content_container">
             </android.support.v7.widget.RecyclerView>
 
-            <TextView
+            <Spinner
                 android:id="@+id/header_tv"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:background="@color/transparent_black_ninty"
                 android:gravity="center"
                 android:text="header"
                 android:textColor="@android:color/white"
-                android:textSize="22sp"
+                android:textSize="40sp"
                 android:layout_alignParentTop="true"
+                android:background="@drawable/shape_rounded_rectangle"
                 />
         </RelativeLayout>
 
@@ -45,7 +40,7 @@
         android:id="@+id/footer"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="42dp"
         android:gravity="center">
         <TextView
             android:id="@+id/footer_tv"

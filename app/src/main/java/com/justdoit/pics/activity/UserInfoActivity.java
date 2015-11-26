@@ -368,7 +368,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         viewPagerAdapter = new UserInfoViewPagerAdapter(getSupportFragmentManager());
 
         viewPagerAdapter.addFragment(BriefIntroFragment.newInstance(), "简介");
-        viewPagerAdapter.addFragment(MainFragment.newInstance(MainFragment.NO_FOOTERANDHEADER), "信息");
+        viewPagerAdapter.addFragment(MainFragment.newInstance(MainFragment.NO_FOOTERANDHEADER,username,userId), "信息");
         if (isUserOwn) {
             // TODO 收藏页面
             viewPagerAdapter.addFragment(new Fragment(), "收藏");
