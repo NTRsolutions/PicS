@@ -43,8 +43,7 @@ import java.util.Map;
 /**
  * 通过用户名和密码登录
  * 或者通过用户名、email和密码注册
- *
- * TODO 注册之后要再次发送登录请求登陆
+ * <p/>
  * <p/>
  * 其中goActivity()方法控制跳转到目标的activity
  */
@@ -222,15 +221,30 @@ public class LoginActivity extends AppCompatActivity {
      * @param password
      */
     public void work(String email, final String username, String password) {
-        Map<String, String> map = new HashMap<String, String>();
+        final Map<String, String> map = new HashMap<String, String>();
 
         map.put(USER_NAME, username);
         map.put(PASSWORD, password);
 
         // 判断登录还是注册，改变url和传递数据
         if (NetUtil.isNetworkAvailable(this)) {
-            User user = new UserImpl();
-            Response.Listener okListener = new Response.Listener() {
+            final User user = new UserImpl();
+
+            final Response.ErrorListener errorListener = new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // 显示错误信息
+
+                    if (error.networkResponse != null) {
+                        showErrorMessage(error.networkResponse);
+                    } else {
+                        Toast.makeText(LoginActivity.this, "错误都错误了=++=", Toast.LENGTH_LONG).show();
+                    }
+
+                    showProgress(false);
+                }
+            };
+            final Response.Listener okLoginListener = new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
                     showProgress(false);
@@ -246,21 +260,19 @@ public class LoginActivity extends AppCompatActivity {
                 }
             };
 
-            Response.ErrorListener errorListener = new Response.ErrorListener() {
+            Response.Listener okRegistListener = new Response.Listener() {
                 @Override
-                public void onErrorResponse(VolleyError error) {
-                    // 显示错误信息
-                    showErrorMessage(error.networkResponse);
-
-                    showProgress(false);
+                public void onResponse(Object response) {
+                    user.login(LoginActivity.this, map
+                            , okLoginListener, errorListener);
                 }
             };
 
             if (!isToLogin) {
                 map.put(EMAIL, email);
-                user.regist(this, map, okListener, errorListener);
+                user.regist(this, map, okRegistListener, errorListener);
             } else {
-                user.login(this, map, okListener, errorListener);
+                user.login(this, map, okLoginListener, errorListener);
             }
         }
 
@@ -280,11 +292,7 @@ public class LoginActivity extends AppCompatActivity {
 
             int userid = -1;
 
-            if (isToLogin) {
-                userid = jsonObject.getInt(Constant.USER_ID_NAME);
-            } else {
-                userid = jsonObject.getInt("pk");
-            }
+            userid = jsonObject.getInt(Constant.USER_ID_NAME);
 
             editor.putInt(Constant.USER_ID_NAME, userid);
             editor.putString(Constant.USERNAME_NAME, username);
