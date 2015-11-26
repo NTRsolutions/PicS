@@ -83,6 +83,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             toolbar.setTitle(username);
             Log.e("test",username);
         }
+
+        setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        setSupportActionBar(toolbar);
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.container, MainFragment.newInstance(MainFragment.NORMAL),"MainFragment")
