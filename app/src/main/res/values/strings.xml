@@ -61,6 +61,7 @@
     <string name="top">top</string>
     <string name="comment">comment</string>
     <string name="logout">Sign out</string>
+    <string name="following">Following</string>
 
 
 </resources>

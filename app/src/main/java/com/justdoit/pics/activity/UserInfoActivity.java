@@ -19,6 +19,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -217,6 +218,8 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
             }
         };
 
+
+
     }
 
     /**
@@ -265,7 +268,8 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         // 0: briefIntroFragment
         // 1: mainFragment
         // 2:
-        ((BriefIntroFragment) viewPagerAdapter.getItem(0)).updateUI(userInfo);
+        // TODO 关系表数据获取
+        ((BriefIntroFragment) viewPagerAdapter.getItem(0)).updateUserInfo(userInfo);
 
         // 停止刷新，如果正在刷新
         if (container.isRefreshing()) {
@@ -343,6 +347,16 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         scannersTv = (TextView) findViewById(R.id.user_info_scanners);
 
         makeFriendsBtn = (Button) findViewById(R.id.make_friends_btn);
+        makeFriendsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO 建立关系
+            }
+        });
+
+        if (!isUserOwn) {
+            makeFriendsBtn.setVisibility(View.VISIBLE);
+        }
 
         userNameTv.setText(username);
         userNameTv.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG); // 字体加粗
@@ -377,7 +391,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
     private void setupViewPager(ViewPager viewpager) {
         viewPagerAdapter = new UserInfoViewPagerAdapter(getSupportFragmentManager());
 
-        viewPagerAdapter.addFragment(BriefIntroFragment.newInstance(), "简介");
+        viewPagerAdapter.addFragment(BriefIntroFragment.newInstance(new UserInfo(), isUserOwn), "简介");
         viewPagerAdapter.addFragment(MainFragment.newInstance(MainFragment.NO_FOOTERANDHEADER), "信息");
         if (isUserOwn) {
             // TODO 收藏页面

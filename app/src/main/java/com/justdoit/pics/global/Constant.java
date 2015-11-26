@@ -10,6 +10,8 @@ public class Constant {
     public final static String LOGIN_URL_SUFFIX = "api/user/login/"; // 登录
     public final static String USER_INFO_URL_SUFFIX = "api/user/userinfo/"; // 用户信息
     public final static String LOGOUT_URL_SUFFIX = "api/user/logout/"; // 登出
+    public final static String FOLLOWING_URL_SUFFIX = "api/relation/following/"; // 关注列表
+    public final static String FOLLOWER_URL_SUFFIX = "api/relation/followers/"; // 粉丝列表
     public final static String TOKEN_NAME = "csrftoken"; // token名称
     public final static String FORM_TOKEN_NAME = "csrfmiddlewaretoken"; // 表单token名称
 
