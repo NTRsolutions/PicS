@@ -95,6 +95,8 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
     private TextView followersTv; // 粉丝数
     private TextView scannersTv; // 被查看次数
 
+    private Button makeFriendsBtn; // follow和un-follow
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +105,10 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         initData();
 
         initView();
+
+        initListener();
+
+        getDataFromServer();
     }
 
     @Override
@@ -251,7 +257,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         // 0: briefIntroFragment
         // 1: mainFragment
         // 2:
-        ((BriefIntroFragment) viewPagerAdapter.getItem(0)).updateUI(userInfo);
+        ((BriefIntroFragment) viewPagerAdapter.getItem(0)).updateUserInfo(userInfo);
 
         // 停止刷新，如果正在刷新
         if (container.isRefreshing()) {
@@ -370,8 +376,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         viewPagerAdapter = new UserInfoViewPagerAdapter(getSupportFragmentManager());
 
         viewPagerAdapter.addFragment(BriefIntroFragment.newInstance(new UserInfo(), isUserOwn), "简介");
-        viewPagerAdapter.addFragment(MainFragment.newInstance(MainFragment.NO_FOOTERANDHEADER,username,userId), "信息");
-        
+        viewPagerAdapter.addFragment(MainFragment.newInstance(MainFragment.USERINFO,username,userId), "信息");
         if (isUserOwn) {
             // TODO 收藏页面
             viewPagerAdapter.addFragment(new Fragment(), "收藏");
