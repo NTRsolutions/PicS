@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.MainFragment">
+    tools:context=".fragment.MainFragment"
+    android:padding="8dp">
 
     <com.justdoit.pics.widget.MultiSwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -25,6 +26,7 @@
                 android:layout_height="80dp"
                 android:gravity="center"
                 android:text="header"
+                android:textAlignment="center"
                 android:textColor="@android:color/white"
                 android:textSize="40sp"
                 android:layout_alignParentTop="true"

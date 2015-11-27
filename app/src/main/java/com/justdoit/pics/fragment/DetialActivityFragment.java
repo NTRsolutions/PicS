@@ -1,5 +1,6 @@
 package com.justdoit.pics.fragment;
 
+import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -20,6 +21,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.justdoit.pics.R;
@@ -99,15 +101,36 @@ public class DetialActivityFragment extends Fragment implements SwipeRefreshLayo
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         menu.clear();
         inflater.inflate(R.menu.menu_detial, menu);
-//        if(((App)getActivity().getApplication()).USER_ID != content.getAuthor().getId()){
-//            menu.findItem(R.id.action_detele).setVisible(false);
-//        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        int id = item.getItemId();
+        switch (id){
+            case R.id.action_detele:
+                if(((App)getActivity().getApplication()).USER_ID == content.getAuthor().getId()){
+                    StringRequest request = new StringRequest("http://demo.gzqichang.com:8001/api/topic/" + pk + "/" + Constant.FORM_TOKEN_NAME + "=" + App.getToken() + "&" + "_method=DELETE", new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+
+                            getActivity().setResult(Activity.RESULT_OK);
+                            getActivity().finish();
+
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    });
+                    NetSingleton.getInstance(getActivity()).addToRequestQueue(request);
+                }else{
+                    Toast.makeText(this.getActivity(),"你没有权限删除",Toast.LENGTH_LONG).show();
+                }
+                break;
+        }
+        return true;
     }
 
     public void getDataFormServer(){
@@ -177,9 +200,6 @@ public class DetialActivityFragment extends Fragment implements SwipeRefreshLayo
     @Override
     public void onItemClick(View item, int position, int which) {
         int id = item.getId();
-        if(id == R.id.reply_btn){
-
-        }
     }
     public void onItemClick(View item, int position, int which,String content) {
         int id = item.getId();
