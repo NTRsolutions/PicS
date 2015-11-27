@@ -3,6 +3,7 @@ package com.justdoit.pics.adapater;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +38,7 @@ import com.justdoit.pics.global.Constant;
 import com.justdoit.pics.model.NetSingleton;
 import com.justdoit.pics.widget.PersonalIntroItemView;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -190,40 +193,6 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
             } else {
                 ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), res.getString(R.string.unknown), isUserOwn);
             }
-            ((PersonalHolder) holder).sexPIV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                    builder.setTitle("选择性别");
-                    builder.setItems(new String[]{"女", "男"}, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, final int which) {
-                            Map<String, String> map = new HashMap<String, String>();
-                            map.put("_method", "PUT");
-                            map.put("sex", which + "");
-                            new UserImpl().changeUserInfo(context, userInfo.getPk(), map, null,
-                                    new Response.Listener() {
-                                        @Override
-                                        public void onResponse(Object response) {
-                                            Toast.makeText(context, "修改成功", Toast.LENGTH_LONG).show();
-                                            ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), which == 0? "女" : "男", isUserOwn);
-                                        }
-                                    },
-                                    new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            Toast.makeText(context, "修改失败", Toast.LENGTH_LONG).show();
-
-                                        }
-                                    }
-                            );
-                        }
-                    });
-
-                    builder.create().show();
-
-                }
-            });
 
             // 居住地 Y
             ((PersonalHolder) holder).residencePIV.update(res.getString(R.string.user_info_location), userInfo.getCountry() + " " + userInfo.getProvince() + " " + userInfo.getCity(), isUserOwn);
@@ -235,13 +204,61 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
             } else {
                 ((PersonalHolder) holder).birthdayPIV.update(res.getString(R.string.birthday), String.valueOf(userInfo.getBirthday()), isUserOwn);
             }
-            ((PersonalHolder) holder).birthdayPIV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DialogFragment newFragment = new DatePickerFragment();
-                    newFragment.show(((AppCompatActivity) v.getContext()).getSupportFragmentManager(), "设置生日");
-                }
-            });
+
+            if (isUserOwn) {
+                // 单独设置click listener
+                ((PersonalHolder) holder).birthdayPIV.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DialogFragment newFragment = new DatePickerFragment(){
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int day) {
+                                super.onDateSet(view, year, month, day);
+
+                                ((PersonalHolder) holder).birthdayPIV.update(res.getString(R.string.birthday), "" + year + "-" + month + "-" + day, isUserOwn);
+                            }
+                        };
+                        newFragment.show(((AppCompatActivity) v.getContext()).getSupportFragmentManager(), "设置生日");
+                    }
+                });
+
+                ((PersonalHolder) holder).sexPIV.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                        builder.setTitle("选择性别");
+                        builder.setItems(new String[]{"女", "男"}, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, final int which) {
+                                Map<String, String> map = new HashMap<String, String>();
+                                map.put("_method", "PUT");
+                                map.put("sex", which + "");
+                                new UserImpl().changeUserInfo(context, userInfo.getPk(), map, null,
+                                        new Response.Listener() {
+                                            @Override
+                                            public void onResponse(Object response) {
+                                                Toast.makeText(context, "修改成功", Toast.LENGTH_LONG).show();
+                                                ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), which == 0? "女" : "男", isUserOwn);
+                                            }
+                                        },
+                                        new Response.ErrorListener() {
+                                            @Override
+                                            public void onErrorResponse(VolleyError error) {
+                                                Toast.makeText(context, "修改失败", Toast.LENGTH_LONG).show();
+
+                                            }
+                                        }
+                                );
+                            }
+                        });
+
+                        builder.create().show();
+
+                    }
+                });
+            }
+
 
 
         } else if (holder instanceof ConnectionsHolder) {
@@ -285,7 +302,7 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
                     NetworkImageView item = new NetworkImageView(context);
                     item.setDefaultImageResId(R.drawable.ic_image_black_48dp);
                     item.setErrorImageResId(R.drawable.ic_broken_image_black_48dp);
-                    item.setImageUrl(String.valueOf(followerList.getResults().get(i).getRelation_user().getAvatar()), imageLoader);
+                    item.setImageUrl(String.valueOf(userEntity.getAvatar()), imageLoader);
                     item.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

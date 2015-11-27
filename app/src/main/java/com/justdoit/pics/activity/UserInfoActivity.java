@@ -451,6 +451,8 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         followersTv = (TextView) findViewById(R.id.user_info_followers);
         scannersTv = (TextView) findViewById(R.id.user_info_scanners);
 
+        makeFriendsBtn = (Button) findViewById(R.id.make_friends_btn);
+
         userNameTv.setText(username);
         userNameTv.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG); // 字体加粗
         // TODO 用户简介的数据更新
