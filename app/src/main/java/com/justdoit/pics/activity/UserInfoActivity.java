@@ -30,12 +30,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.justdoit.pics.R;
 import com.justdoit.pics.adapater.UserInfoViewPagerAdapter;
 import com.justdoit.pics.bean.UserInfo;
+import com.justdoit.pics.bean.UserRelationListInfo;
 import com.justdoit.pics.dao.User;
+import com.justdoit.pics.dao.UserRelation;
 import com.justdoit.pics.dao.impl.UserImpl;
+import com.justdoit.pics.dao.impl.UserRelationImpl;
 import com.justdoit.pics.fragment.BriefIntroFragment;
 import com.justdoit.pics.fragment.MainFragment;
 import com.justdoit.pics.global.App;
@@ -186,6 +190,9 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
     private Response.Listener okListener; // 成功监听器
     private Response.ErrorListener errorListener; // 失败监听器
 
+    private Response.Listener<JsonObject> okFollowingListener; // following和follower
+    private Response.Listener<JsonObject> okFollowerListener; // following和follower
+
     /**
      * 初始化网络请求监听
      */
@@ -218,6 +225,33 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
             }
         };
 
+        okFollowingListener = new Response.Listener() {
+            @Override
+            public void onResponse(Object response) {
+                Gson gson = new Gson();
+                Type type = new TypeToken<UserRelationListInfo>() {
+
+                }.getType();
+                UserRelationListInfo list = gson.fromJson(String.valueOf(response), type);
+                ((BriefIntroFragment) viewPagerAdapter.getItem(0)).updateFollowings(list);
+
+                if (!isUserOwn) {
+                    updateFriendsBtn(list);
+                }
+            }
+        };
+
+        okFollowerListener = new Response.Listener() {
+            @Override
+            public void onResponse(Object response) {
+                Gson gson = new Gson();
+                Type type = new TypeToken<UserRelationListInfo>() {
+
+                }.getType();
+                UserRelationListInfo list = gson.fromJson(String.valueOf(response), type);
+                ((BriefIntroFragment) viewPagerAdapter.getItem(0)).updateFollowers(list);
+            }
+        };
 
 
     }
@@ -235,11 +269,81 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         if (NetUtil.isNetworkAvailable(this)) {
             User user = new UserImpl();
             user.getUserInfo(this, userId, null, okListener, errorListener);
+            // 关系获取
+            UserRelation userRelation = new UserRelationImpl();
+            userRelation.getUserFollowingRelations(this, okFollowingListener, errorListener);
+            userRelation.getUserFollowerRelations(this, okFollowerListener, errorListener);
         } else {
             // TODO 没有网络
             Toast.makeText(this, "当前没有网络+-+", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    /**
+     * 0：关注
+     * 1：拉黑
+     */
+    private View.OnClickListener cancelFollowing = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("relation_user", String.valueOf(userId));
+            params.put("relation", String.valueOf(0));
+            UserRelation userRelation = new UserRelationImpl();
+            userRelation.cancelUserFollowingRelations(v.getContext(), params,
+                    new Response.Listener() {
+                        @Override
+                        public void onResponse(Object response) {
+                            makeFriendsBtn.setText("立即关注");
+                            makeFriendsBtn.setOnClickListener(createFollowing);
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(UserInfoActivity.this, "取消关注失败", Toast.LENGTH_LONG).show();
+                        }
+                    });
+        }
+    };
+
+    private View.OnClickListener createFollowing = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("relation_user", String.valueOf(userId));
+            params.put("relation", String.valueOf(0));
+            UserRelation userRelation = new UserRelationImpl();
+            userRelation.createUserFollowingRelations(v.getContext(), params,
+                    new Response.Listener() {
+                        @Override
+                        public void onResponse(Object response) {
+                            makeFriendsBtn.setText("取消关注");
+                            makeFriendsBtn.setOnClickListener(cancelFollowing);
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(UserInfoActivity.this, "关注失败", Toast.LENGTH_LONG).show();
+                        }
+                    });
+        }
+    };
+
+    private void updateFriendsBtn(UserRelationListInfo listInfo) {
+        for (int i = 0; i < listInfo.getCount(); i++) {
+            if (userId == listInfo.getResults().get(i).getRelation_user().getId()) {
+                makeFriendsBtn.setText("取消关注");
+                makeFriendsBtn.setOnClickListener(cancelFollowing);
+                // 跳出函数
+                return;
+            }
+        }
+
+        makeFriendsBtn.setText("立即关注");
+        makeFriendsBtn.setOnClickListener(createFollowing);
     }
 
     /**
@@ -268,7 +372,6 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         // 0: briefIntroFragment
         // 1: mainFragment
         // 2:
-        // TODO 关系表数据获取
         ((BriefIntroFragment) viewPagerAdapter.getItem(0)).updateUserInfo(userInfo);
 
         // 停止刷新，如果正在刷新

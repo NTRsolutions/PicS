@@ -9,6 +9,10 @@ import com.android.volley.toolbox.JsonRequest;
 import com.justdoit.pics.dao.UserRelation;
 import com.justdoit.pics.global.Constant;
 import com.justdoit.pics.model.NetSingleton;
+import com.justdoit.pics.model.PostFormJsonObjRequest;
+import com.justdoit.pics.model.PostFormRequest;
+
+import java.util.Map;
 
 /**
  * Created by mengwen on 2015/11/26.
@@ -30,6 +34,24 @@ public class UserRelationImpl implements UserRelation {
                 Request.Method.GET,
                 Constant.HOME_URL + Constant.FOLLOWER_URL_SUFFIX,
                 okListener, errorListener
+        );
+        NetSingleton.getInstance(context).addToRequestQueue(request);
+    }
+
+    @Override
+    public void cancelUserFollowingRelations(Context context, Map<String, String> params, Response.Listener okListener, Response.ErrorListener errorListener) {
+        PostFormRequest request = new PostFormJsonObjRequest(
+                context, Constant.HOME_URL + Constant.CANCEL_FOLLOWING_URL_SUFFIX,
+                params, okListener, errorListener
+        );
+        NetSingleton.getInstance(context).addToRequestQueue(request);
+    }
+
+    @Override
+    public void createUserFollowingRelations(Context context, Map<String, String> params, Response.Listener okListener, Response.ErrorListener errorListener) {
+        PostFormRequest request = new PostFormJsonObjRequest(
+                context, Constant.HOME_URL + Constant.CREATE_FOLLOWING_URL_SUFFIX,
+                params, okListener, errorListener
         );
         NetSingleton.getInstance(context).addToRequestQueue(request);
     }

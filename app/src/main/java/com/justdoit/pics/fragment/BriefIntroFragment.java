@@ -77,20 +77,12 @@ public class BriefIntroFragment extends Fragment {
         return fragment;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        initListener();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle bundle = getArguments();
         UserInfo userInfo;
-        UserRelationListInfo followingList = null;
-        UserRelationListInfo followerList = null;
+
         boolean isUserOwn = true;
 
         if (bundle != null) {
@@ -98,13 +90,6 @@ public class BriefIntroFragment extends Fragment {
             isUserOwn = bundle.getBoolean(IS_USER_OWN);
         } else {
             userInfo = new UserInfo();
-        }
-
-        if (isUserOwn) {
-            // TODO 获取用户关系列表
-            getDataFromServe();
-        } else {
-
         }
 
         View view = inflater.inflate(R.layout.fragment_brief_intro, container, false);
@@ -152,52 +137,4 @@ public class BriefIntroFragment extends Fragment {
         briefIntroAdapter.setFollowers(followers);
         briefIntroAdapter.notifyDataSetChanged();
     }
-
-    private Response.Listener<JsonObject> okFollowingListener; // following和follower
-    private Response.Listener<JsonObject> okFollowerListener; // following和follower
-    private Response.ErrorListener errorFollowListener; // following和follower
-
-    public void initListener() {
-        okFollowingListener = new Response.Listener() {
-            @Override
-            public void onResponse(Object response) {
-                Gson gson = new Gson();
-                Type type = new TypeToken<UserRelationListInfo>() {
-
-                }.getType();
-                UserRelationListInfo list = gson.fromJson(String.valueOf(response), type);
-                updateFollowings(list);
-            }
-        };
-
-        okFollowerListener = new Response.Listener() {
-            @Override
-            public void onResponse(Object response) {
-                Gson gson = new Gson();
-                Type type = new TypeToken<UserRelationListInfo>() {
-
-                }.getType();
-                UserRelationListInfo list = gson.fromJson(String.valueOf(response), type);
-                updateFollowers(list);
-            }
-        };
-
-
-        errorFollowListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, error.toString());
-            }
-        };
-    }
-
-    /**
-     * 服务器获取数据
-     */
-    public void getDataFromServe() {
-        UserRelation userRelation = new UserRelationImpl();
-        userRelation.getUserFollowingRelations(this.getContext(), okFollowingListener, errorFollowListener);
-        userRelation.getUserFollowerRelations(this.getContext(), okFollowerListener, errorFollowListener);
-    }
-
 }

@@ -1,10 +1,16 @@
 package com.justdoit.pics.adapater;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.justdoit.pics.R;
@@ -20,10 +29,15 @@ import com.justdoit.pics.activity.ChangeInfoActivity;
 import com.justdoit.pics.activity.UserInfoActivity;
 import com.justdoit.pics.bean.UserInfo;
 import com.justdoit.pics.bean.UserRelationListInfo;
+import com.justdoit.pics.dao.impl.UserImpl;
+import com.justdoit.pics.fragment.DatePickerFragment;
 import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
 import com.justdoit.pics.model.NetSingleton;
 import com.justdoit.pics.widget.PersonalIntroItemView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by mengwen on 2015/11/10.
@@ -75,7 +89,7 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
         this(context, true);
     }
 
-    public BriefIntroAdapter(final Context context, boolean isUserOwn) {
+    public BriefIntroAdapter(final Context context, final boolean isUserOwn) {
 
         this.isUserOwn = isUserOwn;
         this.context = context;
@@ -85,35 +99,38 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
         briefItemClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ChangeInfoActivity.class);
-                Bundle args = new Bundle();
-                PersonalIntroItemView piv = (PersonalIntroItemView) v;
+                if (isUserOwn) {
+                    // 如果是用户自己，就可以触发下列事件
+                    Intent intent = new Intent(context, ChangeInfoActivity.class);
+                    Bundle args = new Bundle();
+                    PersonalIntroItemView piv = (PersonalIntroItemView) v;
 
-                args.putString(KEY_OLD_VALUE, piv.getContent());
+                    args.putString(KEY_OLD_VALUE, piv.getContent());
 
-                switch (piv.getId()) {
-                    case R.id.personal_intro_nickname:
-                        args.putInt(KEY_NAME_TYPE, NAME_TYPE.nickname.ordinal());
-                        break;
-                    case R.id.personal_intro_email:
-                        args.putInt(KEY_NAME_TYPE, NAME_TYPE.email.ordinal());
-                        break;
-                    case R.id.personal_intro_birthday:
-                        args.putInt(KEY_NAME_TYPE, NAME_TYPE.birthday.ordinal());
-                        break;
-                    case R.id.personal_intro_residence:
-                        args.putInt(KEY_NAME_TYPE, NAME_TYPE.residence.ordinal());
-                        break;
-                    case R.id.personal_intro_sex:
-                        args.putInt(KEY_NAME_TYPE, NAME_TYPE.sex.ordinal());
-                        break;
-                    default:
-                        break;
+                    switch (piv.getId()) {
+                        case R.id.personal_intro_nickname:
+                            args.putInt(KEY_NAME_TYPE, NAME_TYPE.nickname.ordinal());
+                            break;
+                        case R.id.personal_intro_email:
+                            args.putInt(KEY_NAME_TYPE, NAME_TYPE.email.ordinal());
+                            break;
+                        case R.id.personal_intro_birthday:
+                            args.putInt(KEY_NAME_TYPE, NAME_TYPE.birthday.ordinal());
+                            break;
+                        case R.id.personal_intro_residence:
+                            args.putInt(KEY_NAME_TYPE, NAME_TYPE.residence.ordinal());
+                            break;
+                        case R.id.personal_intro_sex:
+                            args.putInt(KEY_NAME_TYPE, NAME_TYPE.sex.ordinal());
+                            break;
+                        default:
+                            break;
+                    }
+
+                    intent.putExtras(args);
+
+                    context.startActivity(intent);
                 }
-
-                intent.putExtras(args);
-
-                context.startActivity(intent);
             }
         };
     }
@@ -150,9 +167,9 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
-        Resources res = context.getResources();
+        final Resources res = context.getResources();
 
 
         if (holder instanceof PersonalHolder) {
@@ -173,7 +190,40 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
             } else {
                 ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), res.getString(R.string.unknown), isUserOwn);
             }
-            ((PersonalHolder) holder).sexPIV.setOnClickListener(briefItemClickListener);
+            ((PersonalHolder) holder).sexPIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                    builder.setTitle("选择性别");
+                    builder.setItems(new String[]{"女", "男"}, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, final int which) {
+                            Map<String, String> map = new HashMap<String, String>();
+                            map.put("_method", "PUT");
+                            map.put("sex", which + "");
+                            new UserImpl().changeUserInfo(context, userInfo.getPk(), map, null,
+                                    new Response.Listener() {
+                                        @Override
+                                        public void onResponse(Object response) {
+                                            Toast.makeText(context, "修改成功", Toast.LENGTH_LONG).show();
+                                            ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), which == 0? "女" : "男", isUserOwn);
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Toast.makeText(context, "修改失败", Toast.LENGTH_LONG).show();
+
+                                        }
+                                    }
+                            );
+                        }
+                    });
+
+                    builder.create().show();
+
+                }
+            });
 
             // 居住地 Y
             ((PersonalHolder) holder).residencePIV.update(res.getString(R.string.user_info_location), userInfo.getCountry() + " " + userInfo.getProvince() + " " + userInfo.getCity(), isUserOwn);
@@ -185,11 +235,21 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
             } else {
                 ((PersonalHolder) holder).birthdayPIV.update(res.getString(R.string.birthday), String.valueOf(userInfo.getBirthday()), isUserOwn);
             }
-            ((PersonalHolder) holder).birthdayPIV.setOnClickListener(briefItemClickListener);
+            ((PersonalHolder) holder).birthdayPIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogFragment newFragment = new DatePickerFragment();
+                    newFragment.show(((AppCompatActivity) v.getContext()).getSupportFragmentManager(), "设置生日");
+                }
+            });
 
 
         } else if (holder instanceof ConnectionsHolder) {
             ImageLoader imageLoader = NetSingleton.getInstance(context).getImageLoader();
+
+            // 避免重复
+            ((ConnectionsHolder) holder).followingLayout.removeAllViews();
+            ((ConnectionsHolder) holder).followerLayout.removeAllViews();
 
             if (followingList != null) {
 
