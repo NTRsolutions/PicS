@@ -36,8 +36,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.justdoit.pics.R;
 import com.justdoit.pics.adapater.UserInfoViewPagerAdapter;
+import com.justdoit.pics.bean.UserFollowerListInfo;
 import com.justdoit.pics.bean.UserInfo;
-import com.justdoit.pics.bean.UserRelationListInfo;
+import com.justdoit.pics.bean.UserFollowingListInfo;
 import com.justdoit.pics.dao.User;
 import com.justdoit.pics.dao.UserRelation;
 import com.justdoit.pics.dao.impl.UserImpl;
@@ -242,10 +243,10 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
             @Override
             public void onResponse(Object response) {
                 Gson gson = new Gson();
-                Type type = new TypeToken<UserRelationListInfo>() {
+                Type type = new TypeToken<UserFollowingListInfo>() {
 
                 }.getType();
-                UserRelationListInfo list = gson.fromJson(String.valueOf(response), type);
+                UserFollowingListInfo list = gson.fromJson(String.valueOf(response), type);
                 ((BriefIntroFragment) viewPagerAdapter.getItem(0)).updateFollowings(list);
 
                 if (!isUserOwn) {
@@ -258,10 +259,10 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
             @Override
             public void onResponse(Object response) {
                 Gson gson = new Gson();
-                Type type = new TypeToken<UserRelationListInfo>() {
+                Type type = new TypeToken<UserFollowerListInfo>() {
 
                 }.getType();
-                UserRelationListInfo list = gson.fromJson(String.valueOf(response), type);
+                UserFollowerListInfo list = gson.fromJson(String.valueOf(response), type);
                 ((BriefIntroFragment) viewPagerAdapter.getItem(0)).updateFollowers(list);
             }
         };
@@ -342,7 +343,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         }
     };
 
-    private void updateFriendsBtn(UserRelationListInfo listInfo) {
+    private void updateFriendsBtn(UserFollowingListInfo listInfo) {
         for (int i = 0; i < listInfo.getCount(); i++) {
             if (userId == listInfo.getResults().get(i).getRelation_user().getId()) {
                 makeFriendsBtn.setText("取消关注");
