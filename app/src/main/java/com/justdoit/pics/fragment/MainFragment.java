@@ -107,10 +107,10 @@ public class MainFragment extends Fragment implements OnClickListener, SwipeRefr
      * @param type Parameter 1.
      * @return A new instance of fragment MainFragment.
      */
-    public static MainFragment newInstance(int contenttype,String username,int userid) {
+    public static MainFragment newInstance(int type,String username,int userid) {
         MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, contenttype);
+        args.putInt(ARG_PARAM1, type);
         args.putString(ARG_PARAM2, username);
         args.putInt(ARG_PARAM3,userid);
         fragment.setArguments(args);
@@ -158,10 +158,10 @@ public class MainFragment extends Fragment implements OnClickListener, SwipeRefr
         header_tv.setOnItemSelectedListener(this);
         //显示header,footer组件
         if(contenttype == COLLECT||contenttype == USERINFO){
-            footer.setVisibility(View.INVISIBLE);
-            footer.setEnabled(true);
-            header_tv.setVisibility(View.INVISIBLE);
-            header_tv.setEnabled(true);
+            footer.setVisibility(View.GONE);
+            footer.setEnabled(false);
+            header_tv.setVisibility(View.GONE);
+            header_tv.setEnabled(false);
         }
 
         //添加header,footer滑动监听器
@@ -200,6 +200,7 @@ public class MainFragment extends Fragment implements OnClickListener, SwipeRefr
 
 
     public void getDataFormServer(){
+        Log.e("test",contenttype+"");
         mSwipeRefreshLayout.setRefreshing(true);
         String url = null;
         switch (contenttype){
