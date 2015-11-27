@@ -1,6 +1,7 @@
 package com.justdoit.pics.activity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -302,17 +303,19 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
             params.put("relation_user", String.valueOf(userId));
             params.put("relation", String.valueOf(0));
             UserRelation userRelation = new UserRelationImpl();
-            userRelation.cancelUserFollowingRelations(v.getContext(), params,
+            userRelation.cancelUserRelations(v.getContext(), params,
                     new Response.Listener() {
                         @Override
                         public void onResponse(Object response) {
                             makeFriendsBtn.setText("立即关注");
                             makeFriendsBtn.setOnClickListener(createFollowing);
+                            Toast.makeText(UserInfoActivity.this, "取消关注成功", Toast.LENGTH_LONG).show();
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
+                            Log.e(TAG, error.toString());
                             Toast.makeText(UserInfoActivity.this, "取消关注失败", Toast.LENGTH_LONG).show();
                         }
                     });
@@ -326,12 +329,13 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
             params.put("relation_user", String.valueOf(userId));
             params.put("relation", String.valueOf(0));
             UserRelation userRelation = new UserRelationImpl();
-            userRelation.createUserFollowingRelations(v.getContext(), params,
+            userRelation.createUserRelations(v.getContext(), params,
                     new Response.Listener() {
                         @Override
                         public void onResponse(Object response) {
                             makeFriendsBtn.setText("取消关注");
                             makeFriendsBtn.setOnClickListener(cancelFollowing);
+                            Toast.makeText(UserInfoActivity.this, "关注成功", Toast.LENGTH_LONG).show();
                         }
                     },
                     new Response.ErrorListener() {
@@ -470,6 +474,13 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
 
         makeFriendsBtn = (Button) findViewById(R.id.make_friends_btn);
 
+        if (!isUserOwn) {
+            makeFriendsBtn.setVisibility(View.VISIBLE);
+
+        } else {
+            makeFriendsBtn.setVisibility(View.GONE);
+        }
+
         userNameTv.setText(username);
         userNameTv.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG); // 字体加粗
         // TODO 用户简介的数据更新
@@ -553,9 +564,36 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
                 startActivity(new Intent(this, MainActivity.class));
                 finish();
                 return true;
+            case R.id.action_mask:
+                // 屏蔽用户
+                maskUser(this);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 屏蔽用户
+     */
+    private void maskUser(final Context context) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("relation_user", String.valueOf(userId));
+        params.put("relation", String.valueOf(1));
+        UserRelation u = new UserRelationImpl();
+        u.createUserRelations(this, params, new Response.Listener() {
+                    @Override
+                    public void onResponse(Object response) {
+                        Toast.makeText(context, "屏蔽成功", Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "屏蔽失败", Toast.LENGTH_LONG).show();
+
+                    }
+                });
     }
 
     /**

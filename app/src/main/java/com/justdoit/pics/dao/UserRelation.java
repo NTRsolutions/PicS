@@ -22,19 +22,25 @@ public interface UserRelation {
     public abstract void getUserFollowerRelations(Context context, Response.Listener okListener, Response.ErrorListener errorListener);
 
     /**
-     * 取消关注
+     * 取消关系
+     * params
+     * 0：关注
+     * 1：拉黑
      * @param context
      * @param okListener
      * @param errorListener
      */
-    public abstract void cancelUserFollowingRelations(Context context, Map<String, String> params, Response.Listener okListener, Response.ErrorListener errorListener);
+    public abstract void cancelUserRelations(Context context, Map<String, String> params, Response.Listener okListener, Response.ErrorListener errorListener);
 
     /**
-     * 关注
+     * 创建关系
+     * params
+     * 0：关注
+     * 1：拉黑
      * @param context
      * @param okListener
      * @param errorListener
      */
-    public abstract void createUserFollowingRelations(Context context, Map<String, String> params, Response.Listener okListener, Response.ErrorListener errorListener);
+    public abstract void createUserRelations(Context context, Map<String, String> params, Response.Listener okListener, Response.ErrorListener errorListener);
 
 }

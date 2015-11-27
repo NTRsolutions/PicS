@@ -39,7 +39,7 @@ public class UserRelationImpl implements UserRelation {
     }
 
     @Override
-    public void cancelUserFollowingRelations(Context context, Map<String, String> params, Response.Listener okListener, Response.ErrorListener errorListener) {
+    public void cancelUserRelations(Context context, Map<String, String> params, Response.Listener okListener, Response.ErrorListener errorListener) {
         PostFormRequest request = new PostFormJsonObjRequest(
                 context, Constant.HOME_URL + Constant.CANCEL_FOLLOWING_URL_SUFFIX,
                 params, okListener, errorListener
@@ -48,7 +48,7 @@ public class UserRelationImpl implements UserRelation {
     }
 
     @Override
-    public void createUserFollowingRelations(Context context, Map<String, String> params, Response.Listener okListener, Response.ErrorListener errorListener) {
+    public void createUserRelations(Context context, Map<String, String> params, Response.Listener okListener, Response.ErrorListener errorListener) {
         PostFormRequest request = new PostFormJsonObjRequest(
                 context, Constant.HOME_URL + Constant.CREATE_FOLLOWING_URL_SUFFIX,
                 params, okListener, errorListener

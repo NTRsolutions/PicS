@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -294,6 +296,7 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
                 for (int i = 0; i < followerList.getCount() && i < FOLLOW_NUM; i++) {
                     final UserFollowerListInfo.ResultsEntity.UserEntity userEntity = followerList.getResults().get(i).getUser();
                     NetworkImageView item = new NetworkImageView(context);
+                    item.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     item.setDefaultImageResId(R.drawable.ic_image_black_48dp);
                     item.setErrorImageResId(R.drawable.ic_broken_image_black_48dp);
                     item.setImageUrl(String.valueOf(userEntity.getAvatar()), imageLoader);

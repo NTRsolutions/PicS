@@ -1,9 +1,14 @@
 package com.justdoit.pics.util;
 
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import com.justdoit.pics.R;
@@ -35,6 +40,29 @@ public class ImageUtil {
         if (data != null) {
             return BitmapFactory.decodeByteArray(data, 0, data.length);
         } else {
+            return null;
+        }
+    }
+
+    /**
+     * 从Uri获取bitmap
+     * @param context
+     * @param uri
+     * @return
+     */
+    public static Bitmap getBitmapFromUri(Context context, Uri uri)
+    {
+        try
+        {
+            // 读取uri所在的图片
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+            return bitmap;
+        }
+        catch (Exception e)
+        {
+            Log.e("[Android]", e.getMessage());
+            Log.e("[Android]", "目录为：" + uri);
+            e.printStackTrace();
             return null;
         }
     }
