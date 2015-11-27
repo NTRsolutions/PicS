@@ -143,7 +143,6 @@ public class EditFragment extends DialogFragment implements View.OnClickListener
                 PostFormJsonObjRequest request = new PostFormJsonObjRequest(this.getActivity(),"http://demo.gzqichang.com:8001/api/topic/create/", params, fileparams, new Response.Listener() {
                     @Override
                     public void onResponse(Object response) {
-                        Toast.makeText(getActivity(),"发送成功",Toast.LENGTH_SHORT);
                         MainFragment  mainFragment= (MainFragment)((AppCompatActivity)getActivity()).getSupportFragmentManager().findFragmentByTag("MainFragment");
                         mainFragment.getDataFormServer();
                         dismiss();

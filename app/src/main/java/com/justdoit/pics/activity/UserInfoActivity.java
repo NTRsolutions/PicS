@@ -1,8 +1,10 @@
 package com.justdoit.pics.activity;
 
 import android.app.AlertDialog;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -155,7 +157,21 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
                         break;
                     case usePhotos:
                         avatarImageView.setImageURI(data.getData());
-                        // TODO 同步到服务器,并且处理本地UI
+                        String[] proj = { MediaStore.Images.Media.DATA };
+                        CursorLoader mCursorLoader = new CursorLoader(this, data.getData(), proj, null, null, null);
+                        Cursor c = mCursorLoader.loadInBackground();
+
+                        int actual_image_column_index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+
+                        c.moveToFirst();
+                        String imagepath = c.getString(actual_image_column_index);
+                        c.close();
+                        fileParams.put("avatar", imagepath);
+                        user.changeUserInfo(this, App.getUserId(),
+                                params, fileParams,
+                                okListener,
+                                errorListener
+                        );
 
                         break;
                     case useAlbum:
