@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by mengwen on 2015/11/26.
  */
-public class UserRelationListInfo implements Serializable{
+public class UserFollowingListInfo implements Serializable{
 
     /**
      * count : 1

@@ -69,11 +69,11 @@ public class App extends Application {
             for (HttpCookie c : cookieManager.getCookieStore().getCookies()) {
                 if (c.getName().equals(Constant.TOKEN_NAME)) {
                     token = c.getValue();
-                    Log.e(TAG, token);
+                    Log.i(TAG, token);
                 }
             }
         } else {
-            Log.e(TAG, token);
+            Log.i(TAG, token);
         }
 
         return token;

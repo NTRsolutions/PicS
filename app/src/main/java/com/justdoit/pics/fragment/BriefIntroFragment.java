@@ -5,33 +5,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.justdoit.pics.R;
 import com.justdoit.pics.adapater.BriefIntroAdapter;
+import com.justdoit.pics.bean.UserFollowerListInfo;
 import com.justdoit.pics.bean.UserInfo;
-import com.justdoit.pics.bean.UserRelationListInfo;
-import com.justdoit.pics.dao.User;
-import com.justdoit.pics.dao.UserRelation;
-import com.justdoit.pics.dao.impl.UserRelationImpl;
-import com.justdoit.pics.global.App;
-import com.justdoit.pics.global.Constant;
-import com.justdoit.pics.model.NetSingleton;
-import com.justdoit.pics.widget.CustomItemDecoration;
-
-import org.json.JSONObject;
-
-import java.lang.reflect.Type;
+import com.justdoit.pics.bean.UserFollowingListInfo;
 
 /**
  * 简介fragment
@@ -128,12 +110,12 @@ public class BriefIntroFragment extends Fragment {
         briefIntroAdapter.notifyDataSetChanged();
     }
 
-    public void updateFollowings(UserRelationListInfo followings) {
+    public void updateFollowings(UserFollowingListInfo followings) {
         briefIntroAdapter.setFollowings(followings);
         briefIntroAdapter.notifyDataSetChanged();
     }
 
-    public void updateFollowers(UserRelationListInfo followers) {
+    public void updateFollowers(UserFollowerListInfo followers) {
         briefIntroAdapter.setFollowers(followers);
         briefIntroAdapter.notifyDataSetChanged();
     }
