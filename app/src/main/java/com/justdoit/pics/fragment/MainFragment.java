@@ -158,9 +158,9 @@ public class MainFragment extends Fragment implements OnClickListener, SwipeRefr
         header_tv.setOnItemSelectedListener(this);
         //显示header,footer组件
         if(contenttype == COLLECT||contenttype == USERINFO){
-            footer.setVisibility(View.GONE);
+            footer.setVisibility(View.INVISIBLE);
             footer.setEnabled(false);
-            header_tv.setVisibility(View.GONE);
+            header_tv.setVisibility(View.INVISIBLE);
             header_tv.setEnabled(false);
         }
 
@@ -200,7 +200,6 @@ public class MainFragment extends Fragment implements OnClickListener, SwipeRefr
 
 
     public void getDataFormServer(){
-        Log.e("test",contenttype+"");
         mSwipeRefreshLayout.setRefreshing(true);
         String url = null;
         switch (contenttype){
@@ -316,6 +315,9 @@ public class MainFragment extends Fragment implements OnClickListener, SwipeRefr
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        if(contenttype == USERINFO || contenttype == COLLECT){
+            return ;
+        }
 
         String swi = adapterView.getItemAtPosition(i).toString();
         switch (swi){
