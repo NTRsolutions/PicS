@@ -53,6 +53,13 @@ public interface User {
     public abstract void regist(Context context, Map<String, String> params, Response.Listener listener, Response.ErrorListener errorListener);
 
     /**
+     * 登出接口
+     * @param context
+     * @param listener
+     * @param errorListener
+     */
+    public abstract void logout(Context context, Response.Listener listener, Response.ErrorListener errorListener);
+    /**
      * 查看用户话题接口
      * @param context
      * @param params

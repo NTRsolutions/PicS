@@ -19,6 +19,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -367,8 +369,9 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
     private void setupViewPager(ViewPager viewpager) {
         viewPagerAdapter = new UserInfoViewPagerAdapter(getSupportFragmentManager());
 
-        viewPagerAdapter.addFragment(BriefIntroFragment.newInstance(), "简介");
+        viewPagerAdapter.addFragment(BriefIntroFragment.newInstance(new UserInfo(), isUserOwn), "简介");
         viewPagerAdapter.addFragment(MainFragment.newInstance(MainFragment.NO_FOOTERANDHEADER,username,userId), "信息");
+        
         if (isUserOwn) {
             // TODO 收藏页面
             viewPagerAdapter.addFragment(new Fragment(), "收藏");
@@ -400,7 +403,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
                 return true;
             case R.id.action_settings:
                 // 打开设置页面
-                // TODO 设置页面
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.action_change_avatar:
                 // 打开修改用户头像页面
@@ -410,6 +413,12 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
             case R.id.action_change_background_image:
                 // 修改背景图片
                 choosePicture(false);
+                return true;
+            case R.id.action_logout:
+                // 退出登录
+                App.logout(this);
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
                 return true;
         }
 

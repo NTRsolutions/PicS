@@ -1,7 +1,10 @@
 package com.justdoit.pics.global;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v4.content.SharedPreferencesCompat;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.justdoit.pics.model.MyCookieStore;
@@ -9,6 +12,7 @@ import com.justdoit.pics.model.MyCookieStore;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.net.HttpCookie;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -52,11 +56,26 @@ public class App extends Application {
     }
 
     public void initToken() {
+
         SharedPreferences sp = getSharedPreferences(Constant.COOKIES_PREFS, MODE_PRIVATE);
         token = sp.getString(Constant.TOKEN_NAME, "");
+
+        // TODO token仍然为空
     }
 
     public static String getToken() {
+
+        if (TextUtils.isEmpty(token)) {
+            for (HttpCookie c : cookieManager.getCookieStore().getCookies()) {
+                if (c.getName().equals(Constant.TOKEN_NAME)) {
+                    token = c.getValue();
+                    Log.e(TAG, token);
+                }
+            }
+        } else {
+            Log.e(TAG, token);
+        }
+
         return token;
     }
 
@@ -78,6 +97,38 @@ public class App extends Application {
             }
             CookieHandler.setDefault(cookieManager);
         }
+    }
+
+    /**
+     * 退出登录
+     * 清理所有用户信息和cookies
+     * 设置token为空字符串
+     * @param context
+     */
+    public static void logout(Context context) {
+        // 清除cookies
+        cookieManager.getCookieStore().removeAll();
+        // 清除preference
+        clearAllPrefs(context);
+
+        USER_ID = -1;
+
+        token = "";
+    }
+
+    /**
+     * 清除所有preferences
+     * cookies
+     * userinfo
+     * @param context
+     */
+    public static void clearAllPrefs(Context context) {
+        context.getSharedPreferences(Constant.COOKIES_PREFS, MODE_PRIVATE).edit()
+                .clear()
+                .commit();
+        context.getSharedPreferences(Constant.USER_INFO_PREFS, MODE_PRIVATE).edit()
+                .clear()
+                .commit();
     }
 
     /**

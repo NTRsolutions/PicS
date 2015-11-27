@@ -44,6 +44,7 @@ import java.util.Map;
  * 通过用户名和密码登录
  * 或者通过用户名、email和密码注册
  * <p/>
+ * <p/>
  * 其中goActivity()方法控制跳转到目标的activity
  */
 public class LoginActivity extends AppCompatActivity {
@@ -220,42 +221,58 @@ public class LoginActivity extends AppCompatActivity {
      * @param password
      */
     public void work(String email, final String username, String password) {
-        Map<String, String> map = new HashMap<String, String>();
+        final Map<String, String> map = new HashMap<String, String>();
 
         map.put(USER_NAME, username);
         map.put(PASSWORD, password);
 
         // 判断登录还是注册，改变url和传递数据
         if (NetUtil.isNetworkAvailable(this)) {
-            User user = new UserImpl();
-            Response.Listener okListener = new Response.Listener() {
-                @Override
-                public void onResponse(Object response) {
-                    // 保存参数
-                    saveUserInfo(response.toString(), username);
+            final User user = new UserImpl();
 
-                    showProgress(false);
-
-                    // 跳转到相应页面
-                    goActivity();
-                }
-            };
-
-            Response.ErrorListener errorListener = new Response.ErrorListener() {
+            final Response.ErrorListener errorListener = new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     // 显示错误信息
-                    showErrorMessage(error.networkResponse);
+
+                    if (error.networkResponse != null) {
+                        showErrorMessage(error.networkResponse);
+                    } else {
+                        Toast.makeText(LoginActivity.this, "错误都错误了=++=", Toast.LENGTH_LONG).show();
+                    }
 
                     showProgress(false);
+                }
+            };
+            final Response.Listener okLoginListener = new Response.Listener() {
+                @Override
+                public void onResponse(Object response) {
+                    showProgress(false);
+                    // 保存参数
+                    if (response != null) {
+                        saveUserInfo(String.valueOf(response), username);
+
+                        // 跳转到相应页面
+                        goActivity();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "返回参数出错+-+", Toast.LENGTH_LONG).show();
+                    }
+                }
+            };
+
+            Response.Listener okRegistListener = new Response.Listener() {
+                @Override
+                public void onResponse(Object response) {
+                    user.login(LoginActivity.this, map
+                            , okLoginListener, errorListener);
                 }
             };
 
             if (!isToLogin) {
                 map.put(EMAIL, email);
-                user.regist(this, map, okListener, errorListener);
+                user.regist(this, map, okRegistListener, errorListener);
             } else {
-                user.login(this, map, okListener, errorListener);
+                user.login(this, map, okLoginListener, errorListener);
             }
         }
 
@@ -263,7 +280,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * 保存登录或注册成功后的信息
-     * TODO 注册接口需要添加userid字段
+     * 直接保存填写的username
      *
      * @param jsonStr
      */
@@ -273,11 +290,15 @@ public class LoginActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(jsonStr);
             SharedPreferences.Editor editor = getSharedPreferences(Constant.USER_INFO_PREFS, MODE_PRIVATE).edit();
 
-            editor.putInt(Constant.USER_ID_NAME, jsonObject.getInt(Constant.USER_ID_NAME));
+            int userid = -1;
+
+            userid = jsonObject.getInt(Constant.USER_ID_NAME);
+
+            editor.putInt(Constant.USER_ID_NAME, userid);
             editor.putString(Constant.USERNAME_NAME, username);
             editor.commit();
 
-            App.setUserId(jsonObject.getInt(Constant.USER_ID_NAME)); // 设置全局userId
+            App.setUserId(userid); // 设置全局userId
             App.setUserName(username);
 
             SharedPreferences.Editor cookieEditor = getSharedPreferences(Constant.COOKIES_PREFS, MODE_PRIVATE).edit();

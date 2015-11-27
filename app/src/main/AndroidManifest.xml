@@ -17,7 +17,9 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.LoginActivity"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name">
+        </activity>
+
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name">
@@ -27,12 +29,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.UserInfoActivity"
-            android:label="@string/user_info"></activity>
-        <activity
-            android:name=".activity.ChangeInfoActivity"
-            android:label="@string/change_info"></activity>
+
+        <activity android:name=".activity.UserInfoActivity"
+            android:label="@string/user_info">
+
+        </activity>
+        <activity android:name=".activity.ChangeInfoActivity"
+            android:label="@string/change_info">
+
+        </activity>
+    
+    <activity android:name=".activity.SettingsActivity"
+        android:label="@string/action_settings">
+    </activity>
         <activity
             android:name=".activity.DetialActivity"
             android:label="@string/title_activity_detial"

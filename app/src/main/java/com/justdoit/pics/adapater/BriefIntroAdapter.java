@@ -4,16 +4,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.justdoit.pics.R;
 import com.justdoit.pics.activity.ChangeInfoActivity;
+import com.justdoit.pics.activity.UserInfoActivity;
 import com.justdoit.pics.bean.UserInfo;
+import com.justdoit.pics.bean.UserRelationListInfo;
 import com.justdoit.pics.global.App;
+import com.justdoit.pics.global.Constant;
+import com.justdoit.pics.model.NetSingleton;
 import com.justdoit.pics.widget.PersonalIntroItemView;
 
 /**
@@ -26,7 +35,12 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
     private final static String KEY_OLD_VALUE = "oldValue";
     private final static String KEY_NAME_TYPE = "nameType";
 
+    private final static int FOLLOW_NUM = 10; // 10个人头像
+
     private UserInfo userInfo = null;
+    private UserRelationListInfo followingList = null;
+    private UserRelationListInfo followerList = null;
+
     private boolean isUserOwn = true;
     private int NUM_ITEM = 0;
     private Context context;
@@ -113,6 +127,14 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
         this.userInfo = userInfo;
     }
 
+    public void setFollowings(UserRelationListInfo followings) {
+        this.followingList = followings;
+    }
+
+    public void setFollowers(UserRelationListInfo followers) {
+        this.followerList = followers;
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -121,7 +143,7 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
         if (viewType == ITEM_TYPE.ITEM_PERSONAL_INTRO.ordinal()) {
             holder = new PersonalHolder((LayoutInflater.from(parent.getContext())).inflate(R.layout.brief_intro_personal, parent, false));
         } else {
-            holder = new ConnectionsHolder((LayoutInflater.from(parent.getContext())).inflate(R.layout.brief_intro_connections, parent, false));
+            holder = new ConnectionsHolder((LayoutInflater.from(parent.getContext())).inflate(R.layout.brief_intro_connections, parent, false), isUserOwn);
         }
 
         return holder;
@@ -132,39 +154,93 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
 
         Resources res = context.getResources();
 
+
         if (holder instanceof PersonalHolder) {
+            // 通过isUserOwn判断是否可以编辑
             // 名称 + 值 + 可否编辑(Y/N)
             // 昵称 Y
-            ((PersonalHolder) holder).nicknamePIV.update(res.getString(R.string.nick_name), userInfo.getNickname(), true);
+            ((PersonalHolder) holder).nicknamePIV.update(res.getString(R.string.nick_name), userInfo.getNickname(), isUserOwn);
             ((PersonalHolder) holder).nicknamePIV.setOnClickListener(briefItemClickListener);
             // email Y
-            ((PersonalHolder) holder).emailPIV.update(res.getString(R.string.prompt_email), userInfo.getEmail(), true);
+            ((PersonalHolder) holder).emailPIV.update(res.getString(R.string.prompt_email), userInfo.getEmail(), isUserOwn);
             ((PersonalHolder) holder).emailPIV.setOnClickListener(briefItemClickListener);
 
             // 性别 Y
             if ("1".equals(userInfo.getSex())) {
-                ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), res.getString(R.string.man), true);
+                ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), res.getString(R.string.man), isUserOwn);
             } else if ("0".equals(userInfo.getSex())) {
-                ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), res.getString(R.string.female), true);
+                ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), res.getString(R.string.female), isUserOwn);
             } else {
-                ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), res.getString(R.string.unknown), true);
+                ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), res.getString(R.string.unknown), isUserOwn);
             }
             ((PersonalHolder) holder).sexPIV.setOnClickListener(briefItemClickListener);
 
             // 居住地 Y
-            ((PersonalHolder) holder).residencePIV.update(res.getString(R.string.user_info_location), userInfo.getCountry() + " " + userInfo.getProvince() + " " + userInfo.getCity(), true);
+            ((PersonalHolder) holder).residencePIV.update(res.getString(R.string.user_info_location), userInfo.getCountry() + " " + userInfo.getProvince() + " " + userInfo.getCity(), isUserOwn);
             ((PersonalHolder) holder).residencePIV.setOnClickListener(briefItemClickListener);
 
             // 生日 Y TODO:没有进行时间格式转换
             if (userInfo.getBirthday() == null) {
-                ((PersonalHolder) holder).birthdayPIV.update(res.getString(R.string.birthday), "", true);
+                ((PersonalHolder) holder).birthdayPIV.update(res.getString(R.string.birthday), "", isUserOwn);
             } else {
-                ((PersonalHolder) holder).birthdayPIV.update(res.getString(R.string.birthday), String.valueOf(userInfo.getBirthday()), true);
+                ((PersonalHolder) holder).birthdayPIV.update(res.getString(R.string.birthday), String.valueOf(userInfo.getBirthday()), isUserOwn);
             }
             ((PersonalHolder) holder).birthdayPIV.setOnClickListener(briefItemClickListener);
 
 
         } else if (holder instanceof ConnectionsHolder) {
+            ImageLoader imageLoader = NetSingleton.getInstance(context).getImageLoader();
+
+            if (followingList != null) {
+
+                // 关注列表
+                ((ConnectionsHolder) holder).followingNum.setText(String.valueOf(followingList.getCount()));
+                for (int i = 0; i < followingList.getCount() && i < FOLLOW_NUM; i++) {
+
+                    final UserRelationListInfo.ResultsEntity.RelationUserEntity userEntity = followingList.getResults().get(i).getRelation_user();
+                    NetworkImageView item = new NetworkImageView(context);
+                    item.setDefaultImageResId(R.drawable.ic_image_black_48dp);
+                    item.setErrorImageResId(R.drawable.ic_broken_image_black_48dp);
+                    item.setImageUrl(String.valueOf(userEntity.getAvatar()), imageLoader);
+                    item.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(context, UserInfoActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putInt(Constant.USER_ID_NAME, userEntity.getId());
+                            bundle.putString(Constant.USERNAME_NAME, userEntity.getUsername());
+                            intent.putExtras(bundle);
+                            context.startActivity(intent);
+                        }
+                    });
+                    ((ConnectionsHolder) holder).followingLayout.addView(item, i);
+                }
+            }
+
+            if (followerList != null) {
+                // 粉丝列表
+                ((ConnectionsHolder) holder).followerNum.setText(String.valueOf(followerList.getCount()));
+                for (int i = 0; i < followerList.getCount() && i < FOLLOW_NUM; i++) {
+                    final UserRelationListInfo.ResultsEntity.RelationUserEntity userEntity = followerList.getResults().get(i).getRelation_user();
+                    NetworkImageView item = new NetworkImageView(context);
+                    item.setDefaultImageResId(R.drawable.ic_image_black_48dp);
+                    item.setErrorImageResId(R.drawable.ic_broken_image_black_48dp);
+                    item.setImageUrl(String.valueOf(followerList.getResults().get(i).getRelation_user().getAvatar()), imageLoader);
+                    item.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(context, UserInfoActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putInt(Constant.USER_ID_NAME, userEntity.getId());
+                            bundle.putString(Constant.USERNAME_NAME, userEntity.getUsername());
+                            intent.putExtras(bundle);
+                            context.startActivity(intent);
+                        }
+                    });
+                    ((ConnectionsHolder) holder).followerLayout.addView(item, i);
+                }
+            }
+        } else {
 
         }
 
@@ -186,11 +262,23 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
     class ConnectionsHolder extends RecyclerView.ViewHolder {
 
         TextView titleTv;
+        TextView followerNum;
+        TextView followingNum;
+        LinearLayout followerLayout;
+        LinearLayout followingLayout;
 
-        public ConnectionsHolder(View itemView) {
+        public ConnectionsHolder(View itemView, boolean isVisible) {
             super(itemView);
 
+            // 设置为不可见
+            if (!isVisible) {
+                itemView.setVisibility(View.GONE);
+            }
             titleTv = (TextView) itemView.findViewById(R.id.brief_connections_intro_title);
+            followingLayout = (LinearLayout) itemView.findViewById(R.id.following_layout);
+            followerLayout = (LinearLayout) itemView.findViewById(R.id.follower_layout);
+            followerNum = (TextView) itemView.findViewById(R.id.follower_num);
+            followingNum = (TextView) itemView.findViewById(R.id.following_num);
         }
     }
 

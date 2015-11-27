@@ -9,6 +9,10 @@
         android:id="@+id/action_change_avatar"
         android:title="@string/action_change_avatar"
         app:showAsAction="never" />
+    <item android:id="@+id/action_logout"
+        android:title="@string/logout"
+        app:showAsAction="never"/>
+
     <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
