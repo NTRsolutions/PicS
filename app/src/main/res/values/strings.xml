@@ -34,6 +34,7 @@
     <string name="follow">Follow</string>
     <string name="un_follow">Cancel Follow</string>
     
+
     <!-- 选取图片菜单 -->
     <string name="choose_picture">Select A Picture</string>
     <string name="action_mask">Mask</string>
@@ -63,5 +64,13 @@
     <string name="logout">Sign out</string>
     <string name="following">Following</string>
 
+    <string name="title_activity_detial">detial</string>
+    <string name="reply">reply</string>
 
+    <string-array name="headerarray">
+        <item>recent</item>
+        <item>friends</item>
+        <item>hot</item>
+        <item>search</item>
+    </string-array>
 </resources>

@@ -197,7 +197,6 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
      * 初始化网络请求监听
      */
     private void initListener() {
-        // 成功后更新UI
         okListener = new Response.Listener() {
             @Override
             public void onResponse(Object response) {
@@ -206,7 +205,6 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
 
                 }.getType();
                 UserInfo userInfo = gson.fromJson(String.valueOf(response), type);
-                Log.e(TAG, "updateUI");
 
                 // 更新UI
                 updateUI(userInfo);
@@ -224,7 +222,6 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
                 }
             }
         };
-
         okFollowingListener = new Response.Listener() {
             @Override
             public void onResponse(Object response) {
@@ -252,18 +249,16 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
                 ((BriefIntroFragment) viewPagerAdapter.getItem(0)).updateFollowers(list);
             }
         };
-
-
     }
 
     /**
      * 从服务器获取数据
-     * 判断是否有网络
      * 获取成功后，okListener
      * 使用updateUI()
      * 更新Activity和简介fragment的UI
      */
     private void getDataFromServer() {
+        initListener();
 
         // 如果网络通畅
         if (NetUtil.isNetworkAvailable(this)) {
@@ -277,7 +272,6 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
             // TODO 没有网络
             Toast.makeText(this, "当前没有网络+-+", Toast.LENGTH_LONG).show();
         }
-
     }
 
     /**
@@ -393,6 +387,14 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         } else {
             isUserOwn = false;
         }
+
+        // 如果网络通畅
+        if (NetUtil.isNetworkAvailable(this)) {
+            getDataFromServer();
+        } else {
+            // TODO 没有网络
+            Toast.makeText(this, "当前没有网络+-+", Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
@@ -449,18 +451,6 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         followersTv = (TextView) findViewById(R.id.user_info_followers);
         scannersTv = (TextView) findViewById(R.id.user_info_scanners);
 
-        makeFriendsBtn = (Button) findViewById(R.id.make_friends_btn);
-        makeFriendsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO 建立关系
-            }
-        });
-
-        if (!isUserOwn) {
-            makeFriendsBtn.setVisibility(View.VISIBLE);
-        }
-
         userNameTv.setText(username);
         userNameTv.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG); // 字体加粗
         // TODO 用户简介的数据更新
@@ -495,7 +485,7 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
         viewPagerAdapter = new UserInfoViewPagerAdapter(getSupportFragmentManager());
 
         viewPagerAdapter.addFragment(BriefIntroFragment.newInstance(new UserInfo(), isUserOwn), "简介");
-        viewPagerAdapter.addFragment(MainFragment.newInstance(MainFragment.NO_FOOTERANDHEADER), "信息");
+        viewPagerAdapter.addFragment(MainFragment.newInstance(MainFragment.USERINFO,username,userId), "信息");
         if (isUserOwn) {
             // TODO 收藏页面
             viewPagerAdapter.addFragment(new Fragment(), "收藏");

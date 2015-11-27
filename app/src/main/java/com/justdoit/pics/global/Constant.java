@@ -5,6 +5,9 @@ package com.justdoit.pics.global;
  */
 public class Constant {
     // 网页有关
+    public final static String USER_TOPIC_LIST = "api/topic/list/"; //用户话题列表
+    public final static String TOPIC = "api/topic/"; //查看删除修改话题
+    public final static String COMMENT_LIST = "api/topic/comment/list/"; //查看话题列表
     public final static String HOME_URL = "http://demo.gzqichang.com:8001/"; // 首页
     public final static String REGIST_URL_SUFFIX = "api/user/regist/"; // 注册
     public final static String LOGIN_URL_SUFFIX = "api/user/login/"; // 登录

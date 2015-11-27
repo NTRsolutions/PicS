@@ -174,14 +174,14 @@ public class Content {
         private boolean is_active;
         private String date_joined;
         private String nickname;
-        private Object avatar;
+        private String avatar;
         private String sex;
         private String email_verified;
         private String phone_verified;
         private String country;
         private String province;
         private String city;
-        private Object birthday;
+        private String birthday;
         private int grade;
         private int followers_count;
         private int topic_count;
@@ -237,7 +237,7 @@ public class Content {
             this.nickname = nickname;
         }
 
-        public void setAvatar(Object avatar) {
+        public void setAvatar(String avatar) {
             this.avatar = avatar;
         }
 
@@ -265,7 +265,7 @@ public class Content {
             this.city = city;
         }
 
-        public void setBirthday(Object birthday) {
+        public void setBirthday(String birthday) {
             this.birthday = birthday;
         }
 
@@ -341,7 +341,7 @@ public class Content {
             return nickname;
         }
 
-        public Object getAvatar() {
+        public String getAvatar() {
             return avatar;
         }
 
@@ -369,7 +369,7 @@ public class Content {
             return city;
         }
 
-        public Object getBirthday() {
+        public String getBirthday() {
             return birthday;
         }
 
