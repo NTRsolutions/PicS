@@ -1,5 +1,6 @@
 package com.justdoit.pics.adapater;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -49,6 +50,7 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
     private final static String KEY_NAME_TYPE = "nameType";
 
     private final static int FOLLOW_NUM = 10; // 10个人头像
+    private final static int ITEM_SIZE = 160;
 
     private UserInfo userInfo = null;
     private UserFollowingListInfo followingList = null;
@@ -263,6 +265,8 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
             // 避免重复
             ((ConnectionsHolder) holder).followingLayout.removeAllViews();
             ((ConnectionsHolder) holder).followerLayout.removeAllViews();
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ITEM_SIZE, ITEM_SIZE);
+            layoutParams.setMargins(0, 0, 20, 0);
 
             if (followingList != null) {
 
@@ -272,6 +276,8 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
 
                     final UserFollowingListInfo.ResultsEntity.RelationUserEntity userEntity = followingList.getResults().get(i).getRelation_user();
                     NetworkImageView item = new NetworkImageView(context);
+
+                    item.setLayoutParams(layoutParams);
                     item.setDefaultImageResId(R.drawable.ic_image_black_48dp);
                     item.setErrorImageResId(R.drawable.ic_broken_image_black_48dp);
                     item.setImageUrl(String.valueOf(userEntity.getAvatar()), imageLoader);
@@ -296,6 +302,7 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
                 for (int i = 0; i < followerList.getCount() && i < FOLLOW_NUM; i++) {
                     final UserFollowerListInfo.ResultsEntity.UserEntity userEntity = followerList.getResults().get(i).getUser();
                     NetworkImageView item = new NetworkImageView(context);
+                    item.setLayoutParams(layoutParams);
                     item.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     item.setDefaultImageResId(R.drawable.ic_image_black_48dp);
                     item.setErrorImageResId(R.drawable.ic_broken_image_black_48dp);

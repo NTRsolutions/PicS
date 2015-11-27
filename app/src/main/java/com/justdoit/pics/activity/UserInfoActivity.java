@@ -116,7 +116,13 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
 
         initListener();
 
-        getDataFromServer();
+        // 如果网络通畅
+        if (NetUtil.isNetworkAvailable(this)) {
+            getDataFromServer();
+        } else {
+            // TODO 没有网络
+            Toast.makeText(this, "当前没有网络+-+", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -407,14 +413,6 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
             isUserOwn = true;
         } else {
             isUserOwn = false;
-        }
-
-        // 如果网络通畅
-        if (NetUtil.isNetworkAvailable(this)) {
-            getDataFromServer();
-        } else {
-            // TODO 没有网络
-            Toast.makeText(this, "当前没有网络+-+", Toast.LENGTH_LONG).show();
         }
     }
 
