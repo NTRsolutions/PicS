@@ -26,6 +26,7 @@
     <!-- 基本信息的字体 -->
     <dimen name="personal_intro_item_title">16sp</dimen>
     <dimen name="personal_intro_item_content">14sp</dimen>
+    <dimen name="brief_follow_height">40dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="brief_follow_height">40dp</dimen>
 </resources>

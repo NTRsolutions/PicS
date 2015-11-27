@@ -187,7 +187,7 @@ public class DetialActivityFragment extends Fragment implements SwipeRefreshLayo
             Map<String,String> params = new HashMap<String,String>();
             params.put("content",content);
             params.put("topic",pk+"");
-            PostFormJsonObjRequest request = new PostFormJsonObjRequest("http://demo.gzqichang.com:8001/api/topic/comment/create/", params, null, new Response.Listener() {
+            PostFormJsonObjRequest request = new PostFormJsonObjRequest(this.getActivity(),"http://demo.gzqichang.com:8001/api/topic/comment/create/", params, null, new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
                     Toast.makeText(getActivity(), "发送成功", Toast.LENGTH_SHORT);
@@ -207,7 +207,7 @@ public class DetialActivityFragment extends Fragment implements SwipeRefreshLayo
             ((TextView)item).setEnabled(false);
             Map<String,String> params = new HashMap<String,String>();
             params.put("topic", pk + "");
-            PostFormJsonObjRequest request = new PostFormJsonObjRequest("http://demo.gzqichang.com:8001/api/topic/collection/create/", params, null, new Response.Listener() {
+            PostFormJsonObjRequest request = new PostFormJsonObjRequest(this.getActivity(),"http://demo.gzqichang.com:8001/api/topic/collection/create/", params, null, new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
                 }
@@ -224,7 +224,7 @@ public class DetialActivityFragment extends Fragment implements SwipeRefreshLayo
             ((TextView)item).setEnabled(false);
             Map<String,String> params = new HashMap<String,String>();
             params.put("topic", pk + "");
-            PostFormJsonObjRequest request = new PostFormJsonObjRequest("http://demo.gzqichang.com:8001/api/topic/star/create/", params, null, new Response.Listener() {
+            PostFormJsonObjRequest request = new PostFormJsonObjRequest(this.getActivity(),"http://demo.gzqichang.com:8001/api/topic/star/create/", params, null, new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
                 }

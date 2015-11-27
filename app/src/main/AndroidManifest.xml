@@ -42,6 +42,12 @@
     <activity android:name=".activity.SettingsActivity"
         android:label="@string/action_settings">
     </activity>
+
+        <activity android:name=".activity.SettingsActivity"
+            android:label="@string/action_settings">
+
+        </activity>
+        
         <activity
             android:name=".activity.DetialActivity"
             android:label="@string/title_activity_detial"

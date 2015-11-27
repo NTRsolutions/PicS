@@ -85,7 +85,7 @@ public class MainFragment extends Fragment implements OnClickListener, SwipeRefr
     public static final int USERINFO = 5;
     public static final int COLLECT = 6;
 
-    private int type;
+
     private int contenttype;
     private String username;
     private int userid;
@@ -107,10 +107,10 @@ public class MainFragment extends Fragment implements OnClickListener, SwipeRefr
      * @param type Parameter 1.
      * @return A new instance of fragment MainFragment.
      */
-    public static MainFragment newInstance(int type,String username,int userid) {
+    public static MainFragment newInstance(int contenttype,String username,int userid) {
         MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, type);
+        args.putInt(ARG_PARAM1, contenttype);
         args.putString(ARG_PARAM2, username);
         args.putInt(ARG_PARAM3,userid);
         fragment.setArguments(args);
@@ -121,7 +121,7 @@ public class MainFragment extends Fragment implements OnClickListener, SwipeRefr
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            type = getArguments().getInt(ARG_PARAM1);
+            contenttype = getArguments().getInt(ARG_PARAM1);
             username = getArguments().getString(ARG_PARAM2);
             userid = getArguments().getInt(ARG_PARAM3);
         }
@@ -153,13 +153,15 @@ public class MainFragment extends Fragment implements OnClickListener, SwipeRefr
         Spinner header_tv = (Spinner)v.findViewById(R.id.header_tv);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.headerarray, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         header_tv.setAdapter(adapter);
         header_tv.setOnItemSelectedListener(this);
         //显示header,footer组件
         if(contenttype == COLLECT||contenttype == USERINFO){
             footer.setVisibility(View.INVISIBLE);
+            footer.setEnabled(true);
             header_tv.setVisibility(View.INVISIBLE);
+            header_tv.setEnabled(true);
         }
 
         //添加header,footer滑动监听器
@@ -275,7 +277,7 @@ public class MainFragment extends Fragment implements OnClickListener, SwipeRefr
             ((TextView)item).setEnabled(false);
             Map<String,String> params = new HashMap<String,String>();
             params.put("topic", contents.get(position).getPk() + "");
-            PostFormJsonObjRequest request = new PostFormJsonObjRequest("http://demo.gzqichang.com:8001/api/topic/collection/create/", params, null, new Response.Listener() {
+            PostFormJsonObjRequest request = new PostFormJsonObjRequest(this.getActivity(),"http://demo.gzqichang.com:8001/api/topic/collection/create/", params, null, new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
                 }
@@ -292,7 +294,7 @@ public class MainFragment extends Fragment implements OnClickListener, SwipeRefr
             ((TextView)item).setEnabled(false);
             Map<String,String> params = new HashMap<String,String>();
             params.put("topic", contents.get(position).getPk() + "");
-            PostFormJsonObjRequest request = new PostFormJsonObjRequest("http://demo.gzqichang.com:8001/api/topic/star/create/", params, null, new Response.Listener() {
+            PostFormJsonObjRequest request = new PostFormJsonObjRequest(this.getActivity(),"http://demo.gzqichang.com:8001/api/topic/star/create/", params, null, new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
                 }

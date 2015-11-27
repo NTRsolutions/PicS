@@ -1,5 +1,7 @@
 package com.justdoit.pics.model;
 
+import android.content.Context;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
@@ -14,12 +16,12 @@ import java.util.Map;
  * Created by ljz on 2015/11/25.
  */
 public class PostFormJsonArrayRequest<JSONArray> extends PostFormRequest<JSONArray> {
-    public PostFormJsonArrayRequest(String url, Map params, Map fileParams, Response.Listener okListener, Response.ErrorListener errorListener) {
-        super(url, params, fileParams, okListener, errorListener);
+    public PostFormJsonArrayRequest(Context context,String url, Map params, Map fileParams, Response.Listener okListener, Response.ErrorListener errorListener) {
+        super(context,url, params, fileParams, okListener, errorListener);
     }
 
-    public PostFormJsonArrayRequest(String url, Map params, Response.Listener okListener, Response.ErrorListener errorListener) {
-        super(url, params, okListener, errorListener);
+    public PostFormJsonArrayRequest(Context context,String url, Map params, Response.Listener okListener, Response.ErrorListener errorListener) {
+        super(context,url, params, okListener, errorListener);
     }
 
     @Override

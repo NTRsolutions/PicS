@@ -77,7 +77,7 @@ public class UserImpl implements User {
         NetSingleton.getInstance(context).addToRequestQueue(request);
     }
     public void userTopic(Context context, Map<String, String> params, Response.Listener listener, Response.ErrorListener errorListener) {
-        PostFormJsonArrayRequest request = new PostFormJsonArrayRequest(
+        PostFormJsonArrayRequest request = new PostFormJsonArrayRequest(context,
                 Constant.HOME_URL + Constant.USER_TOPIC_LIST,
                 params,listener,errorListener
         );

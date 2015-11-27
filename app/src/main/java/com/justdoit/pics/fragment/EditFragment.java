@@ -140,7 +140,7 @@ public class EditFragment extends DialogFragment implements View.OnClickListener
                 params.put("article_status","1");
                 Map<String,String> fileparams = new HashMap<String,String>();
                 fileparams.put("cover_image",imagepath);
-                PostFormJsonObjRequest request = new PostFormJsonObjRequest("http://demo.gzqichang.com:8001/api/topic/create/", params, fileparams, new Response.Listener() {
+                PostFormJsonObjRequest request = new PostFormJsonObjRequest(this.getActivity(),"http://demo.gzqichang.com:8001/api/topic/create/", params, fileparams, new Response.Listener() {
                     @Override
                     public void onResponse(Object response) {
                         Toast.makeText(getActivity(),"发送成功",Toast.LENGTH_SHORT);
