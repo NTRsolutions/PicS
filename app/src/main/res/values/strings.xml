@@ -64,9 +64,11 @@
     <string name="logout">Sign out</string>
     <string name="following">Following</string>
 
-    <string name="title_activity_detial">detial</string>
+    <string name="title_activity_detial">detail</string>
     <string name="reply">reply</string>
-
+    <string name="errormsg">Connect error, please try again</string>
+    <string name="netstatcmsg">No network, please figure out</string>
+    <string name="successmsg">Successful</string>
     <string-array name="headerarray">
         <item>recent</item>
         <item>friends</item>

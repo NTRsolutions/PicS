@@ -41,7 +41,6 @@ public class DetialActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                // 点击up按钮事件处理
                 finish();
                 return true;
         }

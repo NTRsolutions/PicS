@@ -52,17 +52,15 @@ import java.util.Objects;
  * 登录或者游客(未登录的)之后跳转的目标activity,需要登录的userid
  *
  *
- * TODO:等待数据接口
+ * TODO:整理
  * Created by mengwen on 2015/10/26.
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Toolbar toolbar;
-    private App mApp;
 
     private String username;
     private int userid;
-    private FrameLayout container;
 
     public UserInfo userinfo;
 
@@ -81,27 +79,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             toolbar.setNavigationIcon(R.mipmap.user_info_def_avatar);
             getSupportActionBar().setTitle(R.string.visitor);
         } else { // 登录了就显示用户头像 TODO:用户头像获取
-            username = mApp.getUserName();
-            userid = mApp.getUserId();
+            username = App.getUserName();
+            userid = App.getUserId();
             getUserInfoFromServer();
             getSupportActionBar().setTitle(username);
         }
     }
 
     private void initView() {
-        Intent i = getIntent();
-        Bundle b = i.getExtras();
-        mApp = (App)getApplicationContext();
+
+
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        container = (FrameLayout) findViewById(R.id.container);
-
-
-
-        setSupportActionBar(toolbar);
         if (App.isLogin()) {
-            username = mApp.getUserName();
-            userid = mApp.getUserId();
+            username = App.getUserName();
+            userid = App.getUserId();
         }
 
         setSupportActionBar(toolbar);
@@ -118,19 +110,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     // 带上要跳转到UserInfo的标识
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    Bundle b = new Bundle();
                     intent.putExtra(Constant.ACTION_KEY, "UserInfoActivity");
                     startActivity(intent);
                 }
 
             }
         });
-
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.container, MainFragment.newInstance(MainFragment.NORMAL,username,userid),"MainFragment")
+                .add(R.id.container, MainFragment.newInstance(MainFragment.RECENT,username,userid),"MainFragment")
                 .commit();
-
     }
 
     @Override
@@ -140,46 +129,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
-
-    /**
-     * 显示dialog和隐藏login form
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    public void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-
-        final RelativeLayout mProgressLayoutView = (RelativeLayout)findViewById(R.id.progress_layout);
-        final ProgressBar mProgressView = (ProgressBar)findViewById(R.id.progressbar);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-            container.setVisibility(show ? View.GONE : View.VISIBLE);
-            container.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    container.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressLayoutView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressLayoutView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressLayoutView.setVisibility(show ? View.VISIBLE : View.GONE);
-            container.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-
 
     private void getUserInfoFromServer(){
         JsonObjectRequest mrequest = new JsonObjectRequest(Constant.HOME_URL + Constant.USER_INFO_URL_SUFFIX + userid, new Response.Listener<JSONObject>() {
@@ -213,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Drawable drawable =new BitmapDrawable(null,response);
                         toolbar.setNavigationIcon(drawable);
                     }
-                }, 0, 0, ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565, new Response.ErrorListener() {
+                }, 200, 200, ImageView.ScaleType.CENTER_CROP, Bitmap.Config.RGB_565, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 getUserAvatarFromServer();
