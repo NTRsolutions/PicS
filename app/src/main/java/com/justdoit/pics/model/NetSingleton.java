@@ -1,13 +1,22 @@
 package com.justdoit.pics.model;
 
 import android.content.Context;
+import android.os.Environment;
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.android.volley.Cache;
+import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HttpClientStack;
+import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+
+import java.io.File;
 
 /**
  * 单例模式的网络队列类，可获取request queue和image loader
@@ -16,6 +25,10 @@ import com.android.volley.toolbox.Volley;
 public class NetSingleton {
 
     private final String TAG = "DefaultRequestTAG"; // 请求默认标记
+
+    private static final String CACHE_DIR = "pics"; // 缓存文件夹名称
+
+    private static final int MAX_CACHE_SIZE_IN_BYTES = 25 * 1024 * 1024; // 最大缓存为25M
 
     private static NetSingleton mInstance;
 
@@ -56,8 +69,24 @@ public class NetSingleton {
     public RequestQueue getRequestQueue() {
 
         if (queue == null) {
-            // 一般使用application 保证生命周期和app一致
-            queue = Volley.newRequestQueue(mCxt.getApplicationContext());
+            File rootDir = mCxt.getExternalCacheDir();
+            if (rootDir == null) {
+                Log.e(TAG, "It can't get external cache dir.");
+                rootDir = mCxt.getCacheDir(); // 获取文件系统应用的cache，内存不够时，很容易被系统删除
+            }
+
+            Log.e(TAG, rootDir.getAbsolutePath());
+
+            File cacheDir = new File(rootDir, CACHE_DIR); // 缓存文件夹
+
+            // 创建文件夹
+            cacheDir.mkdirs();
+            Cache diskCache = new DiskBasedCache(cacheDir, MAX_CACHE_SIZE_IN_BYTES);
+            Network network = new BasicNetwork(new HurlStack());
+
+            queue = new RequestQueue(diskCache, network);
+
+            queue.start(); // 启动请求队列
         }
         return queue;
     }

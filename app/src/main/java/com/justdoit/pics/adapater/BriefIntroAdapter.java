@@ -280,7 +280,9 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
                     item.setLayoutParams(layoutParams);
                     item.setDefaultImageResId(R.drawable.ic_image_black_48dp);
                     item.setErrorImageResId(R.drawable.ic_broken_image_black_48dp);
-                    item.setImageUrl(String.valueOf(userEntity.getAvatar()), imageLoader);
+                    if (userEntity.getAvatar() != null) {
+                        item.setImageUrl(String.valueOf(userEntity.getAvatar()), imageLoader);
+                    }
                     item.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -306,7 +308,9 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
                     item.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     item.setDefaultImageResId(R.drawable.ic_image_black_48dp);
                     item.setErrorImageResId(R.drawable.ic_broken_image_black_48dp);
-                    item.setImageUrl(String.valueOf(userEntity.getAvatar()), imageLoader);
+                    if (userEntity.getAvatar() != null) {
+                        item.setImageUrl(String.valueOf(userEntity.getAvatar()), imageLoader);
+                    }
                     item.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
