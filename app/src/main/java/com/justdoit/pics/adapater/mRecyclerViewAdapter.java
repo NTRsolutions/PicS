@@ -62,8 +62,12 @@ public class mRecyclerViewAdapter extends RecyclerView.Adapter implements View.O
             View  v = LayoutInflater.from(parent.getContext()).inflate(R.layout.index_cardview,parent,false);
             return new mViewHolder(v);
         }else{
-            ImageView topview = new ImageView(mcontext);
-            topview.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,150));
+            ImageView topview = topview = new ImageView(mcontext);;
+            if((type == MainFragment.USERINFO || type == MainFragment.COLLECT)){
+                topview.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0));
+            }else{
+                topview.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,150));
+            }
             return new mViewHolder(topview);
         }
 
@@ -133,8 +137,8 @@ public class mRecyclerViewAdapter extends RecyclerView.Adapter implements View.O
             });
 
         }else{
-            if(type == MainFragment.NO_HEADER || type == MainFragment.NO_FOOTERANDHEADER)
-                ((mViewHolder) holder).top.setVisibility(View.GONE);
+//            if(type == MainFragment.USERINFO || type == MainFragment.COLLECT)
+//                ((mViewHolder) holder).top.setVisibility(View.GONE);
         }
 
         if(mposition > lastPosition){
@@ -174,6 +178,7 @@ public class mRecyclerViewAdapter extends RecyclerView.Adapter implements View.O
         NetworkImageView mPostImageView;
 
         ImageView top;
+
         public mViewHolder(ImageView top){
             super(top);
             this.top = top;

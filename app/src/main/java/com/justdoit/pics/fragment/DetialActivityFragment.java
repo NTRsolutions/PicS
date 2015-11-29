@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -29,6 +30,9 @@ import com.justdoit.pics.adapater.DetailAdapter;
 import com.justdoit.pics.adapater.mRecyclerViewAdapter;
 import com.justdoit.pics.bean.Comment;
 import com.justdoit.pics.bean.Content;
+import com.justdoit.pics.dao.GetTopicCommentEdit;
+import com.justdoit.pics.dao.impl.GetTopicCommentEditImpl;
+import com.justdoit.pics.dao.impl.UserStarCollectImpl;
 import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
 import com.justdoit.pics.model.ItemClickHelper;
@@ -110,13 +114,12 @@ public class DetialActivityFragment extends Fragment implements SwipeRefreshLayo
         switch (id){
             case R.id.action_detele:
                 if(((App)getActivity().getApplication()).USER_ID == content.getAuthor().getId()){
-                    StringRequest request = new StringRequest("http://demo.gzqichang.com:8001/api/topic/" + pk + "/" + Constant.FORM_TOKEN_NAME + "=" + App.getToken() + "&" + "_method=DELETE", new Response.Listener<String>() {
+                    StringRequest request = new StringRequest(Request.Method.DELETE,"http://demo.gzqichang.com:8001/api/topic/" + pk /*+ "/" + Constant.FORM_TOKEN_NAME + "=" + App.getToken() + "&" + "_method=DELETE"*/, new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-
+                            Log.e("test",response);
                             getActivity().setResult(Activity.RESULT_OK);
                             getActivity().finish();
-
                         }
                     }, new Response.ErrorListener() {
                         @Override
@@ -135,10 +138,9 @@ public class DetialActivityFragment extends Fragment implements SwipeRefreshLayo
 
     public void getDataFormServer(){
         mSwipeRefreshLayout.setRefreshing(true);
-        JsonObjectRequest mrequest = new JsonObjectRequest(Constant.HOME_URL + Constant.TOPIC +pk, new Response.Listener<JSONObject>() {
+        Response.Listener oklistener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                mSwipeRefreshLayout.setRefreshing(false);
                 try {
                     Gson mgson = new Gson();
                     content = mgson.fromJson(String.valueOf(response),Content.class);
@@ -147,21 +149,20 @@ public class DetialActivityFragment extends Fragment implements SwipeRefreshLayo
                     getCommentFromServer();
                 }
             }
-        }, new Response.ErrorListener() {
+        };
+        Response.ErrorListener errorlistener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(getActivity(),R.string.errormsg,Toast.LENGTH_SHORT);
                 mSwipeRefreshLayout.setRefreshing(false);
-                Log.e("test", "error: " + error.toString());
             }
-        });
-
-        RequestQueue mRequest = NetSingleton.getInstance(getActivity()).getRequestQueue();
-        mRequest.add(mrequest);
+        };
+        GetTopicCommentEditImpl getTopic = new GetTopicCommentEditImpl();
+        getTopic.GetTopic(getActivity(), pk, oklistener, errorlistener);
     }
 
     private void getCommentFromServer(){
-        JsonObjectRequest mrequest1 = new JsonObjectRequest(Constant.HOME_URL + Constant.COMMENT_LIST +"?id="+pk, new Response.Listener<JSONObject>() {
+        Response.Listener oklistener = new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -179,17 +180,18 @@ public class DetialActivityFragment extends Fragment implements SwipeRefreshLayo
                     mAdapter.notifyDataSetChanged();
                 }
             }
-        }, new Response.ErrorListener() {
+        };
+        Response.ErrorListener errorlistener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
+                Toast.makeText(getActivity(),R.string.errormsg,Toast.LENGTH_SHORT);
                 mSwipeRefreshLayout.setRefreshing(false);
-                Log.e("test", "error: " + error.toString());
             }
-        });
+        };
 
-        RequestQueue mRequest = NetSingleton.getInstance(getActivity()).getRequestQueue();
-        mRequest.add(mrequest1);
+        GetTopicCommentEditImpl getComment = new GetTopicCommentEditImpl();
+        getComment.GetTopic(getActivity(), pk, oklistener, errorlistener);
     }
 
     @Override
@@ -198,63 +200,71 @@ public class DetialActivityFragment extends Fragment implements SwipeRefreshLayo
     }
 
     @Override
-    public void onItemClick(View item, int position, int which) {
+    public void onItemClick(final View item, int position, int which) {
         int id = item.getId();
+        if(id == R.id.collect_tv){
+            item.setEnabled(false);
+            Response.Listener oklistener = new Response.Listener() {
+                @Override
+                public void onResponse(Object response) {
+                    ((TextView)item).setText((Integer.parseInt(((TextView) item).getText().toString()) + 1) + "");
+                    ((TextView)item).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_star_black_18dp, 0, 0, 0);
+                    Toast.makeText(getActivity(),R.string.successmsg,Toast.LENGTH_SHORT);
+                }
+            };
+            Response.ErrorListener errorlistener = new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getActivity(),R.string.errormsg,Toast.LENGTH_SHORT);
+                    item.setEnabled(true);
+                }
+            };
+            UserStarCollectImpl userstar = new UserStarCollectImpl();
+            userstar.Star(getActivity(),content.getPk(),oklistener,errorlistener);
+        }else if(id == R.id.plus_one_tv){
+            item.setEnabled(false);
+
+            Response.Listener oklistener = new Response.Listener() {
+                @Override
+                public void onResponse(Object response) {
+                    ((TextView)item).setText((Integer.parseInt(((TextView)item).getText().toString())+1)+"");
+                    ((TextView)item).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_favorite_black_18dp, 0, 0, 0);
+                    Toast.makeText(getActivity(),R.string.successmsg,Toast.LENGTH_SHORT).show();
+                }
+            };
+            Response.ErrorListener errorlistener = new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getActivity(),R.string.errormsg,Toast.LENGTH_SHORT).show();
+                    item.setEnabled(true);
+                }
+            };
+            UserStarCollectImpl usercollect = new UserStarCollectImpl();
+            usercollect.Collect(getActivity(), content.getPk(), oklistener, errorlistener);
+        }
     }
     public void onItemClick(View item, int position, int which,String content) {
         int id = item.getId();
         if(id == R.id.reply_btn){
             Map<String,String> params = new HashMap<String,String>();
             params.put("content",content);
-            params.put("topic",pk+"");
-            PostFormJsonObjRequest request = new PostFormJsonObjRequest(this.getActivity(),"http://demo.gzqichang.com:8001/api/topic/comment/create/", params, null, new Response.Listener() {
+            params.put("topic", pk + "");
+            Response.Listener oklistener = new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
-                    Toast.makeText(getActivity(), "发送成功", Toast.LENGTH_SHORT);
+                    Toast.makeText(getActivity(), "发送成功", Toast.LENGTH_SHORT).show();
                     getDataFormServer();
                 }
-            }, new Response.ErrorListener() {
+            };
+            Response.ErrorListener errorlistener =  new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
 
-                    Toast.makeText(getActivity(), "发送失败", Toast.LENGTH_SHORT);
+                    Toast.makeText(getActivity(), "发送失败", Toast.LENGTH_SHORT).show();
                 }
-            });
-            NetSingleton.getInstance(getActivity()).addToRequestQueue(request);
-        }else if(id == R.id.collect_tv){
-            ((TextView)item).setText((Integer.parseInt(((TextView) item).getText().toString()) + 1) + "");
-            ((TextView)item).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_star_black_18dp, 0, 0, 0);
-            ((TextView)item).setEnabled(false);
-            Map<String,String> params = new HashMap<String,String>();
-            params.put("topic", pk + "");
-            PostFormJsonObjRequest request = new PostFormJsonObjRequest(this.getActivity(),"http://demo.gzqichang.com:8001/api/topic/collection/create/", params, null, new Response.Listener() {
-                @Override
-                public void onResponse(Object response) {
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-
-                }
-            });
-            NetSingleton.getInstance(getActivity()).addToRequestQueue(request);
-        }else if(id == R.id.plus_one_tv){
-            ((TextView)item).setText((Integer.parseInt(((TextView)item).getText().toString())+1)+"");
-            ((TextView)item).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_favorite_black_18dp, 0, 0, 0);
-            ((TextView)item).setEnabled(false);
-            Map<String,String> params = new HashMap<String,String>();
-            params.put("topic", pk + "");
-            PostFormJsonObjRequest request = new PostFormJsonObjRequest(this.getActivity(),"http://demo.gzqichang.com:8001/api/topic/star/create/", params, null, new Response.Listener() {
-                @Override
-                public void onResponse(Object response) {
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-
-                }
-            });
-            NetSingleton.getInstance(getActivity()).addToRequestQueue(request);
+            };
+            GetTopicCommentEditImpl createComment = new GetTopicCommentEditImpl();
+            createComment.CreateComment(getActivity(),params, oklistener, errorlistener);
         }
     }
 }

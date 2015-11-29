@@ -43,12 +43,17 @@ import com.justdoit.pics.activity.UserInfoActivity;
 import com.justdoit.pics.adapater.mRecyclerViewAdapter;
 import com.justdoit.pics.bean.Content;
 import com.justdoit.pics.dao.User;
+import com.justdoit.pics.dao.UserList;
+import com.justdoit.pics.dao.UserStarCollect;
 import com.justdoit.pics.dao.impl.UserImpl;
+import com.justdoit.pics.dao.impl.UserListImpl;
+import com.justdoit.pics.dao.impl.UserStarCollectImpl;
 import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
 import com.justdoit.pics.model.ItemClickHelper;
 import com.justdoit.pics.model.NetSingleton;
 import com.justdoit.pics.model.PostFormJsonObjRequest;
+import com.justdoit.pics.util.NetUtil;
 import com.justdoit.pics.widget.MultiSwipeRefreshLayout;
 
 import org.json.JSONArray;
@@ -69,14 +74,11 @@ import java.util.Map;
  */
 public class MainFragment extends Fragment implements OnClickListener, SwipeRefreshLayout.OnRefreshListener,ItemClickHelper, AdapterView.OnItemSelectedListener {
 
-    private static final String ARG_PARAM1 = "type";
+    private static final String ARG_PARAM1 = "contenttype";
     private static final String ARG_PARAM2 = "username";
     private static final String ARG_PARAM3 = "userid";
 
-    public static final int NO_HEADER = 0;
-    public static final int NO_FOOTER = 1;
-    public static final int NO_FOOTERANDHEADER = 2 ;
-    public static final int NORMAL = 3;
+
 
     public static final int RECENT = 1;
     public static final int RELATION = 2;
@@ -104,13 +106,15 @@ public class MainFragment extends Fragment implements OnClickListener, SwipeRefr
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param type Parameter 1.
+     * @param contenttype type of fragment.
+     * @param username username who display on this list.
+     * @param userid userid who display on this list.
      * @return A new instance of fragment MainFragment.
      */
-    public static MainFragment newInstance(int type,String username,int userid) {
+    public static MainFragment newInstance(int contenttype,String username,int userid) {
         MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM1, type);
+        args.putInt(ARG_PARAM1, contenttype);
         args.putString(ARG_PARAM2, username);
         args.putInt(ARG_PARAM3,userid);
         fragment.setArguments(args);
@@ -142,21 +146,51 @@ public class MainFragment extends Fragment implements OnClickListener, SwipeRefr
      * @param v
      */
     public void initView(View v){
+
+        initcontainer(v);
+        initHeaderAndFooter(v);
+        initSwipeRefreshLayout(v);
+
+    }
+
+    /**
+     * 加载container
+     * container:RecyclerView id:content_container,显示各种话题列表,
+     * @param v View
+     */
+    private void initcontainer(View v){
         content_container = (RecyclerView)v.findViewById(R.id.content_container);
         content_container.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        mAdapter = new mRecyclerViewAdapter(this.getActivity(),contents,this);
+        mAdapter = new mRecyclerViewAdapter(this.getActivity(),contents,this,contenttype);
         content_container.setAdapter(mAdapter);
+    }
 
-        TextView footer_tv = (TextView)v.findViewById(R.id.footer_tv);
-        ImageView edit_iv = (ImageView)v.findViewById(R.id.edit_iv);
+    /**
+     * 加载header,footer组件
+     * header:Spinner,选择fragment显示的列表
+     * footer:TextView + ImageView,ImagetView id:edit_iv,点击显示发布话题的编辑对话fragment TODO:TextView id:footer_tv,点击跳转至页面顶部并刷新
+     *
+     * @param v View
+     */
+    private void initHeaderAndFooter(View v){
+
         FrameLayout footer = (FrameLayout)v.findViewById(R.id.footer);
+        TextView footer_tv = (TextView)v.findViewById(R.id.footer_tv);
+        footer_tv.setOnClickListener(this);
+
         Spinner header_tv = (Spinner)v.findViewById(R.id.header_tv);
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.headerarray, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+                R.array.headerarray, R.layout.spinner_item);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         header_tv.setAdapter(adapter);
-        header_tv.setOnItemSelectedListener(this);
-        //显示header,footer组件
+        header_tv.setOnItemSelectedListener(this);//加载header,一个Spinner
+
+        ImageView edit_iv = (ImageView)v.findViewById(R.id.edit_iv);
+        edit_iv.setOnClickListener(this);//加载页面右下角的话题发布按钮
+
+        //contenttype为COLLECT或者USERINFO时,不显示header,footer组件
         if(contenttype == COLLECT||contenttype == USERINFO){
             footer.setVisibility(View.INVISIBLE);
             footer.setEnabled(false);
@@ -174,12 +208,13 @@ public class MainFragment extends Fragment implements OnClickListener, SwipeRefr
                 .slideFooterDownAnimation(AnimationUtils.loadAnimation(this.getActivity(), R.anim.slide_footer_down))
                 .build();
         content_container.addOnScrollListener(scrollListener);
+    }
+
+    private void initSwipeRefreshLayout(View v){
         mSwipeRefreshLayout = (MultiSwipeRefreshLayout) v.findViewById(R.id.mSwipeRefreshLayout);
         mSwipeRefreshLayout.setChildViews(R.id.content_container);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-        edit_iv.setOnClickListener(this);
     }
-
 
     /**
      * 点击事件监听器
@@ -189,68 +224,91 @@ public class MainFragment extends Fragment implements OnClickListener, SwipeRefr
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.edit_iv:
-                EditFragment EditFragment = com.justdoit.pics.fragment.EditFragment.newInstance(username,((MainActivity)getActivity()).userinfo.getAvatar());
-                EditFragment.show(this.getActivity().getFragmentManager().beginTransaction(),"EditFragment");
+                if(App.isLogin()){
+                    EditFragment EditFragment = com.justdoit.pics.fragment.EditFragment.newInstance(username,((MainActivity)getActivity()).userinfo.getAvatar());
+                    EditFragment.show(this.getActivity().getFragmentManager().beginTransaction(),"EditFragment");
+                }
                 break;
+            case R.id.footer_tv:
+                content_container.smoothScrollToPosition(0);
             default:
                 break;
         }
     }
 
 
+    Response.Listener<JSONObject> oklistener;
+    Response.ErrorListener errorListener;
 
+    /**
+     * 初始化网络listener
+     */
+    private void initListener(){
+        if(contenttype == COLLECT){
+            //TODO:用户收藏列表网络返回数据类型监听器
+        }else{
+            oklistener = new Response.Listener<JSONObject>(){
+                @Override
+                public void onResponse(JSONObject response) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    try {
+                        JSONArray results = response.getJSONArray("results");
+                        Gson mgson = new Gson();
+                        mAdapter.mcontents.clear();
+                        for(int i =0 ;i<results.length();i++){
+                            Content content = mgson.fromJson(String.valueOf(results.get(i)),Content.class);
+                            mAdapter.mcontents.add(content);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }finally {
+                        mAdapter.notifyDataSetChanged();
+                    }
+                }
+            };
+
+            errorListener = new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getActivity(), R.string.errormsg, Toast.LENGTH_LONG);
+                }
+            };
+        }
+    }
+
+    /**
+     * 访问服务器获取数据
+     */
     public void getDataFormServer(){
+        if(!NetUtil.isNetworkAvailable(getActivity())){
+            Toast.makeText(getActivity(),R.string.netstatcmsg,Toast.LENGTH_LONG);
+        }
+        initListener();
         mSwipeRefreshLayout.setRefreshing(true);
-        String url = null;
+        UserListImpl userlistnetimpl = new UserListImpl();
+        userlistnetimpl.getList(getActivity(),getUrl(),oklistener,errorListener);
+    }
+
+    /**
+     * 根据contenttype获取服务器Url
+     * @return Url
+     */
+    private String getUrl(){
         switch (contenttype){
             case COLLECT:
-                url = "http://demo.gzqichang.com:8001/api/topic/collection/list/";
-                break;
+                return Constant.HOME_URL + Constant.USER_COLLECT_LIST;
             case USERINFO:
-                url = Constant.HOME_URL + Constant.USER_TOPIC_LIST + "?user_id="+userid;
-                break;
+                return Constant.HOME_URL + Constant.USER_TOPIC_LIST + "?user_id="+userid;
             case RECENT:
-                url = "http://demo.gzqichang.com:8001/api/topic/recentlist/";
-                break;
+                return Constant.HOME_URL + Constant.RECENT_LIST;
             case RELATION:
-                url = "http://demo.gzqichang.com:8001/api/topic/relationlist/";
-                break;
+                return Constant.HOME_URL + Constant.RELATION_LIST;
             case BEST:
-                url = "http://demo.gzqichang.com:8001/api/topic/bestlist/";
-                break;
+                return Constant.HOME_URL + Constant.BEST_LIST;
         }
-        JsonObjectRequest mrequest = new JsonObjectRequest(url, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                mSwipeRefreshLayout.setRefreshing(false);
-                try {
-                    JSONArray results = response.getJSONArray("results");
-                    Gson mgson = new Gson();
-                    mAdapter.mcontents.clear();
-                    for(int i =0 ;i<results.length();i++){
-                        Content content = mgson.fromJson(String.valueOf(results.get(i)),Content.class);
-                        mAdapter.mcontents.add(content);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }finally {
-                    mAdapter.notifyDataSetChanged();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                mSwipeRefreshLayout.setRefreshing(false);
-                Log.e("test", "error: " + error.toString());
-                getDataFormServer();
-            }
-        });
-
-        RequestQueue mRequest = NetSingleton.getInstance(getActivity()).getRequestQueue();
-        mRequest.add(mrequest);
-
+        return null;
     }
+
 
     @Override
     public void onRefresh() {
@@ -258,53 +316,60 @@ public class MainFragment extends Fragment implements OnClickListener, SwipeRefr
     }
 
     @Override
-    public void onItemClick(View item, int position, int which) {
+    public void onItemClick(final View item, int position, int which) {
         int id = item.getId();
         if(id == R.id.add_comment_tv || id == R.id.post_iv || id == R.id.message_tv ){
             Intent i = new Intent(getActivity(), DetialActivity.class);
             i.putExtra("pk",contents.get(position).getPk());
             startActivity(i);
         }else if(id == R.id.display_name_tv || id == R.id.user_iv){
+
             Intent intent = new Intent(getActivity(), UserInfoActivity.class);
             Bundle bundle = new Bundle();
             bundle.putInt(Constant.USER_ID_NAME, contents.get(position).getAuthor().getId());
             bundle.putString(Constant.USERNAME_NAME, contents.get(position).getAuthor().getUsername());
             intent.putExtras(bundle);
             startActivity(intent);
+
         }else if(id == R.id.collect_tv){
-            ((TextView)item).setText((Integer.parseInt(((TextView) item).getText().toString()) + 1) + "");
-            ((TextView)item).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_star_black_18dp, 0, 0, 0);
-            ((TextView)item).setEnabled(false);
-            Map<String,String> params = new HashMap<String,String>();
-            params.put("topic", contents.get(position).getPk() + "");
-            PostFormJsonObjRequest request = new PostFormJsonObjRequest(this.getActivity(),"http://demo.gzqichang.com:8001/api/topic/collection/create/", params, null, new Response.Listener() {
+            item.setEnabled(false);
+            Response.Listener oklistener = new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
+                    ((TextView)item).setText((Integer.parseInt(((TextView) item).getText().toString()) + 1) + "");
+                    ((TextView)item).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_star_black_18dp, 0, 0, 0);
+                    Toast.makeText(getActivity(),R.string.successmsg,Toast.LENGTH_SHORT);
                 }
-            }, new Response.ErrorListener() {
+            };
+            Response.ErrorListener errorlistener = new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    Toast.makeText(getActivity(),R.string.errormsg,Toast.LENGTH_SHORT);
+                    item.setEnabled(true);
                 }
-            });
-            NetSingleton.getInstance(getActivity()).addToRequestQueue(request);
+            };
+            UserStarCollectImpl userstar = new UserStarCollectImpl();
+            userstar.Star(getActivity(),contents.get(position).getPk(),oklistener,errorlistener);
         }else if(id == R.id.plus_one_tv){
-            ((TextView)item).setText((Integer.parseInt(((TextView)item).getText().toString())+1)+"");
-            ((TextView)item).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_favorite_black_18dp, 0, 0, 0);
-            ((TextView)item).setEnabled(false);
-            Map<String,String> params = new HashMap<String,String>();
-            params.put("topic", contents.get(position).getPk() + "");
-            PostFormJsonObjRequest request = new PostFormJsonObjRequest(this.getActivity(),"http://demo.gzqichang.com:8001/api/topic/star/create/", params, null, new Response.Listener() {
+            item.setEnabled(false);
+
+            Response.Listener oklistener = new Response.Listener() {
                 @Override
                 public void onResponse(Object response) {
+                    ((TextView)item).setText((Integer.parseInt(((TextView)item).getText().toString())+1)+"");
+                    ((TextView)item).setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_favorite_black_18dp, 0, 0, 0);
+                    Toast.makeText(getActivity(),R.string.successmsg,Toast.LENGTH_SHORT).show();
                 }
-            }, new Response.ErrorListener() {
+            };
+            Response.ErrorListener errorlistener = new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    Toast.makeText(getActivity(),R.string.errormsg,Toast.LENGTH_SHORT).show();
+                    item.setEnabled(true);
                 }
-            });
-            NetSingleton.getInstance(getActivity()).addToRequestQueue(request);
+            };
+            UserStarCollectImpl usercollect = new UserStarCollectImpl();
+            usercollect.Collect(getActivity(), contents.get(position).getPk(), oklistener, errorlistener);
         }
     }
 
@@ -318,7 +383,6 @@ public class MainFragment extends Fragment implements OnClickListener, SwipeRefr
         if(contenttype == USERINFO || contenttype == COLLECT){
             return ;
         }
-
         String swi = adapterView.getItemAtPosition(i).toString();
         switch (swi){
             case "最近":

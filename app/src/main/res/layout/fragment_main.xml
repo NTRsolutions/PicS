@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.MainFragment"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:background="@color/gray9">
 
     <com.justdoit.pics.widget.MultiSwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -19,19 +20,14 @@
                 android:layout_height="match_parent"
                 android:id="@+id/content_container">
             </android.support.v7.widget.RecyclerView>
-
             <Spinner
                 android:id="@+id/header_tv"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:gravity="center"
-                android:text="header"
-                android:textAlignment="center"
-                android:textColor="@android:color/white"
-                android:textSize="40sp"
                 android:layout_alignParentTop="true"
-                android:background="@drawable/shape_rounded_rectangle"
-                />
+                android:background="@drawable/mainview_selector">
+
+            </Spinner>
         </RelativeLayout>
 
     </com.justdoit.pics.widget.MultiSwipeRefreshLayout>
@@ -58,7 +54,8 @@
             android:layout_marginBottom="29dp"
             android:textColor="@android:color/white"
             android:gravity="center"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:clickable="true"/>
 
         <ImageView
             android:id="@+id/edit_iv"

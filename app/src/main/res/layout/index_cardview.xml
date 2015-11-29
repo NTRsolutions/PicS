@@ -34,7 +34,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
                 android:scaleType="centerCrop"
-                android:background="@drawable/press"
                 android:clickable="true"
                 />
 
@@ -84,7 +83,8 @@
             android:clickable="true"/>
 
         <com.android.volley.toolbox.NetworkImageView
-            android:padding="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:id="@+id/post_iv"
             android:layout_width="match_parent"
             android:layout_height="320dp"
@@ -92,7 +92,6 @@
             android:contentDescription=""
             android:scaleType="centerCrop"
             android:clickable="true"
-
             />
 
         <RelativeLayout
