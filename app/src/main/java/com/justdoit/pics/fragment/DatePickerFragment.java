@@ -38,6 +38,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         // Do something with the date chosen by the user
         Map<String, String> params = new HashMap<String, String>();
         params.put("_method", "PUT");
+        month += 1; // 因为month的范围是0-11，要加1才正确
         params.put("birthday", "" + year + "-" + month + "-" + day);
         new UserImpl().changeUserInfo(getContext(), App.getUserId(), params, null,
                 new Response.Listener() {

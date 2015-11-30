@@ -196,7 +196,7 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
             ((PersonalHolder) holder).residencePIV.update(res.getString(R.string.user_info_location), userInfo.getCountry() + " " + userInfo.getProvince() + " " + userInfo.getCity(), isUserOwn);
             ((PersonalHolder) holder).residencePIV.setOnClickListener(briefItemClickListener);
 
-            // 生日 Y TODO:没有进行时间格式转换
+            // 生日 Y
             if (userInfo.getBirthday() == null) {
                 ((PersonalHolder) holder).birthdayPIV.update(res.getString(R.string.birthday), "", isUserOwn);
             } else {
@@ -208,11 +208,12 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
                 ((PersonalHolder) holder).birthdayPIV.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DialogFragment newFragment = new DatePickerFragment(){
+                        DialogFragment newFragment = new DatePickerFragment() {
 
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int day) {
                                 super.onDateSet(view, year, month, day);
+                                month += 1; // 因为month的范围是0-11，要加1才正确
 
                                 ((PersonalHolder) holder).birthdayPIV.update(res.getString(R.string.birthday), "" + year + "-" + month + "-" + day, isUserOwn);
                             }
@@ -226,37 +227,39 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
                     public void onClick(View v) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                         builder.setTitle("选择性别");
-                        builder.setItems(new String[]{"女", "男"}, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, final int which) {
-                                Map<String, String> map = new HashMap<String, String>();
-                                map.put("_method", "PUT");
-                                map.put("sex", which + "");
-                                new UserImpl().changeUserInfo(context, userInfo.getPk(), map, null,
-                                        new Response.Listener() {
-                                            @Override
-                                            public void onResponse(Object response) {
-                                                Toast.makeText(context, "修改成功", Toast.LENGTH_LONG).show();
-                                                ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), which == 0? "女" : "男", isUserOwn);
-                                            }
-                                        },
-                                        new Response.ErrorListener() {
-                                            @Override
-                                            public void onErrorResponse(VolleyError error) {
-                                                Toast.makeText(context, "修改失败", Toast.LENGTH_LONG).show();
+                        final String manStr = res.getString(R.string.man);
+                        final String femaleStr = res.getString(R.string.female);
+                        builder.setItems(new String[]{femaleStr, manStr},
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, final int which) {
+                                        Map<String, String> map = new HashMap<String, String>();
+                                        map.put("_method", "PUT");
+                                        map.put("sex", which + "");
+                                        new UserImpl().changeUserInfo(context, userInfo.getPk(), map, null,
+                                                new Response.Listener() {
+                                                    @Override
+                                                    public void onResponse(Object response) {
+                                                        Toast.makeText(context, "修改成功", Toast.LENGTH_LONG).show();
+                                                        ((PersonalHolder) holder).sexPIV.update(res.getString(R.string.sex), which == 0 ? femaleStr : manStr, isUserOwn);
+                                                    }
+                                                },
+                                                new Response.ErrorListener() {
+                                                    @Override
+                                                    public void onErrorResponse(VolleyError error) {
+                                                        Toast.makeText(context, "修改失败", Toast.LENGTH_LONG).show();
 
-                                            }
-                                        }
-                                );
-                            }
-                        });
+                                                    }
+                                                }
+                                        );
+                                    }
+                                });
 
                         builder.create().show();
 
                     }
                 });
             }
-
 
 
         } else if (holder instanceof ConnectionsHolder) {

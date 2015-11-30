@@ -75,8 +75,6 @@ public class NetSingleton {
                 rootDir = mCxt.getCacheDir(); // 获取文件系统应用的cache，内存不够时，很容易被系统删除
             }
 
-            Log.e(TAG, rootDir.getAbsolutePath());
-
             File cacheDir = new File(rootDir, CACHE_DIR); // 缓存文件夹
 
             // 创建文件夹
