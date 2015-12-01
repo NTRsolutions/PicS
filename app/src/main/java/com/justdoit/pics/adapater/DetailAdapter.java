@@ -2,6 +2,7 @@ package com.justdoit.pics.adapater;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,8 @@ public class DetailAdapter extends RecyclerView.Adapter {
     private static final int NORMAL = 2;
     ImageLoader imageLoader;
     ItemClickHelper mcallback;
+
+    private EditText comment_ev;
 
     public DetailAdapter(Context context ,Content content,ArrayList<Comment> comments , ItemClickHelper callback){
         mcontext = context;
@@ -79,8 +82,54 @@ public class DetailAdapter extends RecyclerView.Adapter {
             ((mViewHolder) holder).mUserImageView.setDefaultImageResId(R.mipmap.ic_launcher);
             ((mViewHolder) holder).mPostImageView.setImageUrl(mcontent.getCover_image(), imageLoader);
             ((mViewHolder) holder).mPostImageView.setDefaultImageResId(R.mipmap.ic_launcher);
+
+//            ((mViewHolder) holder).mMessageTextView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    mcallback.onItemClick(view, position, ((mViewHolder) holder).mMessageTextView.getId());
+//                }
+//            });
+//            ((mViewHolder) holder).mPostImageView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    mcallback.onItemClick(view, position, ((mViewHolder) holder).mPostImageView.getId());
+//                }
+//            });
+            ((mViewHolder) holder).mAddCommentTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mcallback.onItemClick(view, position, ((mViewHolder) holder).mAddCommentTextView.getId());
+                }
+            });
+
+            ((mViewHolder) holder).mDisplayNameTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mcallback.onItemClick(view, position, ((mViewHolder) holder).mDisplayNameTextView.getId());
+                }
+            });
+            ((mViewHolder) holder).mUserImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mcallback.onItemClick(view, position, ((mViewHolder) holder).mUserImageView.getId());
+                }
+            });
+
+            ((mViewHolder) holder).mPlusOneView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mcallback.onItemClick(view, position, ((mViewHolder) holder).mPlusOneView.getId());
+                }
+            });
+            ((mViewHolder) holder).mCollectTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mcallback.onItemClick(view, position, ((mViewHolder) holder).mCollectTextView.getId());
+                }
+            });
         }else if(position == 1 ){
-            ((mViewHolder) holder).comment_ev.setHint(R.string.reply);
+            comment_ev = ((mViewHolder) holder).comment_ev;
+            ((mViewHolder) holder).comment_ev.setHint(mcontext.getResources().getString(R.string.reply));
             ((mViewHolder) holder).reply_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -90,11 +139,33 @@ public class DetailAdapter extends RecyclerView.Adapter {
             });
         }else{
             ((mViewHolder) holder).mDisplayNameTextView.setText(mcomments.get(position-2).getAuthor().getUsername());
-            ((mViewHolder) holder).commentcontent_tv.setText(mcomments.get(position-2).getContent());
-            ((mViewHolder) holder).mTimestampTextView.setText(mcomments.get(position-2).getCreate_time());
+            ((mViewHolder) holder).commentcontent_tv.setText(mcomments.get(position - 2).getContent());
+            ((mViewHolder) holder).mTimestampTextView.setText(mcomments.get(position - 2).getCreate_time());
 
-            ((mViewHolder) holder).mUserImageView.setImageUrl(mcomments.get(position-2).getAuthor().getAvatar(), imageLoader);
+            ((mViewHolder) holder).mUserImageView.setImageUrl(mcomments.get(position - 2).getAuthor().getAvatar(), imageLoader);
             ((mViewHolder) holder).mUserImageView.setDefaultImageResId(R.mipmap.ic_launcher);
+
+            ((mViewHolder) holder).mDisplayNameTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mcallback.onItemClick(view, position, ((mViewHolder) holder).mDisplayNameTextView.getId());
+                }
+            });
+            ((mViewHolder) holder).mUserImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mcallback.onItemClick(view, position, ((mViewHolder) holder).mUserImageView.getId());
+                }
+            });
+            ((mViewHolder) holder).commentcontent_tv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(comment_ev!=null){
+                        comment_ev.setHint(mcontext.getResources().getString(R.string.reply) + " " + ((mViewHolder) holder).mDisplayNameTextView.getText().toString()+" 的评论");
+                        comment_ev.requestFocus();
+                    }
+                }
+            });
         }
 
         if(position > lastPosition){

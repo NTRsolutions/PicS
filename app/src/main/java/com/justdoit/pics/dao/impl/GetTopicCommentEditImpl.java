@@ -12,6 +12,7 @@ import com.justdoit.pics.bean.Content;
 import com.justdoit.pics.dao.GetTopicCommentEdit;
 import com.justdoit.pics.global.Constant;
 import com.justdoit.pics.model.NetSingleton;
+import com.justdoit.pics.model.PostDeteleRequest;
 import com.justdoit.pics.model.PostFormJsonObjRequest;
 
 import org.json.JSONObject;
@@ -42,6 +43,7 @@ public class GetTopicCommentEditImpl implements GetTopicCommentEdit {
 
     @Override
     public void DeteleTopic(Context context, int pk, Response.Listener oklistener, Response.ErrorListener errorListener) {
-
+        PostDeteleRequest mrequest = new PostDeteleRequest(pk,oklistener,errorListener);
+        NetSingleton.getInstance(context).addToRequestQueue(mrequest);
     }
 }

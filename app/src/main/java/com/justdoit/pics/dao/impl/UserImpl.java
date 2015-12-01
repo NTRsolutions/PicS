@@ -1,21 +1,17 @@
 package com.justdoit.pics.dao.impl;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.justdoit.pics.dao.User;
-import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
 import com.justdoit.pics.model.NetSingleton;
-import com.justdoit.pics.model.PostFormJsonArrayRequest;
 import com.justdoit.pics.model.PostFormJsonObjRequest;
 import com.justdoit.pics.model.PostFormRequest;
 
-import java.awt.font.TextAttribute;
 import java.util.Map;
 
 /**
@@ -74,13 +70,6 @@ public class UserImpl implements User {
                 listener, errorListener
         );
 
-        NetSingleton.getInstance(context).addToRequestQueue(request);
-    }
-    public void userTopic(Context context, Map<String, String> params, Response.Listener listener, Response.ErrorListener errorListener) {
-        PostFormJsonArrayRequest request = new PostFormJsonArrayRequest(context,
-                Constant.HOME_URL + Constant.USER_TOPIC_LIST,
-                params,listener,errorListener
-        );
         NetSingleton.getInstance(context).addToRequestQueue(request);
     }
 

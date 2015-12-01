@@ -1,6 +1,7 @@
 package com.justdoit.pics.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -26,6 +27,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.justdoit.pics.R;
+import com.justdoit.pics.activity.UserInfoActivity;
 import com.justdoit.pics.adapater.DetailAdapter;
 import com.justdoit.pics.adapater.mRecyclerViewAdapter;
 import com.justdoit.pics.bean.Comment;
@@ -114,20 +116,23 @@ public class DetialActivityFragment extends Fragment implements SwipeRefreshLayo
         switch (id){
             case R.id.action_detele:
                 if(((App)getActivity().getApplication()).USER_ID == content.getAuthor().getId()){
-                    StringRequest request = new StringRequest(Request.Method.DELETE,"http://demo.gzqichang.com:8001/api/topic/" + pk /*+ "/" + Constant.FORM_TOKEN_NAME + "=" + App.getToken() + "&" + "_method=DELETE"*/, new Response.Listener<String>() {
+                    Response.Listener oklistener = new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
                             Log.e("test",response);
                             getActivity().setResult(Activity.RESULT_OK);
                             getActivity().finish();
                         }
-                    }, new Response.ErrorListener() {
+                    };
+                    Response.ErrorListener errorlistener = new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            Log.e("test",error.toString());
+                            Toast.makeText(getActivity(),R.string.errormsg,Toast.LENGTH_SHORT).show();
                         }
-                    });
-                    NetSingleton.getInstance(getActivity()).addToRequestQueue(request);
+                    };
+                    GetTopicCommentEdit deletecomment = new GetTopicCommentEditImpl();
+                    deletecomment.DeteleTopic(getActivity(),pk,oklistener,errorlistener);
                 }else{
                     Toast.makeText(this.getActivity(),"你没有权限删除",Toast.LENGTH_LONG).show();
                 }
@@ -191,7 +196,7 @@ public class DetialActivityFragment extends Fragment implements SwipeRefreshLayo
         };
 
         GetTopicCommentEditImpl getComment = new GetTopicCommentEditImpl();
-        getComment.GetTopic(getActivity(), pk, oklistener, errorlistener);
+        getComment.GetComment(getActivity(), pk, oklistener, errorlistener);
     }
 
     @Override
@@ -241,6 +246,15 @@ public class DetialActivityFragment extends Fragment implements SwipeRefreshLayo
             };
             UserStarCollectImpl usercollect = new UserStarCollectImpl();
             usercollect.Collect(getActivity(), content.getPk(), oklistener, errorlistener);
+        }else if(id == R.id.display_name_tv || id == R.id.user_iv){
+
+            Intent intent = new Intent(getActivity(), UserInfoActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt(Constant.USER_ID_NAME, comments.get(position - 2).getAuthor().getId());
+            bundle.putString(Constant.USERNAME_NAME, comments.get(position - 2).getAuthor().getUsername());
+            intent.putExtras(bundle);
+            startActivity(intent);
+
         }
     }
     public void onItemClick(View item, int position, int which,String content) {

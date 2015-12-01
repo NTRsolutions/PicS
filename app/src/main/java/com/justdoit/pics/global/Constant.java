@@ -22,8 +22,8 @@ public class Constant {
     public final static String CREATE_FOLLOWING_URL_SUFFIX = "api/relation/create/"; // 关注关系创建
     public final static String CANCEL_FOLLOWING_URL_SUFFIX = "api/relation/cancel/"; // 关注关系取消
     public final static String USER_START = "api/topic/star/create/";//用户点赞
-    public final static String USER_COLLECT="api/topic/collection/create/";//用户收藏
-    public final static String USER_COMMENT = "api/topic/comment/create/"; //用户评论
+    public final static String USER_COLLECT="api/topic/collection/create/";//用户创建收藏
+    public final static String USER_COMMENT = "api/topic/comment/create/"; //用户创建评论
     public final static String TOKEN_NAME = "csrftoken"; // token名称
     public final static String FORM_TOKEN_NAME = "csrfmiddlewaretoken"; // 表单token名称
 
