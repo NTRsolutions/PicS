@@ -304,7 +304,6 @@ public class LoginActivity extends AppCompatActivity {
             SharedPreferences.Editor cookieEditor = getSharedPreferences(Constant.COOKIES_PREFS, MODE_PRIVATE).edit();
             for (HttpCookie c : App.cookieManager.getCookieStore().getCookies()) {
                 cookieEditor.putString(c.getName(), c.getValue());
-                Log.e(TAG, "name:" + c.getName() + " value:" + c.getValue());
             }
 
             cookieEditor.commit();
