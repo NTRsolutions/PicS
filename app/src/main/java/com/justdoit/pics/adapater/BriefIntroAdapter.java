@@ -1,12 +1,10 @@
 package com.justdoit.pics.adapater;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -49,7 +47,7 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
     private final static String KEY_OLD_VALUE = "oldValue";
     private final static String KEY_NAME_TYPE = "nameType";
 
-    private final static int FOLLOW_NUM = 10; // 10个人头像
+    private final static int FOLLOW_NUM = 6; // 显示人头像
     private final static int ITEM_SIZE = 160;
 
     private UserInfo userInfo = null;
@@ -234,7 +232,6 @@ public class BriefIntroAdapter extends RecyclerView.Adapter {
                                     @Override
                                     public void onClick(DialogInterface dialog, final int which) {
                                         Map<String, String> map = new HashMap<String, String>();
-                                        map.put("_method", "PUT");
                                         map.put("sex", which + "");
                                         new UserImpl().changeUserInfo(context, userInfo.getPk(), map, null,
                                                 new Response.Listener() {

@@ -22,8 +22,14 @@ import java.util.Map;
 
 /**
  * 表单提交抽象类
+ *
+ * --注意--
+ * 默认的提交方法是post，可以在构造函数设置为其他的提交方式
+ * --注意--
+ *
  * 包含了文件提交
- * 自动初始化token，initParams()
+ * 自动初始化token，initparams()
+ * 在header上添加X-CSRFToken
  * 使用方法：
  * 通过构造方法或setParams()或者setFileParams()方法
  * <p>
@@ -35,12 +41,14 @@ import java.util.Map;
  * <p>
  * Created by mengwen on 2015/10/28.
  */
-public abstract class PostFormRequest<T> extends Request<T> {
+public abstract class FormRequest<T> extends Request<T> {
 
-    private final static String TAG = "PostFormRequest";
+    private final static String TAG = "FormRequest";
     protected static final String PROTOCOL_CHARSET = "utf-8";
     private String BOUNDARY = "----FormBoundary"; //数据分隔线
     private String MULTIPART_FORM_DATA = "multipart/form-data";
+
+    public static final String HEADER_TOKEN = "X-CSRFToken";
 
 
     private Response.Listener mListener; // 请求正确时调用
@@ -50,19 +58,24 @@ public abstract class PostFormRequest<T> extends Request<T> {
     private Map<String, String> fileParams; // 上传图片文件
 
 
-    public PostFormRequest(Context context, String url, Map<String, String> params, Response.Listener okListener, Response.ErrorListener errorListener) {
+    public FormRequest(Context context, String url, Map<String, String> params, Response.Listener okListener, Response.ErrorListener errorListener) {
         this(context, url, params, null, okListener, errorListener);
     }
 
     /**
+     * 默认提交方法为POST
      * @param url
      * @param params
      * @param fileParams    参数名和文件路径的map;文件名用时间戳
      * @param okListener
      * @param errorListener
      */
-    public PostFormRequest(Context context, String url, Map<String, String> params, Map<String, String> fileParams, Response.Listener okListener, Response.ErrorListener errorListener) {
-        super(Method.POST, url, errorListener);
+    public FormRequest(Context context, String url, Map<String, String> params, Map<String, String> fileParams, Response.Listener okListener, Response.ErrorListener errorListener) {
+        this(context, Method.POST, url, params, fileParams, okListener, errorListener);
+    }
+
+    public FormRequest(Context context, int method, String url, Map<String, String> params, Map<String, String> fileParams, Response.Listener okListener, Response.ErrorListener errorListener) {
+        super(method, url, errorListener);
 
         initParams(context, params);
         this.mListener = okListener;
@@ -153,7 +166,7 @@ public abstract class PostFormRequest<T> extends Request<T> {
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Log.e(TAG, "PostFormRequest formParams() failed");
+                    Log.e(TAG, "FormRequest formParams() failed");
                 }
 
 
@@ -210,6 +223,14 @@ public abstract class PostFormRequest<T> extends Request<T> {
     @Override
     public String getBodyContentType() {
         return MULTIPART_FORM_DATA + "; boundary=" + BOUNDARY;
+    }
+
+    @Override
+    public Map<String, String> getHeaders() throws AuthFailureError {
+        // 初始化token header
+        Map<String, String> headers = new HashMap<String, String>(super.getHeaders());
+        headers.put(HEADER_TOKEN, App.getToken());
+        return headers;
     }
 
     @Override

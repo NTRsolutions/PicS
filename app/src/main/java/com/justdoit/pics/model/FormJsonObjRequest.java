@@ -15,16 +15,20 @@ import java.util.Map;
 /**
  * 表单提交返回json object
  * 可提交文件
- * 使用方法可看PostFormRequest类
+ * 使用方法可看FormRequest类
  * Created by mengwen on 2015/10/28.
  */
-public class PostFormJsonObjRequest<JSONObject> extends PostFormRequest<JSONObject> {
-    public PostFormJsonObjRequest(Context context, String url, Map<String, String> params, Response.Listener okListener, Response.ErrorListener errorListener) {
+public class FormJsonObjRequest<JSONObject> extends FormRequest<JSONObject> {
+    public FormJsonObjRequest(Context context, String url, Map<String, String> params, Response.Listener okListener, Response.ErrorListener errorListener) {
         this(context, url, params, null, okListener, errorListener);
     }
 
-    public PostFormJsonObjRequest(Context context, String url, Map<String, String> params, Map<String, String> fileParams, Response.Listener okListener, Response.ErrorListener errorListener) {
+    public FormJsonObjRequest(Context context, String url, Map<String, String> params, Map<String, String> fileParams, Response.Listener okListener, Response.ErrorListener errorListener) {
         super(context, url, params, fileParams, okListener, errorListener);
+    }
+
+    public FormJsonObjRequest(Context context, int method, String url, Map<String, String> params, Map<String, String> fileParams, Response.Listener okListener, Response.ErrorListener errorListener) {
+        super(context, method, url, params, fileParams, okListener, errorListener);
     }
 
     @Override

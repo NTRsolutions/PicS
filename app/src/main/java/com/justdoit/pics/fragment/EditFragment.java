@@ -3,19 +3,14 @@ package com.justdoit.pics.fragment;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,11 +26,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 import com.justdoit.pics.R;
-import com.justdoit.pics.global.App;
+import com.justdoit.pics.global.Constant;
 import com.justdoit.pics.model.NetSingleton;
-import com.justdoit.pics.model.PostFormJsonObjRequest;
+import com.justdoit.pics.model.FormJsonObjRequest;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -140,7 +134,10 @@ public class EditFragment extends DialogFragment implements View.OnClickListener
                 params.put("article_status","1");
                 Map<String,String> fileparams = new HashMap<String,String>();
                 fileparams.put("cover_image",imagepath);
-                PostFormJsonObjRequest request = new PostFormJsonObjRequest(this.getActivity(),"http://demo.gzqichang.com:8001/api/topic/create/", params, fileparams, new Response.Listener() {
+                FormJsonObjRequest request = new FormJsonObjRequest(
+                        this.getActivity(),
+                        Constant.HOME_URL + Constant.CREATE_TOPIC,
+                        params, fileparams, new Response.Listener() {
                     @Override
                     public void onResponse(Object response) {
                         MainFragment  mainFragment= (MainFragment)((AppCompatActivity)getActivity()).getSupportFragmentManager().findFragmentByTag("MainFragment");

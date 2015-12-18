@@ -158,7 +158,6 @@ public class ChangeInfoActivity extends AppCompatActivity {
     public void work() {
 
         Map<String, String> params = new HashMap<String, String>();
-        params.put("_method", "PUT");
         switch (type) {
             case nickname:
                 params.put(BriefIntroAdapter.NAME_TYPE.nickname.getName(), newValue);

@@ -1,7 +1,6 @@
 package com.justdoit.pics.model;
 
 import android.content.Context;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -11,7 +10,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HttpClientStack;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
@@ -63,7 +61,7 @@ public class NetSingleton {
 
     /**
      * 获取request queue
-     *
+     * 创建外部存储的cache文件夹
      * @return 全局的queue
      */
     public RequestQueue getRequestQueue() {
@@ -86,6 +84,9 @@ public class NetSingleton {
 
             queue.start(); // 启动请求队列
         }
+
+        queue = Volley.newRequestQueue(mCxt);
+
         return queue;
     }
 

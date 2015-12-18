@@ -2,20 +2,13 @@ package com.justdoit.pics.dao.impl;
 
 import android.content.Context;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.gson.Gson;
-import com.justdoit.pics.bean.Comment;
-import com.justdoit.pics.bean.Content;
 import com.justdoit.pics.dao.GetTopicCommentEdit;
 import com.justdoit.pics.global.Constant;
 import com.justdoit.pics.model.NetSingleton;
 import com.justdoit.pics.model.PostDeteleRequest;
-import com.justdoit.pics.model.PostFormJsonObjRequest;
-
-import org.json.JSONObject;
+import com.justdoit.pics.model.FormJsonObjRequest;
 
 import java.util.Map;
 
@@ -37,7 +30,7 @@ public class GetTopicCommentEditImpl implements GetTopicCommentEdit {
 
     @Override
     public void CreateComment(Context context, Map<String, String> params, Response.Listener oklistener, Response.ErrorListener errorListener) {
-        PostFormJsonObjRequest mrequest = new PostFormJsonObjRequest(context,Constant.HOME_URL + Constant.USER_COMMENT,params, oklistener, errorListener);
+        FormJsonObjRequest mrequest = new FormJsonObjRequest(context,Constant.HOME_URL + Constant.USER_COMMENT,params, oklistener, errorListener);
         NetSingleton.getInstance(context).addToRequestQueue(mrequest);
     }
 

@@ -38,8 +38,8 @@ import com.google.gson.reflect.TypeToken;
 import com.justdoit.pics.R;
 import com.justdoit.pics.adapater.UserInfoViewPagerAdapter;
 import com.justdoit.pics.bean.UserFollowerListInfo;
-import com.justdoit.pics.bean.UserInfo;
 import com.justdoit.pics.bean.UserFollowingListInfo;
+import com.justdoit.pics.bean.UserInfo;
 import com.justdoit.pics.dao.User;
 import com.justdoit.pics.dao.UserRelation;
 import com.justdoit.pics.dao.impl.UserImpl;
@@ -146,7 +146,6 @@ public class UserInfoActivity extends AppCompatActivity implements AppBarLayout.
             User user = new UserImpl();
             Map<String, String> fileParams = new HashMap<String, String>();
             Map<String, String> params = new HashMap<String, String>();
-            params.put("_method", "PUT");  // 上传必须要这个参数
 
             // 用户修改头像
             if (REQUEST_CODE.isChangeAvatar) {

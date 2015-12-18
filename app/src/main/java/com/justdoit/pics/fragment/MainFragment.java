@@ -1,16 +1,12 @@
 package com.justdoit.pics.fragment;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,50 +16,34 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.etiennelawlor.quickreturn.library.enums.QuickReturnViewType;
 import com.etiennelawlor.quickreturn.library.listeners.SpeedyQuickReturnRecyclerViewOnScrollListener;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.justdoit.pics.R;
 import com.justdoit.pics.activity.DetialActivity;
 import com.justdoit.pics.activity.MainActivity;
 import com.justdoit.pics.activity.UserInfoActivity;
 import com.justdoit.pics.adapater.mRecyclerViewAdapter;
 import com.justdoit.pics.bean.Content;
-import com.justdoit.pics.dao.User;
-import com.justdoit.pics.dao.UserList;
-import com.justdoit.pics.dao.UserStarCollect;
-import com.justdoit.pics.dao.impl.UserImpl;
 import com.justdoit.pics.dao.impl.UserListImpl;
 import com.justdoit.pics.dao.impl.UserStarCollectImpl;
 import com.justdoit.pics.global.App;
 import com.justdoit.pics.global.Constant;
 import com.justdoit.pics.model.ItemClickHelper;
-import com.justdoit.pics.model.NetSingleton;
-import com.justdoit.pics.model.PostFormJsonObjRequest;
 import com.justdoit.pics.util.NetUtil;
 import com.justdoit.pics.widget.MultiSwipeRefreshLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.

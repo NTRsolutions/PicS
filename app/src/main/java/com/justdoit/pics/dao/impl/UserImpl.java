@@ -8,9 +8,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.justdoit.pics.dao.User;
 import com.justdoit.pics.global.Constant;
+import com.justdoit.pics.model.FormRequest;
 import com.justdoit.pics.model.NetSingleton;
-import com.justdoit.pics.model.PostFormJsonObjRequest;
-import com.justdoit.pics.model.PostFormRequest;
+import com.justdoit.pics.model.FormJsonObjRequest;
 
 import java.util.Map;
 
@@ -31,8 +31,9 @@ public class UserImpl implements User {
 
     @Override
     public void changeUserInfo(Context context, int userId, Map<String, String> params, Map<String, String> fileParams, Response.Listener listener, Response.ErrorListener errorListener) {
-        PostFormRequest request = new PostFormJsonObjRequest(
+        FormRequest request = new FormJsonObjRequest(
                 context,
+                Request.Method.PUT,
                 Constant.HOME_URL + Constant.USER_INFO_URL_SUFFIX + userId + "/",
                 params, fileParams, listener, errorListener
         );
@@ -43,7 +44,7 @@ public class UserImpl implements User {
     @Override
     public void login(Context context, Map<String, String> params, Response.Listener listener, Response.ErrorListener errorListener) {
 
-        PostFormRequest request = new PostFormJsonObjRequest(
+        FormRequest request = new FormJsonObjRequest(
                 context,
                 Constant.HOME_URL + Constant.LOGIN_URL_SUFFIX,
                 params, listener, errorListener
@@ -54,7 +55,7 @@ public class UserImpl implements User {
 
     @Override
     public void regist(Context context, Map<String, String> params, Response.Listener listener, Response.ErrorListener errorListener) {
-        PostFormRequest request = new PostFormJsonObjRequest(
+        FormRequest request = new FormJsonObjRequest(
                 context,
                 Constant.HOME_URL + Constant.REGIST_URL_SUFFIX,
                 params, listener, errorListener
